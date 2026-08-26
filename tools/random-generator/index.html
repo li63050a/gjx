@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机数生成器 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 600px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input { width:80px; padding:6px 10px; border:1px solid #d1d5db; border-radius:8px; font-size:1rem; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .btn.green { background:#16a34a; }
+        .output-box { background:#f8fafc; padding:16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; font-size:1.8rem; font-weight:700; color:#2563eb; text-align:center; }
+        .flex { display:flex; flex-wrap:wrap; gap:10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>🎲 随机数生成器</h2>
+    <div class="row">
+        <label>最小值 <input type="number" id="minVal" value="1"></label>
+        <label>最大值 <input type="number" id="maxVal" value="100"></label>
+        <label>个数 <input type="number" id="countVal" value="1" min="1" max="20"></label>
+    </div>
+    <div class="flex">
+        <button class="btn" onclick="genRandom()">🎲 生成</button>
+        <button class="btn green" onclick="genRandomList()">📋 生成列表</button>
+    </div>
+    <div class="output-box" id="result">点击生成</div>
+</div>
+<script>
+    function genRandom() {
+        const min = parseInt(document.getElementById('minVal').value) || 0;
+        const max = parseInt(document.getElementById('maxVal').value) || 100;
+        if (min >= max) { document.getElementById('result').textContent = '❌ 最小值必须小于最大值'; return; }
+        const val = Math.floor(Math.random() * (max - min + 1)) + min;
+        document.getElementById('result').textContent = val;
+    }
+    function genRandomList() {
+        const min = parseInt(document.getElementById('minVal').value) || 0;
+        const max = parseInt(document.getElementById('maxVal').value) || 100;
+        const count = parseInt(document.getElementById('countVal').value) || 1;
+        if (min >= max) { document.getElementById('result').textContent = '❌ 最小值必须小于最大值'; return; }
+        const arr = [];
+        for (let i=0; i<count; i++) {
+            arr.push(Math.floor(Math.random() * (max - min + 1)) + min);
+        }
+        document.getElementById('result').textContent = arr.join('  ');
+    }
+</script>
+</body>
+</html>

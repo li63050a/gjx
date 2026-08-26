@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>罗马数字 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 700px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input { padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; flex:1; min-width:120px; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; font-size:0.95rem; word-break:break-all; font-family:monospace; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>🏛️ 罗马数字转换</h2>
+    <div class="row">
+        <input type="text" id="val" placeholder="输入数字(1-3999)或罗马数字" value="2024">
+        <button class="btn" onclick="toRoman()">数字→罗马</button>
+        <button class="btn" onclick="fromRoman()">罗马→数字</button>
+    </div>
+    <div class="output-box" id="result">等待转换...</div>
+</div>
+<script>
+    var map = [[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];
+    function toRoman() {
+        var n = parseInt(document.getElementById('val').value);
+        if (isNaN(n) || n < 1 || n > 3999) { document.getElementById('result').textContent = '❌ 仅支持 1-3999'; return; }
+        var r = '';
+        for (var i = 0; i < map.length; i++) { while (n >= map[i][0]) { r += map[i][1]; n -= map[i][0]; } }
+        document.getElementById('result').textContent = r;
+    }
+    function fromRoman() {
+        var s = document.getElementById('val').value.toUpperCase().trim();
+        var val = 0, i = 0;
+        for (var k = 0; k < map.length; k++) {
+            while (s.indexOf(map[k][1], i) === i) { val += map[k][0]; i += map[k][1].length; }
+        }
+        document.getElementById('result').textContent = val ? val : '❌ 无效罗马数字';
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>倒计时 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 700px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input { flex:1; min-width:150px; padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none;border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .btn.gray { background:#6b7280; }
+        .output-box { background:#0f172a; color:#22d3ee; padding:20px; border-radius:10px; margin-top:12px; text-align:center; font-size:2rem; font-family:monospace; letter-spacing:2px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>⏳ 倒计时</h2>
+    <div class="row">
+        <input type="datetime-local" id="target">
+        <button class="btn" onclick="start()">开始</button>
+        <button class="btn gray" onclick="stop()">停止</button>
+    </div>
+    <div class="output-box" id="result">--:--:--:--</div>
+</div>
+<script>
+    var timer = null;
+    document.getElementById('target').value = new Date(Date.now()+3600000).toISOString().slice(0,16);
+    function pad(n){ return (n<10?'0':'')+n; }
+    function start() {
+        stop();
+        var t = new Date(document.getElementById('target').value).getTime();
+        if (isNaN(t)) { document.getElementById('result').textContent = '❌ 请选择时间'; return; }
+        timer = setInterval(function() {
+            var diff = t - Date.now();
+            if (diff <= 0) { document.getElementById('result').textContent = '00:00:00:00 时间到!'; stop(); return; }
+            var d = Math.floor(diff/86400000);
+            var h = Math.floor(diff%86400000/3600000);
+            var m = Math.floor(diff%3600000/60000);
+            var s = Math.floor(diff%60000/1000);
+            document.getElementById('result').textContent = pad(d)+':'+pad(h)+':'+pad(m)+':'+pad(s);
+        }, 1000);
+    }
+    function stop() { if (timer) clearInterval(timer); }
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>密码生成器 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 600px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .row { display:flex; flex-wrap:wrap; gap:12px; margin:10px 0; align-items:center; }
+        .row label { display:flex; align-items:center; gap:6px; font-size:0.9rem; }
+        .row input[type="number"] { width:70px; padding:6px 10px; border:1px solid #d1d5db; border-radius:8px; font-size:1rem; }
+        .row input[type="checkbox"] { width:18px; height:18px; accent-color:#2563eb; }
+        .btn { padding:8px 24px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; font-size:1rem; }
+        .btn:active { transform:scale(0.96); }
+        .btn.green { background:#16a34a; }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; font-size:1.1rem; font-family:monospace; word-break:break-all; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>🔑 密码生成器</h2>
+    <div class="row">
+        <label>长度 <input type="number" id="pwLength" value="12" min="4" max="64"></label>
+        <label><input type="checkbox" id="chkUpper" checked> 大写</label>
+        <label><input type="checkbox" id="chkLower" checked> 小写</label>
+        <label><input type="checkbox" id="chkNumber" checked> 数字</label>
+        <label><input type="checkbox" id="chkSymbol" checked> 符号</label>
+    </div>
+    <div class="row">
+        <button class="btn" onclick="generatePw()">🔄 生成密码</button>
+        <button class="btn green" onclick="copyPw()">📋 复制</button>
+    </div>
+    <div class="output-box" id="result">点击生成</div>
+</div>
+<script>
+    function generatePw() {
+        const len = parseInt(document.getElementById('pwLength').value) || 12;
+        const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const lower = 'abcdefghijklmnopqrstuvwxyz';
+        const numbers = '0123456789';
+        const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+        let pool = '';
+        if (document.getElementById('chkUpper').checked) pool += upper;
+        if (document.getElementById('chkLower').checked) pool += lower;
+        if (document.getElementById('chkNumber').checked) pool += numbers;
+        if (document.getElementById('chkSymbol').checked) pool += symbols;
+        if (!pool) { document.getElementById('result').textContent = '❌ 至少选择一种字符类型'; return; }
+        let pw = '';
+        for (let i=0; i<len; i++) pw += pool[Math.floor(Math.random() * pool.length)];
+        document.getElementById('result').textContent = pw;
+    }
+    function copyPw() {
+        const text = document.getElementById('result').textContent;
+        if (text && text !== '点击生成' && !text.startsWith('❌')) {
+            navigator.clipboard.writeText(text).then(() => alert('✅ 已复制')).catch(() => alert('复制失败，请手动复制'));
+        }
+    }
+    generatePw();
+</script>
+</body>
+</html>

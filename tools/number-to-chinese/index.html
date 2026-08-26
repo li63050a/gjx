@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金额大写 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 700px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input { padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; flex:1; min-width:120px; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; font-size:0.95rem; word-break:break-all; font-family:monospace; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>💴 数字转中文大写</h2>
+    <div class="row">
+        <input type="text" id="val" placeholder="输入金额数字" value="1234.56">
+        <button class="btn" onclick="conv()">转换</button>
+    </div>
+    <div class="output-box" id="result">等待转换...</div>
+</div>
+<script>
+    var d = ['零','壹','贰','叁','肆','伍','陆','柒','捌','玖'];
+    var iUnit = ['', '拾', '佰', '仟'];
+    var gUnit = ['', '万', '亿', '兆'];
+    function intToCN(num) {
+        if (num === 0) return '零';
+        var s = '' + num, out = '', g = 0;
+        var groups = [];
+        while (s.length > 0) { groups.unshift(s.slice(-4)); s = s.slice(0, -4); }
+        for (var gi = 0; gi < groups.length; gi++) {
+            var grp = groups[gi], str = '';
+            var zero = false;
+            for (var i = 0; i < grp.length; i++) {
+                var n = parseInt(grp[i]);
+                var pos = grp.length - 1 - i;
+                if (n === 0) { zero = true; }
+                else {
+                    if (zero) { str += d[0]; zero = false; }
+                    str += d[n] + iUnit[pos];
+                }
+            }
+            if (str !== '') out += str + gUnit[groups.length - 1 - gi];
+        }
+        return out;
+    }
+    function conv() {
+        var v = document.getElementById('val').value.trim();
+        if (!/^\d+(\.\d{1,2})?$/.test(v)) { document.getElementById('result').textContent = '❌ 请输入有效数字(最多两位小数)'; return; }
+        var parts = v.split('.');
+        var res = intToCN(parseInt(parts[0])) + '元';
+        if (parts[1]) {
+            var j = parseInt(parts[1][0]), f = parts[1][1] ? parseInt(parts[1][1]) : 0;
+            res += j ? d[j] + '角' : (f ? '零' : '');
+            res += f ? d[f] + '分' : '';
+        } else { res += '整'; }
+        document.getElementById('result').textContent = res;
+    }
+</script>
+</body>
+</html>

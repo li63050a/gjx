@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正则测试 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 800px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        textarea { width:100%; padding:10px; border:1px solid #d1d5db; border-radius:10px; font-size:0.9rem; min-height:100px; resize:vertical; font-family:monospace; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input { flex:1; min-width:150px; padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; }
+        .row label { display:flex; align-items:center; gap:4px; font-size:0.9rem; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; font-size:0.9rem; font-family:monospace; white-space:pre-wrap; max-height:250px; overflow-y:auto; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>🧪 正则表达式测试</h2>
+    <textarea id="testText" placeholder="输入要测试的文本">hello world 123 test@email.com 456</textarea>
+    <div class="row">
+        <input type="text" id="regexInput" placeholder="输入正则表达式" value="\d+">
+        <label><input type="checkbox" id="flagG" checked> g</label>
+        <label><input type="checkbox" id="flagI"> i</label>
+        <label><input type="checkbox" id="flagM"> m</label>
+        <button class="btn" onclick="testRegex()">测试</button>
+    </div>
+    <div class="output-box" id="result">等待测试...</div>
+</div>
+<script>
+    function testRegex() {
+        const text = document.getElementById('testText').value;
+        const pattern = document.getElementById('regexInput').value;
+        let flags = '';
+        if (document.getElementById('flagG').checked) flags += 'g';
+        if (document.getElementById('flagI').checked) flags += 'i';
+        if (document.getElementById('flagM').checked) flags += 'm';
+        if (!pattern) { document.getElementById('result').textContent = '请输入正则表达式'; return; }
+        try {
+            const regex = new RegExp(pattern, flags);
+            const matches = text.match(regex);
+            if (matches) {
+                document.getElementById('result').textContent = '找到 ' + matches.length + ' 个匹配项:\n' + matches.join('\n');
+            } else {
+                document.getElementById('result').textContent = '没有匹配项';
+            }
+        } catch(e) {
+            document.getElementById('result').textContent = '❌ 正则错误: ' + e.message;
+        }
+    }
+</script>
+</body>
+</html>

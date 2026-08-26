@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机抽签 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 800px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        textarea { width:100%; padding:10px; border:1px solid #d1d5db; border-radius:10px; font-size:0.9rem; min-height:120px; resize:vertical; font-family:monospace; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input { padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; width:80px; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .btn.green { background:#16a34a; }
+        .btn.gray { background:#6b7280; }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; font-size:1.2rem; text-align:center; min-height:40px; word-break:break-all; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>🎯 随机抽签</h2>
+    <textarea id="items" placeholder="每行一个选项">苹果
+香蕉
+橙子
+葡萄</textarea>
+    <div class="row">
+        <span>抽取数量:</span><input type="text" id="count" value="1">
+        <button class="btn" onclick="pick()">🎲 抽取</button>
+        <label style="font-size:0.9rem;"><input type="checkbox" id="uniq" checked> 不重复</label>
+    </div>
+    <div class="output-box" id="result">等待抽取...</div>
+</div>
+<script>
+    function pick() {
+        var arr = document.getElementById('items').value.split('\n').filter(function(x){ return x.trim() !== ''; });
+        var n = parseInt(document.getElementById('count').value) || 1;
+        var uniq = document.getElementById('uniq').checked;
+        if (!arr.length) { document.getElementById('result').textContent = '请先输入选项'; return; }
+        var pool = arr.slice(), res = [];
+        if (uniq && n > pool.length) n = pool.length;
+        for (var i = 0; i < n; i++) {
+            var idx = Math.floor(Math.random() * pool.length);
+            res.push(pool[idx]);
+            if (uniq) pool.splice(idx, 1);
+        }
+        document.getElementById('result').textContent = res.join('  ,  ');
+    }
+</script>
+</body>
+</html>

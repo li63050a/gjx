@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>摩斯密码 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 800px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        textarea { width:100%; padding:10px; border:1px solid #d1d5db; border-radius:10px; font-size:0.95rem; min-height:90px; resize:vertical; font-family:monospace; }
+        .flex { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .btn.green { background:#16a34a; }
+        .btn.gray { background:#6b7280; }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; word-break:break-all; max-height:200px; overflow-y:auto; font-size:0.9rem; font-family:monospace; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>📻 摩斯密码</h2>
+    <textarea id="morseInput" placeholder="输入文本或摩斯密码">SOS HELLO</textarea>
+    <div class="flex">
+        <button class="btn" onclick="encodeMorse()">🔤 文本→摩斯</button>
+        <button class="btn green" onclick="decodeMorse()">📻 摩斯→文本</button>
+        <button class="btn gray" onclick="clearMorse()">清空</button>
+    </div>
+    <div class="output-box" id="result">等待操作...</div>
+</div>
+<script>
+    var dict = { 'A':'.-','B':'-...','C':'-.-.','D':'-..','E':'.','F':'..-.','G':'--.','H':'....','I':'..','J':'.---','K':'-.-','L':'.-..','M':'--','N':'-.','O':'---','P':'.--.','Q':'--.-','R':'.-.','S':'...','T':'-','U':'..-','V':'...-','W':'.--','X':'-..-','Y':'-.--','Z':'--..','0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.','.':'.-.-.-',',':'--..--','?':'..--..','/':'-..-.','=':'-...-','+':'.-.-.','(':'-.--.',')':'-.--.-' };
+    var rev = {};
+    for (var k in dict) rev[dict[k]] = k;
+    function encodeMorse() {
+        var text = document.getElementById('morseInput').value.toUpperCase();
+        var out = [];
+        for (var i = 0; i < text.length; i++) {
+            var ch = text[i];
+            if (ch === ' ') { out.push('/'); }
+            else if (dict[ch]) { out.push(dict[ch]); }
+            else { out.push(ch); }
+        }
+        document.getElementById('result').textContent = out.join(' ');
+    }
+    function decodeMorse() {
+        var text = document.getElementById('morseInput').value.trim();
+        var words = text.split('/');
+        var res = [];
+        for (var w = 0; w < words.length; w++) {
+            var letters = words[w].trim().split(/\s+/);
+            var word = '';
+            for (var i = 0; i < letters.length; i++) {
+                if (rev[letters[i]]) word += rev[letters[i]];
+            }
+            res.push(word);
+        }
+        document.getElementById('result').textContent = res.join(' ');
+    }
+    function clearMorse() { document.getElementById('morseInput').value = ''; document.getElementById('result').textContent = '已清空'; }
+</script>
+</body>
+</html>

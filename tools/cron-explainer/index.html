@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cron 解析 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 700px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input { padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; flex:1; min-width:100px; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; white-space:pre-wrap; font-size:0.95rem; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>⏲️ Cron 表达式解析</h2>
+    <div class="row">
+        <input type="text" id="cron" placeholder="分 时 日 月 周 (如 0 9 * * 1-5)" value="0 9 * * 1-5">
+        <button class="btn" onclick="explain()">解析</button>
+    </div>
+    <div class="output-box" id="result">等待解析...</div>
+</div>
+<script>
+    function part(field, min, max) {
+        if (field === '*') return '每' + (max-min+1) + '个单位';
+        var ranges = field.split(','), out = [];
+        for (var i = 0; i < ranges.length; i++) {
+            var r = ranges[i];
+            if (r.indexOf('/') > -1) {
+                var p = r.split('/');
+                out.push('从' + (p[0]==='*'?min:p[0]) + '开始每' + p[1] + '个');
+            } else if (r.indexOf('-') > -1) {
+                var seg = r.split('-');
+                out.push(seg[0] + '到' + seg[1]);
+            } else {
+                out.push(r);
+            }
+        }
+        return out.join(', ');
+    }
+    function explain() {
+        var c = document.getElementById('cron').value.trim().split(/\s+/);
+        if (c.length !== 5) { document.getElementById('result').textContent = '❌ 需要 5 个字段: 分 时 日 月 周'; return; }
+        var names = ['分钟', '小时', '日', '月', '星期'];
+        var mins = [0,0,1,1,0], maxs = [59,23,31,12,7];
+        var out = '';
+        for (var i = 0; i < 5; i++) {
+            out += names[i] + ': ' + part(c[i], mins[i], maxs[i]) + '\n';
+        }
+        var week = {'0':'周日','1':'周一','2':'周二','3':'周三','4':'周四','5':'周五','6':'周六','7':'周日'};
+        out += '\n说明: 在 ' + part(c[1],0,23) + ' 的 ' + part(c[0],0,59) + ' 执行';
+        if (c[4] !== '*') {
+            var ws = c[4].split(',')[0].split('-')[0];
+            out += '，星期包含 ' + (week[ws] || c[4]);
+        }
+        document.getElementById('result').textContent = out;
+    }
+</script>
+</body>
+</html>

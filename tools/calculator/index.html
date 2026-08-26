@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算器 · 超能工具箱</title>
+    <style>
+        /* 可以复用你主页的样式风格，或者重新设计 */
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f5f9;
+            padding: 20px;
+            color: #0f172a;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .back { text-decoration: none; color: #2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        input, select, button {
+            padding: 8px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: #fff;
+        }
+        button {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            font-weight:600;
+            cursor:pointer;
+            transition:0.15s;
+        }
+        button:active { transform:scale(0.96); }
+        .output {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 16px;
+            border-left: 4px solid #2563eb;
+            font-size:1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="back" href="../../index.html">← 返回工具箱</a>
+        <h2>📐 简易计算器</h2>
+        <div class="row">
+            <input type="text" id="numA" placeholder="数字1" value="12" style="flex:1;">
+            <select id="op" style="flex:0.5;">
+                <option value="+">+</option>
+                <option value="-">−</option>
+                <option value="*">×</option>
+                <option value="/">÷</option>
+            </select>
+            <input type="text" id="numB" placeholder="数字2" value="8" style="flex:1;">
+            <button id="calcBtn">= 计算</button>
+        </div>
+        <div class="output" id="result">结果：20</div>
+    </div>
+
+    <script>
+        const numA = document.getElementById('numA');
+        const numB = document.getElementById('numB');
+        const op = document.getElementById('op');
+        const calcBtn = document.getElementById('calcBtn');
+        const result = document.getElementById('result');
+
+        function compute() {
+            const a = parseFloat(numA.value) || 0;
+            const b = parseFloat(numB.value) || 0;
+            let val;
+            switch (op.value) {
+                case '+': val = a + b; break;
+                case '-': val = a - b; break;
+                case '*': val = a * b; break;
+                case '/': val = b !== 0 ? a / b : '除数不能为0'; break;
+                default: val = '未知操作';
+            }
+            result.textContent = '结果：' + val;
+        }
+
+        calcBtn.addEventListener('click', compute);
+        // 按回车自动计算
+        [numA, numB, op].forEach(el => el.addEventListener('keydown', e => { if (e.key === 'Enter') compute(); }));
+        compute(); // 初始化
+    </script>
+</body>
+</html>

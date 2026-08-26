@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI 计算 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 700px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input { flex:1; min-width:120px; padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; font-size:0.95rem; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>⚖️ BMI 身体质量指数</h2>
+    <div class="row">
+        <input type="text" id="height" placeholder="身高 (cm)" value="170">
+        <input type="text" id="weight" placeholder="体重 (kg)" value="65">
+        <button class="btn" onclick="calc()">计算</button>
+    </div>
+    <div class="output-box" id="result">等待计算...</div>
+</div>
+<script>
+    function calc() {
+        var h = parseFloat(document.getElementById('height').value) / 100;
+        var w = parseFloat(document.getElementById('weight').value);
+        if (isNaN(h) || isNaN(w) || h <= 0 || w <= 0) { document.getElementById('result').textContent = '请输入有效身高体重'; return; }
+        var bmi = w / (h * h);
+        var cat;
+        if (bmi < 18.5) cat = '偏瘦';
+        else if (bmi < 24) cat = '正常';
+        else if (bmi < 28) cat = '超重';
+        else cat = '肥胖';
+        document.getElementById('result').innerHTML =
+            '⚖️ BMI: ' + bmi.toFixed(1) + '<br>' +
+            '📊 分类: ' + cat;
+    }
+</script>
+</body>
+</html>

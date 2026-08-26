@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文本对比 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 900px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .cols { display:flex; gap:12px; flex-wrap:wrap; }
+        textarea { width:100%; padding:10px; border:1px solid #d1d5db; border-radius:10px; font-size:0.85rem; min-height:140px; resize:vertical; font-family:monospace; }
+        .col { flex:1; min-width:260px; }
+        .flex { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .btn.gray { background:#6b7280; }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; white-space:pre-wrap; max-height:300px; overflow-y:auto; font-size:0.85rem; font-family:monospace; }
+        .del { color:#dc2626; } .add { color:#16a34a; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>🔍 文本对比 (行差异)</h2>
+    <div class="cols">
+        <div class="col"><div style="font-size:0.85rem;margin-bottom:6px;">原文本</div><textarea id="a" placeholder="原文本，每行一项">apple
+banana
+cherry
+date</textarea></div>
+        <div class="col"><div style="font-size:0.85rem;margin-bottom:6px;">新文本</div><textarea id="b" placeholder="新文本，每行一项">apple
+blueberry
+cherry
+elderberry</textarea></div>
+    </div>
+    <div class="flex">
+        <button class="btn" onclick="diff()">⚖️ 对比</button>
+        <button class="btn gray" onclick="document.getElementById('result').textContent=''">清空</button>
+    </div>
+    <div class="output-box" id="result">等待对比...</div>
+</div>
+<script>
+    function lcs(a, b) {
+        var m = a.length, n = b.length;
+        var dp = [];
+        for (var i = 0; i <= m; i++) { dp[i] = []; for (var j = 0; j <= n; j++) dp[i][j] = 0; }
+        for (var i = m - 1; i >= 0; i--) for (var j = n - 1; j >= 0; j--) {
+            if (a[i] === b[j]) dp[i][j] = dp[i+1][j+1] + 1;
+            else dp[i][j] = Math.max(dp[i+1][j], dp[i][j+1]);
+        }
+        var res = [], i = 0, j = 0;
+        while (i < m && j < n) {
+            if (a[i] === b[j]) { res.push({t:'=', v:a[i]}); i++; j++; }
+            else if (dp[i+1][j] >= dp[i][j+1]) { res.push({t:'-', v:a[i]}); i++; }
+            else { res.push({t:'+', v:b[j]}); j++; }
+        }
+        while (i < m) { res.push({t:'-', v:a[i]}); i++; }
+        while (j < n) { res.push({t:'+', v:b[j]}); j++; }
+        return res;
+    }
+    function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function diff() {
+        var a = document.getElementById('a').value.split('\n');
+        var b = document.getElementById('b').value.split('\n');
+        var r = lcs(a, b), html = '';
+        for (var k = 0; k < r.length; k++) {
+            if (r[k].t === '=') html += '  ' + esc(r[k].v) + '\n';
+            else if (r[k].t === '-') html += '<span class="del">- ' + esc(r[k].v) + '</span>\n';
+            else html += '<span class="add">+ ' + esc(r[k].v) + '</span>\n';
+        }
+        document.getElementById('result').innerHTML = html;
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>秒表 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 700px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .flex { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .btn.green { background:#16a34a; }
+        .btn.gray { background:#6b7280; }
+        .output-box { background:#0f172a; color:#22d3ee; padding:20px; border-radius:10px; margin-top:12px; text-align:center; font-size:2.4rem; font-family:monospace; letter-spacing:2px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>⏱️ 秒表</h2>
+    <div class="flex">
+        <button class="btn" id="b1" onclick="start()">开始</button>
+        <button class="btn gray" onclick="pause()">暂停</button>
+        <button class="btn green" onclick="reset()">重置</button>
+    </div>
+    <div class="output-box" id="result">00:00.00</div>
+</div>
+<script>
+    var startT = 0, elapsed = 0, running = false, timer = null;
+    function pad(n){ return (n<10?'0':'')+n; }
+    function tick() {
+        var cur = elapsed + (Date.now() - startT);
+        var m = Math.floor(cur/60000);
+        var s = Math.floor(cur%60000/1000);
+        var cs = Math.floor(cur%1000/10);
+        document.getElementById('result').textContent = pad(m)+':'+pad(s)+'.'+pad(cs);
+    }
+    function start() {
+        if (running) return;
+        running = true; startT = Date.now();
+        timer = setInterval(tick, 10);
+    }
+    function pause() {
+        if (!running) return;
+        running = false; elapsed += Date.now() - startT; clearInterval(timer);
+    }
+    function reset() { running = false; clearInterval(timer); elapsed = 0; document.getElementById('result').textContent = '00:00.00'; }
+</script>
+</body>
+</html>

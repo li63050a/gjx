@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时间戳转换 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 700px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input, .row button { padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; }
+        .row input { flex:1; min-width:150px; }
+        .btn { background:#2563eb; color:#fff; border:none; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .btn.green { background:#16a34a; }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; font-size:0.95rem; }
+        .hint { font-size:0.75rem; color:#94a3b8; margin-top:6px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>⏰ 时间戳转换</h2>
+    <div class="row">
+        <input type="text" id="tsInput" placeholder="输入时间戳（秒）" value="1756224000">
+        <button class="btn" onclick="tsToDate()">🔄 转日期</button>
+    </div>
+    <div class="row">
+        <input type="datetime-local" id="dateInput">
+        <button class="btn green" onclick="dateToTs()">🔄 转时间戳</button>
+    </div>
+    <div class="output-box" id="result">等待操作...</div>
+    <div class="hint">💡 当前时间戳（秒）：<span id="nowTs"></span> &nbsp;|&nbsp; 自动填充当前时间</div>
+</div>
+<script>
+    function tsToDate() {
+        const ts = parseInt(document.getElementById('tsInput').value);
+        if (isNaN(ts)) { document.getElementById('result').textContent = '❌ 请输入有效数字'; return; }
+        const d = new Date(ts * 1000);
+        document.getElementById('result').textContent = '📅 ' + d.toLocaleString('zh-CN', { hour12: false });
+    }
+    function dateToTs() {
+        const val = document.getElementById('dateInput').value;
+        if (!val) { document.getElementById('result').textContent = '❌ 请选择日期时间'; return; }
+        const ts = Math.floor(new Date(val).getTime() / 1000);
+        document.getElementById('result').textContent = '🕐 ' + ts;
+    }
+    // 自动填充当前时间
+    const now = new Date();
+    const localStr = now.toISOString().slice(0,16);
+    document.getElementById('dateInput').value = localStr;
+    document.getElementById('nowTs').textContent = Math.floor(now.getTime() / 1000);
+    tsToDate();
+</script>
+</body>
+</html>

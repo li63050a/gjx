@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日历生成 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 700px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input, .row select { padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .cal { margin-top:14px; border-collapse:collapse; width:100%; }
+        .cal th, .cal td { border:1px solid #e2e8f0; padding:8px; text-align:center; }
+        .cal th { background:#f1f5f9; color:#475569; }
+        .cal td.today { background:#dbeafe; color:#1d4ed8; font-weight:700; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>📆 月历生成</h2>
+    <div class="row">
+        <select id="year"></select>
+        <select id="month"></select>
+        <button class="btn" onclick="draw()">生成</button>
+    </div>
+    <div id="calWrap"></div>
+</div>
+<script>
+    var now = new Date();
+    var ySel = document.getElementById('year'), mSel = document.getElementById('month');
+    for (var y = now.getFullYear()-10; y <= now.getFullYear()+10; y++) {
+        var o = document.createElement('option'); o.value = y; o.text = y + ' 年'; if (y===now.getFullYear()) o.selected=true; ySel.appendChild(o);
+    }
+    for (var m = 1; m <= 12; m++) {
+        var o2 = document.createElement('option'); o2.value = m; o2.text = m + ' 月'; if (m===now.getMonth()+1) o2.selected=true; mSel.appendChild(o2);
+    }
+    function draw() {
+        var y = parseInt(ySel.value), m = parseInt(mSel.value);
+        var first = new Date(y, m-1, 1).getDay();
+        var days = new Date(y, m, 0).getDate();
+        var html = '<table class="cal"><tr><th>日</th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th></tr><tr>';
+        for (var i = 0; i < first; i++) html += '<td></td>';
+        for (var d = 1; d <= days; d++) {
+            var dow = (first + d - 1) % 7;
+            var cls = (y===now.getFullYear() && m===now.getMonth()+1 && d===now.getDate()) ? ' class="today"' : '';
+            html += '<td' + cls + '>' + d + '</td>';
+            if (dow === 6 && d !== days) html += '</tr><tr>';
+        }
+        html += '</tr></table>';
+        document.getElementById('calWrap').innerHTML = html;
+    }
+    draw();
+</script>
+</body>
+</html>
