@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <title>DNS 解析 · 超能工具箱</title>
+    <script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+    <style>
+        :root{
+            --bg:#f1f5f9; --fg:#0f172a; --card:#fff; --border:#e2e8f0; --muted:#64748b;
+            --tab:#eef2ff; --tabc:#4338ca; --accent:#2563eb; --accent2:#16a34a;
+            --asset-bg:#f8fafc; --hover:#eef2ff; --note-bg:#fffbeb; --note-bd:#fde68a; --note-fg:#92400e;
+            --code-bg:#0f172a; --code-fg:#e2e8f0;
+        }
+        [data-theme="dark"]{
+            --bg:#0b1120; --fg:#e2e8f0; --card:#111827; --border:#243044; --muted:#94a3b8;
+            --tab:#1e293b; --tabc:#c7d2fe; --accent:#3b82f6; --accent2:#22c55e;
+            --asset-bg:#0f172a; --hover:#1e293b; --note-bg:#1f2937; --note-bd:#374151; --note-fg:#fbbf24;
+            --code-bg:#020617; --code-fg:#e2e8f0;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:-apple-system,'Segoe UI',Roboto,sans-serif; background:var(--bg); padding:20px; color:var(--fg); transition:background .2s,color .2s; }
+        .container { max-width:920px; margin:0 auto; background:var(--card); border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,.06); transition:background .2s; }
+        .brand { text-decoration:none; color:var(--accent); font-weight:700; font-size:1.05rem; display:inline-block; margin-bottom:6px; }
+        .brand:hover { text-decoration:underline; }
+        .back { text-decoration:none; color:var(--accent); font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:14px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input, .row select { flex:1; min-width:120px; padding:9px 14px; border:1px solid var(--border); border-radius:10px; font-size:1rem; background:var(--card); color:var(--fg); }
+        .btn { padding:8px 18px; background:var(--accent); color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .btn.gray { background:#6b7280; }
+        .btn.green { background:var(--accent2); }
+        .hidden { display:none; }
+        .meta { color:var(--muted); font-size:0.88rem; }
+        .ans { border:1px solid var(--border); border-radius:10px; padding:10px 12px; margin:8px 0; word-break:break-all; }
+        .ans .ty { color:var(--accent2); font-weight:600; }
+        .ans pre { background:var(--code-bg); color:var(--code-fg); padding:8px; border-radius:8px; margin-top:6px; overflow:auto; white-space:pre-wrap; font-size:0.8rem; }
+        .msg { color:#b91c1c; font-size:0.9rem; margin-top:8px; white-space:pre-wrap; }
+        .note { background:var(--note-bg); border:1px solid var(--note-bd); color:var(--note-fg); padding:10px 12px; border-radius:10px; font-size:0.85rem; margin-top:10px; }
+        .site-foot { margin-top:28px; padding:14px 0; text-align:center; font-size:0.82rem; color:var(--muted); border-top:1px solid var(--border); line-height:1.9; }
+        .site-foot a { color:var(--accent); text-decoration:none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="brand" href="../../index.html">🧰 超能工具箱</a>
+    <a class="back" href="../../index.html">← 返回主页</a>
+    <h2>🌐 DNS 解析工具</h2>
+    <div class="row">
+        <input id="domain" value="github.com" placeholder="域名，如 github.com">
+        <select id="type">
+            <option value="A">A (IPv4)</option>
+            <option value="AAAA">AAAA (IPv6)</option>
+            <option value="CNAME">CNAME</option>
+            <option value="MX">MX</option>
+            <option value="TXT">TXT</option>
+            <option value="NS">NS</option>
+            <option value="SOA">SOA</option>
+            <option value="HTTPS">HTTPS (SVCB/TLS)</option>
+            <option value="SVCB">SVCB</option>
+            <option value="CAA">CAA</option>
+        </select>
+        <button class="btn" onclick="resolveOne()">解析</button>
+    </div>
+    <div class="row">
+        <button class="btn green" onclick="resolveAll()">⚡ 一键解析全部常用记录 (A/AAAA/CNAME/MX/TXT/NS/HTTPS)</button>
+    </div>
+    <div id="out"><p class="meta">输入域名后点击“解析”。数据来自 Cloudflare / Google 的 DNS-over-HTTPS（DoH），已尝试走加速代理。</p></div>
+    <div class="note">说明：A=IPv4 地址，AAAA=IPv6 地址，CNAME=别名，MX=邮件服务器，TXT=文本记录，NS=域名服务器，HTTPS/SVCB=现代 TLS 连接记录（含对应 IP 与端口）。部分域名 IPv6 可能为空属正常。</div>
+</div>
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>
+    var TYPES={1:'A',28:'AAAA',5:'CNAME',15:'MX',16:'TXT',2:'NS',6:'SOA',65:'HTTPS',43:'SVCB',257:'CAA',255:'ANY'};
+    function setMsg(m,err){ var el=document.getElementById('out'); el.innerHTML = err? '<p class="msg">'+m+'</p>' : m; }
+    function doh(name, type){
+        var cf='https://cloudflare-dns.com/dns-query?name='+encodeURIComponent(name)+'&type='+type;
+        var gg='https://dns.google/resolve?name='+encodeURIComponent(name)+'&type='+type;
+        var urls=['https://g.z321.cc.cd/'+cf, cf, gg];
+        var i=0;
+        function nx(){ if(i>=urls.length) return Promise.reject(new Error('所有 DoH 源均失败')); var u=urls[i++]; return fetch(u,{headers:{'Accept':'application/dns-json'}}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).catch(function(){ return nx(); }); }
+        return nx();
+    }
+    function renderAnswers(name, type, json){
+        if(!json || json.Status!==0) return '<p class="msg">解析失败（Status='+(json&&json.Status)+'）</p>';
+        var ans=json.Answer||[];
+        if(!ans.length) return '<div class="ans"><span class="ty">'+type+'</span> 无记录</div>';
+        return ans.map(function(a){
+            var t=TYPES[a.type]||a.type;
+            var data=a.data;
+            if(t==='TXT') data = data.replace(/^"|"$/g,'').replace(/" "/g,'\n');
+            var ip = (t==='A'||t==='AAAA') ? ' → <b>'+data+'</b>' : '';
+            return '<div class="ans"><span class="ty">'+t+'</span> <span class="meta">TTL '+a.TTL+'</span>'+ip+'<pre>'+esc(data)+'</pre></div>';
+        }).join('');
+    }
+    function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function resolveOne(){
+        var name=document.getElementById('domain').value.trim(); var type=document.getElementById('type').value;
+        if(!name) return;
+        setMsg('解析中…');
+        doh(name, type).then(function(j){ setMsg('<h3 style="margin:8px 0">'+type+' · '+name+'</h3>'+renderAnswers(name,type,j)); })
+            .catch(function(e){ setMsg(e.message, true); });
+    }
+    function resolveAll(){
+        var name=document.getElementById('domain').value.trim();
+        if(!name) return;
+        var types=['A','AAAA','CNAME','MX','TXT','NS','HTTPS'];
+        setMsg('解析中…');
+        Promise.all(types.map(function(t){ return doh(name,t).then(function(j){ return {t:t,j:j}; }).catch(function(e){ return {t:t,err:e.message}; }); }))
+            .then(function(res){
+                var html='<h3 style="margin:8px 0">全部常用记录 · '+name+'</h3>';
+                res.forEach(function(r){ html += (r.err? '<p class="msg">'+r.t+' 失败：'+r.err+'</p>' : renderAnswers(name,r.t,r.j)); });
+                setMsg(html);
+            });
+    }
+    function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}
+    if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}
+</script>
+<footer class="site-foot">
+    <div>🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub 仓库</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">GitHub Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></div>
+    <div>💬 QQ 群：<a href="https://qun.qq.com/universal-share/share?ac=1&authKey=lvoTFPoZGfglgeejEyJiinGqmOr0ZSXmJWXmbjBuf83enyW4LQ66Vlia4g3rGpUX&busi_data=eyJncm91cENvZGUiOiIxMDI2OTM5NzQxIiwidG9rZW4iOiJYTi9nSFg3Q3lrRVpTSmFxcjEwa2hUNkJBRlpHakY1RFY1TG9tUVgzNXRObmdTVWxWVGtaaUxsL3hqTmc5MmpFIiwidWluIjoiMzYzNTczNjE4MCJ9&data=P1gqzEQxB2hGsyKtKp8EZBWMefx__fSBRhnUP-0NWzBGks1275alc0XOjKOn0O4y7O9mcCCQJcQdlu6yeiFmgQ&svctype=4&tempid=h5_group_info" target="_blank" rel="noopener">1026939741</a> · 📺 B站：<a href="https://b23.tv/BbFAP6j" target="_blank" rel="noopener">小帅5656</a> · ✉️ 邮箱：<a href="mailto:li63050@qq.com">li63050@qq.com</a></div>
+</footer>
+</body>
+</html>

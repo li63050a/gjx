@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <title>媒体工具 · 超能工具箱</title>
+    <script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+    <style>
+        :root{
+            --bg:#f1f5f9; --fg:#0f172a; --card:#fff; --border:#e2e8f0; --muted:#64748b;
+            --tab:#eef2ff; --tabc:#4338ca; --accent:#2563eb; --accent2:#16a34a;
+            --asset-bg:#f8fafc; --hover:#eef2ff; --note-bg:#fffbeb; --note-bd:#fde68a; --note-fg:#92400e;
+            --code-bg:#0f172a; --code-fg:#e2e8f0;
+        }
+        [data-theme="dark"]{
+            --bg:#0b1120; --fg:#e2e8f0; --card:#111827; --border:#243044; --muted:#94a3b8;
+            --tab:#1e293b; --tabc:#c7d2fe; --accent:#3b82f6; --accent2:#22c55e;
+            --asset-bg:#0f172a; --hover:#1e293b; --note-bg:#1f2937; --note-bd:#374151; --note-fg:#fbbf24;
+            --code-bg:#020617; --code-fg:#e2e8f0;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:-apple-system,'Segoe UI',Roboto,sans-serif; background:var(--bg); padding:20px; color:var(--fg); transition:background .2s,color .2s; }
+        .container { max-width:920px; margin:0 auto; background:var(--card); border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,.06); transition:background .2s; }
+        .brand { text-decoration:none; color:var(--accent); font-weight:700; font-size:1.05rem; display:inline-block; margin-bottom:6px; }
+        .brand:hover { text-decoration:underline; }
+        .back { text-decoration:none; color:var(--accent); font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:14px; }
+        .tabs { display:flex; gap:8px; margin:14px 0; flex-wrap:wrap; }
+        .tab { flex:1; min-width:90px; padding:10px; border:none; border-radius:12px; background:var(--tab); color:var(--tabc); font-weight:600; cursor:pointer; }
+        .tab.active { background:var(--accent); color:#fff; }
+        .hidden { display:none; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input { flex:1; min-width:160px; padding:9px 14px; border:1px solid var(--border); border-radius:10px; font-size:1rem; background:var(--card); color:var(--fg); }
+        .btn { padding:8px 18px; background:var(--accent); color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .btn.gray { background:#6b7280; }
+        .meta { color:var(--muted); font-size:0.88rem; margin-top:8px; }
+        .panel { border:1px solid var(--border); border-radius:12px; padding:14px; margin-top:10px; }
+        img.prev, video.prev, audio.prev { max-width:100%; border-radius:10px; margin-top:10px; background:#000; }
+        .note { background:var(--note-bg); border:1px solid var(--note-bd); color:var(--note-fg); padding:10px 12px; border-radius:10px; font-size:0.85rem; margin-top:10px; }
+        .site-foot { margin-top:28px; padding:14px 0; text-align:center; font-size:0.82rem; color:var(--muted); border-top:1px solid var(--border); line-height:1.9; }
+        .site-foot a { color:var(--accent); text-decoration:none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="brand" href="../../index.html">🧰 超能工具箱</a>
+    <a class="back" href="../../index.html">← 返回主页</a>
+    <h2>🎞️ 图片 / 视频 / 音频 工具</h2>
+    <div class="tabs">
+        <button class="tab active" id="tImg" onclick="switchTab('img')">🖼️ 图片</button>
+        <button class="tab" id="tVid" onclick="switchTab('vid')">🎬 视频</button>
+        <button class="tab" id="tAud" onclick="switchTab('aud')">🎵 音频</button>
+    </div>
+
+    <div id="imgOut">
+        <div class="panel">
+            <div class="row">
+                <input id="imgFile" type="file" accept="image/*">
+                <button class="btn" onclick="loadImg()">载入预览</button>
+                <button class="btn gray" onclick="copyImgB64()">复制 Base64</button>
+                <button class="btn gray" onclick="dlImg()">下载</button>
+            </div>
+            <div class="meta" id="imgMeta">支持本地图片；可预览、查看尺寸/大小/类型、复制 Base64、下载。</div>
+            <img id="imgPrev" class="prev hidden">
+            <textarea id="imgB64" class="hidden" style="width:100%;height:90px;margin-top:8px"></textarea>
+        </div>
+    </div>
+
+    <div id="vidOut" class="hidden">
+        <div class="panel">
+            <div class="row">
+                <input id="vidUrl" placeholder="视频 URL（或直接选本地文件）">
+                <input id="vidFile" type="file" accept="video/*">
+                <button class="btn" onclick="loadVid()">播放</button>
+            </div>
+            <video id="vidPrev" class="prev hidden" controls></video>
+            <div class="meta">提示：跨域视频可能无法直接播放，本地文件始终可用。</div>
+        </div>
+    </div>
+
+    <div id="audOut" class="hidden">
+        <div class="panel">
+            <div class="row">
+                <input id="audUrl" placeholder="音频 URL（或直接选本地文件）">
+                <input id="audFile" type="file" accept="audio/*">
+                <button class="btn" onclick="loadAud()">播放</button>
+            </div>
+            <audio id="audPrev" class="prev hidden" controls></audio>
+            <div class="meta">提示：跨域音频可能无法直接播放，本地文件始终可用。</div>
+        </div>
+    </div>
+    <div class="note">媒体处理均在本地浏览器完成，文件不会上传到任何服务器。</div>
+</div>
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>
+    function switchTab(t){ ['img','vid','aud'].forEach(function(x){ document.getElementById('t'+x[0].toUpperCase()+x.slice(1)).classList.toggle('active', x===t); document.getElementById(x+'Out').classList.toggle('hidden', x!==t); }); }
+    function loadImg(){
+        var f=document.getElementById('imgFile').files[0]; if(!f){ alert('请先选择图片'); return; }
+        var rd=new FileReader();
+        rd.onload=function(){
+            var prev=document.getElementById('imgPrev'); prev.src=rd.result; prev.classList.remove('hidden');
+            prev.onload=function(){ document.getElementById('imgMeta').textContent='尺寸：'+prev.naturalWidth+' × '+prev.naturalHeight+' px · 大小：'+(f.size/1024).toFixed(1)+' KB · 类型：'+f.type; };
+            document.getElementById('imgB64').value=rd.result; document.getElementById('imgB64').classList.remove('hidden');
+        };
+        rd.readAsDataURL(f);
+    }
+    function copyImgB64(){ var t=document.getElementById('imgB64').value; if(!t){ alert('请先载入图片'); return; } navigator.clipboard.writeText(t).then(function(){ alert('Base64 已复制'); }, function(){ alert('复制失败，可手动选择文本'); }); }
+    function dlImg(){ var t=document.getElementById('imgB64').value; if(!t) return; var a=document.createElement('a'); a.href=t; a.download='image'; a.click(); }
+    function loadVid(){ var v=document.getElementById('vidPrev'); var f=document.getElementById('vidFile').files[0]; var u=document.getElementById('vidUrl').value.trim();
+        v.src = f? URL.createObjectURL(f) : u; if(v.src){ v.classList.remove('hidden'); v.load(); } }
+    function loadAud(){ var a=document.getElementById('audPrev'); var f=document.getElementById('audFile').files[0]; var u=document.getElementById('audUrl').value.trim();
+        a.src = f? URL.createObjectURL(f) : u; if(a.src){ a.classList.remove('hidden'); a.load(); } }
+    function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}
+    if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}
+</script>
+<footer class="site-foot">
+    <div>🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub 仓库</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">GitHub Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></div>
+    <div>💬 QQ 群：<a href="https://qun.qq.com/universal-share/share?ac=1&authKey=lvoTFPoZGfglgeejEyJiinGqmOr0ZSXmJWXmbjBuf83enyW4LQ66Vlia4g3rGpUX&busi_data=eyJncm91cENvZGUiOiIxMDI2OTM5NzQxIiwidG9rZW4iOiJYTi9nSFg3Q3lrRVpTSmFxcjEwa2hUNkJBRlpHakY1RFY1TG9tUVgzNXRObmdTVWxWVGtaaUxsL3hqTmc5MmpFIiwidWluIjoiMzYzNTczNjE4MCJ9&data=P1gqzEQxB2hGsyKtKp8EZBWMefx__fSBRhnUP-0NWzBGks1275alc0XOjKOn0O4y7O9mcCCQJcQdlu6yeiFmgQ&svctype=4&tempid=h5_group_info" target="_blank" rel="noopener">1026939741</a> · 📺 B站：<a href="https://b23.tv/BbFAP6j" target="_blank" rel="noopener">小帅5656</a> · ✉️ 邮箱：<a href="mailto:li63050@qq.com">li63050@qq.com</a></div>
+</footer>
+</body>
+</html>

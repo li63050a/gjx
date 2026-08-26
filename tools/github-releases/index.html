@@ -51,6 +51,16 @@
         .msg { color:#b91c1c; font-size:0.9rem; margin-top:8px; white-space:pre-wrap; }
         .ok { color:var(--accent2); }
         .note { background:var(--note-bg); border:1px solid var(--note-bd); color:var(--note-fg); padding:10px 12px; border-radius:10px; font-size:0.85rem; margin-top:10px; }
+        .modal { position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; z-index:80; align-items:flex-start; justify-content:center; padding:24px; overflow:auto; }
+        .modal.open { display:flex; }
+        .modal-box { background:var(--card); color:var(--text); width:100%; max-width:880px; border-radius:14px; padding:18px; box-shadow:0 10px 40px rgba(0,0,0,.3); }
+        .modal-bar { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:8px; }
+        .modal-box pre.code { max-height:50vh; }
+        .commit { border:1px solid var(--border); border-radius:10px; padding:10px; margin:8px 0; }
+        .commit .cwh { display:flex; gap:8px; align-items:center; }
+        .cfile { border-top:1px solid var(--border); padding:6px 0; word-break:break-all; }
+        .site-foot { margin-top:28px; padding:14px 0; text-align:center; font-size:0.82rem; color:var(--muted); border-top:1px solid var(--border); line-height:1.9; }
+        .site-foot a { color:var(--accent); text-decoration:none; }
     </style>
 </head>
 <body>
@@ -176,21 +186,73 @@
             }).join('') || '<p class="meta">无文件</p>';
         }).catch(function(e){ document.getElementById('tree').innerHTML='<p class="msg">'+e.message+'</p>'; });
     }
+    var curFile={owner:'',repo:'',path:''};
     function showFile(owner, repo, path){
+        curFile={owner:owner,repo:repo,path:path};
         var raw='https://raw.githubusercontent.com/'+owner+'/'+repo+'/'+BRANCH+'/'+path;
         var urls=['https://g.z321.cc.cd/'+raw, raw]; var i=0;
         function nx(){ if(i>=urls.length) return Promise.reject(new Error('读取失败')); var u=urls[i++]; return fetch(u).then(function(r){ if(!r.ok) throw 0; return r.text(); }).catch(function(){ return nx(); }); }
         nx().then(function(txt){
-            document.getElementById('fileHead').innerHTML='<div class="asset" style="margin-bottom:10px"><div class="fn">'+path+'</div><div>'+accLinks(raw)+'</div></div>';
-            var view=document.getElementById('fileView'); view.classList.remove('hidden'); view.textContent=txt; switchTab('file');
-        }).catch(function(e){ document.getElementById('fileView').textContent='读取失败：'+e.message; });
+            document.getElementById('modalTitle').textContent=path;
+            document.getElementById('modalLinks').innerHTML=accLinks(raw);
+            document.getElementById('modalCode').textContent=txt;
+            document.getElementById('histOut').innerHTML='';
+            openModal();
+        }).catch(function(e){ alert('读取失败：'+e.message); });
+    }
+    function openModal(){ document.getElementById('modal').classList.add('open'); }
+    function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+    function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function openHistory(owner,repo,path){
+        var out=document.getElementById('histOut'); out.innerHTML='加载中…';
+        gh('https://api.github.com/repos/'+owner+'/'+repo+'/commits?path='+encodeURIComponent(path)+'&per_page=20').then(function(list){
+            if(!list.length){ out.innerHTML='<p>无提交历史</p>'; return; }
+            out.innerHTML=list.map(function(c){
+                var a=c.author; var who=a?a.login:(c.commit&&c.commit.author&&c.commit.author.name||'?'); var av=a?a.avatar_url:'';
+                var when=c.commit&&c.commit.author?c.commit.author.date.replace('T',' ').replace('Z',''):'';
+                var msg=c.commit?c.commit.message.split('\n')[0]:'';
+                return '<div class="commit"><div class="cwh"><img src="'+av+'" width="22" height="22" style="border-radius:50%"> <b>'+esc(who)+'</b> <span class="meta">'+when+'</span></div>'
+                    + '<div style="margin:4px 0">'+esc(msg)+'</div>'
+                    + '<button class="btn gray" onclick="commitDetail(\''+owner+'\',\''+repo+'\',\''+c.sha+'\',this)">查看改动 / PR / 运行</button>'
+                    + '<div class="cdetail meta"></div></div>';
+            }).join('');
+        }).catch(function(e){ out.innerHTML='<p class="msg">'+e.message+'</p>'; });
+    }
+    function commitDetail(owner,repo,sha,btn){
+        var box=btn.parentElement.querySelector('.cdetail');
+        if(box.dataset.loaded){ box.innerHTML=''; box.dataset.loaded=''; return; }
+        box.textContent='加载中…';
+        Promise.all([
+            gh('https://api.github.com/repos/'+owner+'/'+repo+'/commits/'+sha),
+            gh('https://api.github.com/repos/'+owner+'/'+repo+'/commits/'+sha+'/pulls'),
+            gh('https://api.github.com/repos/'+owner+'/'+repo+'/commits/'+sha+'/check-runs')
+        ]).then(function(r){
+            var det=r[0], prs=r[1], runs=r[2];
+            var files=(det.files||[]).map(function(f){
+                return '<div class="cfile"><b>'+esc(f.filename)+'</b> <span class="meta">['+f.status+'] +'+f.additions+' -'+f.deletions+'</span>'
+                    + (f.patch?'<pre class="code" style="max-height:240px">'+esc(f.patch)+'</pre>':'')+'</div>';
+            }).join('') || '无文件';
+            var prhtml=(prs&&prs.length)?prs.map(function(p){ return '<a href="'+p.html_url+'" target="_blank" rel="noopener">PR #'+p.number+' '+esc(p.title)+'</a>'; }).join(' · '):'无关联 PR';
+            var runhtml=(runs&&runs.check_runs&&runs.check_runs.length)?runs.check_runs.map(function(cr){ return esc(cr.name)+' <span class="meta">('+cr.status+' / '+(cr.conclusion||'-')+')</span>'; }).join(' · '):'无运行记录';
+            box.innerHTML='<div style="margin-top:6px"><b>改动文件：</b>'+files+'</div><div style="margin-top:6px"><b>PR：</b>'+prhtml+'</div><div style="margin-top:6px"><b>运行(CI)：</b>'+runhtml+'</div>';
+            box.dataset.loaded='1';
+        }).catch(function(e){ box.innerHTML='<p class="msg">'+e.message+'</p>'; });
     }
     document.getElementById('token').value = getToken();
     go();
 </script>
 <button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:#2563eb;color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
 <script>function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}</script>
-<!--SITE-LINKS-->
-<div style="margin-top:28px;padding:14px 0;text-align:center;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;">🔗 项目: <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub 仓库</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">gjx.z321.cc.cd</a></div>
+<div id="modal" class="modal"><div class="modal-box">
+    <div class="modal-bar"><span id="modalTitle" class="fn"></span><button class="btn gray" onclick="closeModal()">关闭 ✕</button></div>
+    <div id="modalLinks" class="meta"></div>
+    <pre class="code" id="modalCode"></pre>
+    <div style="margin-top:8px"><button class="btn" onclick="openHistory(curFile.owner,curFile.repo,curFile.path)">📜 查看提交历史（作者 / 改动 / PR / CI）</button></div>
+    <div id="histOut" class="meta" style="margin-top:8px"></div>
+</div></div>
+<footer class="site-foot">
+    <div>🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub 仓库</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">GitHub Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></div>
+    <div>💬 QQ 群：<a href="https://qun.qq.com/universal-share/share?ac=1&authKey=lvoTFPoZGfglgeejEyJiinGqmOr0ZSXmJWXmbjBuf83enyW4LQ66Vlia4g3rGpUX&busi_data=eyJncm91cENvZGUiOiIxMDI2OTM5NzQxIiwidG9rZW4iOiJYTi9nSFg3Q3lrRVpTSmFxcjEwa2hUNkJBRlpHakY1RFY1TG9tUVgzNXRObmdTVWxWVGtaaUxsL3hqTmc5MmpFIiwidWluIjoiMzYzNTczNjE4MCJ9&data=P1gqzEQxB2hGsyKtKp8EZBWMefx__fSBRhnUP-0NWzBGks1275alc0XOjKOn0O4y7O9mcCCQJcQdlu6yeiFmgQ&svctype=4&tempid=h5_group_info" target="_blank" rel="noopener">1026939741</a> · 📺 B站：<a href="https://b23.tv/BbFAP6j" target="_blank" rel="noopener">小帅5656</a> · ✉️ 邮箱：<a href="mailto:li63050@qq.com">li63050@qq.com</a></div>
+</footer>
 </body>
 </html>
