@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<title>密码短语生成 · 超能工具箱</title>
+<script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+<link rel="stylesheet" href="../common.css">
+</head>
+<body>
+<div class="container">
+<a class="brand" href="../../index.html">🧰 超能工具箱</a>
+<a class="back" href="../../index.html">← 返回主页</a>
+<h2>🎲 易记密码短语生成</h2>
+<div class="row">
+<label>词数 <input type="number" id="wc" value="4" min="2" max="10"></label>
+<label>分隔符
+<select id="sep"><option value="-">-</option><option value=".">.</option><option value="_">_</option><option value=" ">空格</option></select>
+</label>
+<label><input type="checkbox" id="num"> 末尾加数字</label>
+<label><input type="checkbox" id="cap" checked> 首字母大写</label>
+<button class="btn" onclick="gen()">生成</button>
+<button class="btn gray" onclick="copy()">复制</button>
+</div>
+<div id="out"></div>
+<div class="note">由内置英文词库随机组合，便于记忆且强度较高。仅供本地生成，不上传。</div>
+</div>
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>
+function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}
+if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}
+var WORDS=['apple','bread','cloud','dragon','eagle','forest','ghost','harbor','island','jungle','river','mountain','ocean','planet','quartz','raven','shadow','tiger','umbra','violet','willow','xenon','yarrow','zephyr','amber','bronze','candy','diamond','ember','frost','garden','honey','ivory','jade','kiwi','lemon','maple','neon','onyx','pearl','ruby','silver','topaz','wave','wind','star','moon','sun','stone','lake','pine','rose','salt','snow','thorn','bridge','crown','flame','leaf','mist','nova','petal','reef','sand','spark','vine','ash','bee','clay','dawn','dusk','fern','glow','herb','iris','lily','moss','oak','reed','seed','sky','terra','veil','wood','bloom','cove','drift','echo','glade','heath','lure','meadow','nook','path','quay','ridge','shoal','tide','vale','weald','wold'];
+var last='';
+function rnd(){ return Math.floor(Math.random()*WORDS.length); }
+function gen(){
+  var n=+document.getElementById('wc').value||4;
+  var sep=document.getElementById('sep').value;
+  var num=document.getElementById('num').checked, cap=document.getElementById('cap').checked;
+  var arr=[]; for(var i=0;i<n;i++){ var w=WORDS[rnd()]; if(cap) w=w[0].toUpperCase()+w.slice(1); arr.push(w); }
+  last=arr.join(sep);
+  if(num) last+=Math.floor(Math.random()*900+100);
+  document.getElementById('out').innerHTML='<div class="ans"><pre>'+last+'</pre></div>';
+}
+function copy(){ if(last) navigator.clipboard.writeText(last); }
+</script>
+<footer class="site-foot">
+<div>🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></div>
+<div>💬 QQ 1026939741 · 📺 B站 小帅5656 · ✉️ li63050@qq.com</div>
+</footer>
+</body>
+</html>

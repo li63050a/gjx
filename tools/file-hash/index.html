@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<title>文件哈希校验 · 超能工具箱</title>
+<script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+<link rel="stylesheet" href="../common.css">
+</head>
+<body>
+<div class="container">
+<a class="brand" href="../../index.html">🧰 超能工具箱</a>
+<a class="back" href="../../index.html">← 返回主页</a>
+<h2>📄 文件哈希校验</h2>
+<div class="row"><input type="file" id="f"></div>
+<div id="out"></div>
+<div class="note">计算文件的 SHA-1 / SHA-256 / SHA-512，文件不会上传（本地计算）。需在 HTTPS 或 localhost 下使用。</div>
+</div>
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>
+function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}
+if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}
+function hex(buf){return [].map.call(new Uint8Array(buf),function(b){return b.toString(16).padStart(2,'0')}).join('');}
+document.getElementById('f').addEventListener('change',function(e){
+  var file=e.target.files[0]; if(!file) return;
+  document.getElementById('out').innerHTML='<p class="meta">读取中：'+esc(file.name)+' ('+file.size+' 字节)</p>';
+  var reader=new FileReader();
+  reader.onload=function(){
+    var buf=reader.result;
+    Promise.all(['SHA-1','SHA-256','SHA-512'].map(function(a){return crypto.subtle.digest(a,buf).then(function(x){return a+': '+hex(x);});}))
+      .then(function(res){ document.getElementById('out').innerHTML='<div class="ans"><span class="ty">'+esc(file.name)+'</span><pre>'+res.join('\n')+'</pre></div>'; })
+      .catch(function(err){ document.getElementById('out').innerHTML='<p class="msg">计算失败：'+err+'</p>'; });
+  };
+  reader.readAsArrayBuffer(file);
+});
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+</script>
+<footer class="site-foot">
+<div>🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></div>
+<div>💬 QQ 1026939741 · 📺 B站 小帅5656 · ✉️ li63050@qq.com</div>
+</footer>
+</body>
+</html>

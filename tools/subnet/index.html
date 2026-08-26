@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<title>子网 / CIDR 计算 · 超能工具箱</title>
+<script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+<link rel="stylesheet" href="../common.css">
+</head>
+<body>
+<div class="container">
+<a class="brand" href="../../index.html">🧰 超能工具箱</a>
+<a class="back" href="../../index.html">← 返回主页</a>
+<h2>🕸️ 子网 / CIDR 计算器</h2>
+<div class="row">
+<input id="cidr" placeholder="如 192.168.1.0/24">
+<button class="btn" onclick="go()">计算</button>
+</div>
+<div id="out"></div>
+</div>
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>
+function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}
+if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}
+function ip2int(ip){ return ip.split('.').reduce(function(a,x){return (a*256+ +x)>>>0; },0); }
+function int2ip(n){ return [ (n>>>24)&255, (n>>16)&255, (n>>8)&255, n&255 ].join('.'); }
+function go(){
+  var s=document.getElementById('cidr').value.trim();
+  var m=s.match(/^(\d+\.\d+\.\d+\.\d+)\/(\d+)$/);
+  if(!m){ document.getElementById('out').innerHTML='<p class="msg">格式错误，示例 192.168.1.0/24</p>'; return; }
+  var base=ip2int(m[1]), bits=+m[2];
+  var mask = bits===0 ? 0 : ((0xffffffff << (32-bits)) >>> 0);
+  var net = (base & mask) >>> 0;
+  var hostmask = (~mask) >>> 0;
+  var bc = (net | hostmask) >>> 0;
+  var hosts = bits>=31 ? (bits===31?2:1) : (Math.pow(2,32-bits)-2);
+  var h='';
+  h+='<div class="ans"><span class="ty">网络地址</span><pre>'+int2ip(net)+'</pre></div>';
+  h+='<div class="ans"><span class="ty">广播地址</span><pre>'+int2ip(bc)+'</pre></div>';
+  h+='<div class="ans"><span class="ty">子网掩码</span><pre>'+int2ip(mask)+' (/'+bits+')</pre></div>';
+  h+='<div class="ans"><span class="ty">可用主机数</span><pre>'+hosts+'</pre></div>';
+  h+='<div class="ans"><span class="ty">主机范围</span><pre>'+int2ip(net+1)+' ~ '+int2ip(bc-1)+'</pre></div>';
+  document.getElementById('out').innerHTML=h;
+}
+</script>
+<footer class="site-foot">
+<div>🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></div>
+<div>💬 QQ 1026939741 · 📺 B站 小帅5656 · ✉️ li63050@qq.com</div>
+</footer>
+</body>
+</html>

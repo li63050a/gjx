@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<title>SHA 哈希 · 超能工具箱</title>
+<script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+<link rel="stylesheet" href="../common.css">
+</head>
+<body>
+<div class="container">
+<a class="brand" href="../../index.html">🧰 超能工具箱</a>
+<a class="back" href="../../index.html">← 返回主页</a>
+<h2>🔒 SHA 哈希计算</h2>
+<div class="row">
+<textarea id="inp" rows="4" placeholder="输入要计算哈希的文本"></textarea>
+</div>
+<div class="row">
+<select id="algo"><option>SHA-1</option><option selected>SHA-256</option><option>SHA-512</option></select>
+<button class="btn" onclick="go()">计算</button>
+<button class="btn gray" onclick="copy()">复制</button>
+</div>
+<div id="out"></div>
+<div class="note">使用浏览器原生 Web Crypto（无需联网）。需在 HTTPS 或 localhost 下使用；file:// 直接打开可能不可用。</div>
+</div>
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>
+function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}
+if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}
+var last='';
+function go(){
+  var t=document.getElementById('inp').value, a=document.getElementById('algo').value;
+  crypto.subtle.digest(a, new TextEncoder().encode(t)).then(function(buf){
+    last=[].map.call(new Uint8Array(buf),function(b){return b.toString(16).padStart(2,'0')}).join('');
+    document.getElementById('out').innerHTML='<div class="ans"><span class="ty">'+a+'</span><pre>'+last+'</pre></div>';
+  }).catch(function(e){ document.getElementById('out').innerHTML='<p class="msg">计算失败：'+e+'（请确认在 HTTPS/localhost 下打开）</p>'; });
+}
+function copy(){ if(last) navigator.clipboard.writeText(last); }
+</script>
+<footer class="site-foot">
+<div>🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></div>
+<div>💬 QQ 1026939741 · 📺 B站 小帅5656 · ✉️ li63050@qq.com</div>
+</footer>
+</body>
+</html>

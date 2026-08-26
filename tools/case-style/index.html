@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<title>命名风格转换 · 超能工具箱</title>
+<script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+<link rel="stylesheet" href="../common.css">
+</head>
+<body>
+<div class="container">
+<a class="brand" href="../../index.html">🧰 超能工具箱</a>
+<a class="back" href="../../index.html">← 返回主页</a>
+<h2>🔤 命名风格转换</h2>
+<div class="row"><textarea id="inp" rows="3" placeholder="输入英文标识符，如 my_variable_name"></textarea></div>
+<div class="row">
+<button class="btn" onclick="conv('camel')">camelCase</button>
+<button class="btn" onclick="conv('snake')">snake_case</button>
+<button class="btn" onclick="conv('kebab')">kebab-case</button>
+<button class="btn" onclick="conv('pascal')">PascalCase</button>
+<button class="btn" onclick="conv('title')">Title Case</button>
+<button class="btn gray" onclick="conv('upper')">UPPER</button>
+<button class="btn gray" onclick="conv('lower')">lower</button>
+</div>
+<div id="out"></div>
+</div>
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>
+function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}
+if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}
+function toWords(s){ return s.replace(/([a-z0-9])([A-Z])/g,'$1 $2').replace(/[\W_]+/g,' ').trim().split(/\s+/).filter(Boolean); }
+function cap(w){ return w[0].toUpperCase()+w.slice(1).toLowerCase(); }
+function conv(mode){
+  var w=toWords(document.getElementById('inp').value);
+  var r='';
+  if(mode==='camel') r=w.map(function(x,i){return i?cap(x):x.toLowerCase();}).join('');
+  else if(mode==='snake') r=w.map(function(x){return x.toLowerCase();}).join('_');
+  else if(mode==='kebab') r=w.map(function(x){return x.toLowerCase();}).join('-');
+  else if(mode==='pascal') r=w.map(cap).join('');
+  else if(mode==='title') r=w.map(cap).join(' ');
+  else if(mode==='upper') r=w.map(function(x){return x.toUpperCase();}).join('');
+  else if(mode==='lower') r=w.map(function(x){return x.toLowerCase();}).join('');
+  document.getElementById('out').innerHTML='<div class="ans"><pre>'+esc(r)+'</pre></div>';
+}
+function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+</script>
+<footer class="site-foot">
+<div>🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></div>
+<div>💬 QQ 1026939741 · 📺 B站 小帅5656 · ✉️ li63050@qq.com</div>
+</footer>
+</body>
+</html>

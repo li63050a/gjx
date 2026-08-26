@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<title>时区转换 · 超能工具箱</title>
+<script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+<link rel="stylesheet" href="../common.css">
+</head>
+<body>
+<div class="container">
+<a class="brand" href="../../index.html">🧰 超能工具箱</a>
+<a class="back" href="../../index.html">← 返回主页</a>
+<h2>🌐 时区转换</h2>
+<div class="row">
+<input type="datetime-local" id="dt">
+<button class="btn" onclick="now()">现在</button>
+</div>
+<div class="row">
+<select id="tz"></select>
+<button class="btn" onclick="go()">转换</button>
+</div>
+<div id="out"></div>
+</div>
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>
+function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}
+if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}
+var TZ=['Asia/Shanghai','Asia/Tokyo','Asia/Hong_Kong','Asia/Kolkata','Asia/Singapore','Europe/London','Europe/Paris','Europe/Moscow','America/New_York','America/Chicago','America/Los_Angeles','Australia/Sydney','UTC'];
+var sel=document.getElementById('tz'); TZ.forEach(function(z){var o=document.createElement('option');o.value=z;o.textContent=z;sel.appendChild(o);});
+function pad(n){return (n<10?'0':'')+n;}
+function fmt(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes());}
+function now(){ var d=new Date(); document.getElementById('dt').value=fmt(d); }
+now();
+function go(){
+  var v=document.getElementById('dt').value;
+  var d=v? new Date(v): new Date();
+  if(isNaN(d)){ document.getElementById('out').innerHTML='<p class="msg">请选择时间</p>'; return; }
+  var tz=document.getElementById('tz').value;
+  var main=new Intl.DateTimeFormat('zh-CN',{timeZone:tz,dateStyle:'full',timeStyle:'long'}).format(d);
+  var html='<div class="ans"><span class="ty">'+tz+'</span><pre>'+main+'</pre></div>';
+  TZ.filter(function(z){return z!==tz;}).slice(0,6).forEach(function(z){
+    html+='<div class="ans"><span class="ty">'+z+'</span><pre>'+new Intl.DateTimeFormat('zh-CN',{timeZone:z,dateStyle:'medium',timeStyle:'medium'}).format(d)+'</pre></div>';
+  });
+  document.getElementById('out').innerHTML=html;
+}
+</script>
+<footer class="site-foot">
+<div>🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></div>
+<div>💬 QQ 1026939741 · 📺 B站 小帅5656 · ✉️ li63050@qq.com</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<title>HMAC 生成 · 超能工具箱</title>
+<script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+<link rel="stylesheet" href="../common.css">
+</head>
+<body>
+<div class="container">
+<a class="brand" href="../../index.html">🧰 超能工具箱</a>
+<a class="back" href="../../index.html">← 返回主页</a>
+<h2>🔑 HMAC 生成</h2>
+<div class="row"><input id="key" placeholder="密钥（Key）"></div>
+<div class="row"><textarea id="msg" rows="4" placeholder="消息（Message）"></textarea></div>
+<div class="row">
+<select id="algo"><option selected>SHA-256</option><option>SHA-1</option><option>SHA-512</option></select>
+<button class="btn" onclick="go()">生成 HMAC</button>
+<button class="btn gray" onclick="copy()">复制</button>
+</div>
+<div id="out"></div>
+<div class="note">基于 Web Crypto 的 HMAC，用于签名/校验。需在 HTTPS 或 localhost 下使用。</div>
+</div>
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>
+function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}
+if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}
+var last='';
+async function go(){
+  var key=document.getElementById('key').value, msg=document.getElementById('msg').value, algo=document.getElementById('algo').value;
+  var enc=new TextEncoder();
+  try{
+    var ck=await crypto.subtle.importKey('raw', enc.encode(key), {name:'HMAC', hash:algo}, false, ['sign']);
+    var sig=await crypto.subtle.sign('HMAC', ck, enc.encode(msg));
+    last=[].map.call(new Uint8Array(sig),function(b){return b.toString(16).padStart(2,'0')}).join('');
+    document.getElementById('out').innerHTML='<div class="ans"><span class="ty">HMAC-'+algo+'</span><pre>'+last+'</pre></div>';
+  }catch(e){ document.getElementById('out').innerHTML='<p class="msg">生成失败：'+e+'</p>'; }
+}
+function copy(){ if(last) navigator.clipboard.writeText(last); }
+</script>
+<footer class="site-foot">
+<div>🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></div>
+<div>💬 QQ 1026939741 · 📺 B站 小帅5656 · ✉️ li63050@qq.com</div>
+</footer>
+</body>
+</html>
