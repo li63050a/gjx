@@ -39,7 +39,9 @@
         .cat { margin-bottom:22px; }
         .cat-h { font-size:1.05rem; margin-bottom:12px; color:var(--text); border-left:4px solid var(--accent); padding-left:10px; cursor:pointer; }
         .cat-h:hover { color:var(--accent); }
-        .cat-n { color:var(--muted); font-weight:400; font-size:0.85rem; }
+        .cat-n { color:var(--muted); font-weight:400; font-size:0.85rem; margin-left:4px; }
+        .cat-n::before { content:"("; }
+        .cat-n::after { content:")"; }
         .dl-h { font-weight:700; color:var(--muted); margin:12px 0 4px; font-size:0.9rem; cursor:pointer; user-select:none; }
         .dl-h .tg { display:inline-block; transition:transform .15s; }
         .dl-group.collapsed .dl-links { display:none; }
