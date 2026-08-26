@@ -49,6 +49,20 @@
     <a class="back" href="../../index.html">← 返回主页</a>
     <h2>🌐 DNS 解析工具</h2>
     <div class="row">
+        <select id="provider" onchange="onProviderChange()" style="flex:2">
+            <option value="cloudflare">Cloudflare · DoH/HTTPS</option>
+            <option value="google">Google · DoH/HTTPS</option>
+            <option value="quad9">Quad9 · DoH/HTTPS</option>
+            <option value="adguard">AdGuard · DoH/HTTPS</option>
+            <option value="alidns">阿里 AliDNS · DoH/HTTPS</option>
+            <option value="dnspod">腾讯 DNSPod · DoH/HTTPS</option>
+            <option value="360">360 · DoH/HTTPS</option>
+            <option value="custom">自定义 DoH 地址…</option>
+        </select>
+        <input id="customDoh" class="hidden" style="flex:2" placeholder="自定义 DoH 地址，如 https://doh.example.com/dns-query">
+        <label style="flex:0 0 auto; white-space:nowrap"><input type="checkbox" id="proxy" checked> 走加速代理</label>
+    </div>
+    <div class="row">
         <input id="domain" value="github.com" placeholder="域名，如 github.com">
         <select id="type">
             <option value="A">A (IPv4)</option>
@@ -67,19 +81,43 @@
     <div class="row">
         <button class="btn green" onclick="resolveAll()">⚡ 一键解析全部常用记录 (A/AAAA/CNAME/MX/TXT/NS/HTTPS)</button>
     </div>
-    <div id="out"><p class="meta">输入域名后点击“解析”。数据来自 Cloudflare / Google 的 DNS-over-HTTPS（DoH），已尝试走加速代理。</p></div>
-    <div class="note">说明：A=IPv4 地址，AAAA=IPv6 地址，CNAME=别名，MX=邮件服务器，TXT=文本记录，NS=域名服务器，HTTPS/SVCB=现代 TLS 连接记录（含对应 IP 与端口）。部分域名 IPv6 可能为空属正常。</div>
+    <div id="out"><p class="meta">输入域名后点击“解析”。可在上方切换 DNS 解析器（公共 DoH 服务器），或填写自定义 DoH 地址；默认走加速代理。</p></div>
+    <div class="note">说明：A=IPv4 地址，AAAA=IPv6 地址，CNAME=别名，MX=邮件服务器，TXT=文本记录，NS=域名服务器，HTTPS/SVCB=现代 TLS 连接记录（含对应 IP 与端口）。部分域名 IPv6 可能为空属正常。<br>⚠️ 浏览器环境只能发起 <b>DoH（HTTPS）</b> 请求，所以本工具通过各家公共 DNS 的 DoH 接口查询，可在上方自由切换解析器。若需 <b>DoT（DNS over TLS :853）</b> 或 <b>普通 DNS（UDP :53）</b>，请在本机使用 <code>dig</code> / <code>nslookup</code> 或系统/路由器设置，网页内无法直接发送这两种协议。</div>
 </div>
 <button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
 <script>
     var TYPES={1:'A',28:'AAAA',5:'CNAME',15:'MX',16:'TXT',2:'NS',6:'SOA',65:'HTTPS',43:'SVCB',257:'CAA',255:'ANY'};
     function setMsg(m,err){ var el=document.getElementById('out'); el.innerHTML = err? '<p class="msg">'+m+'</p>' : m; }
+    var PROVIDERS={
+        cloudflare:'https://cloudflare-dns.com/dns-query',
+        google:'https://dns.google/resolve',
+        quad9:'https://dns.quad9.net/dns-query',
+        adguard:'https://dns.adguard-dns.com/dns-query',
+        alidns:'https://dns.alidns.com/dns-query',
+        dnspod:'https://doh.pub/dns-query',
+        '360':'https://doh.360.cn/dns-query',
+        custom:''
+    };
+    function onProviderChange(){
+        var p=document.getElementById('provider').value;
+        document.getElementById('customDoh').classList.toggle('hidden', p!=='custom');
+    }
+    function currentBase(){
+        var p=document.getElementById('provider').value;
+        var base = PROVIDERS[p] || '';
+        if(p==='custom') base = document.getElementById('customDoh').value.trim();
+        return base;
+    }
     function doh(name, type){
-        var cf='https://cloudflare-dns.com/dns-query?name='+encodeURIComponent(name)+'&type='+type;
-        var gg='https://dns.google/resolve?name='+encodeURIComponent(name)+'&type='+type;
-        var urls=['https://g.z321.cc.cd/'+cf, cf, gg];
+        var base=currentBase();
+        if(!base) return Promise.reject(new Error('请填写自定义 DoH 地址'));
+        var qs='name='+encodeURIComponent(name)+'&type='+type;
+        var direct=base + (base.indexOf('?')>=0 ? '&'+qs : '?'+qs);
+        var cands=[];
+        if(document.getElementById('proxy').checked) cands.push('https://g.z321.cc.cd/'+direct);
+        cands.push(direct);
         var i=0;
-        function nx(){ if(i>=urls.length) return Promise.reject(new Error('所有 DoH 源均失败')); var u=urls[i++]; return fetch(u,{headers:{'Accept':'application/dns-json'}}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).catch(function(){ return nx(); }); }
+        function nx(){ if(i>=cands.length) return Promise.reject(new Error('所有 DoH 源均失败')); var u=cands[i++]; return fetch(u,{headers:{'Accept':'application/dns-json'}}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).catch(function(){ return nx(); }); }
         return nx();
     }
     function renderAnswers(name, type, json){
