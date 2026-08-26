@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>面积换算 · 超能工具箱</title>
@@ -16,6 +18,26 @@
         .btn:active { transform:scale(0.96); }
         .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; font-size:0.95rem; word-break:break-all; font-family:monospace; }
     </style>
+    <style>
+html[data-theme="dark"] body{background:#0f172a;color:#e2e8f0;}
+html[data-theme="dark"] .container{background:#1e293b;color:#e2e8f0;box-shadow:none;}
+html[data-theme="dark"] .back{color:#93c5fd;}
+html[data-theme="dark"] h2{color:#e2e8f0;}
+html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] textarea{background:#0f172a;color:#e2e8f0;border-color:#475569;}
+html[data-theme="dark"] .output-box{background:#0f172a;color:#e2e8f0;border-color:#475569;}
+html[data-theme="dark"] .row span,html[data-theme="dark"] .label,html[data-theme="dark"] .desc,html[data-theme="dark"] .empty{color:#cbd5e1;}
+html[data-theme="dark"] .btn.gray{background:#475569;}
+html[data-theme="dark"] .btn.green{background:#15803d;}
+html[data-theme="dark"] .chip{background:#334155;color:#c7d2fe;}
+html[data-theme="dark"] .chip:hover{background:#475569;}
+html[data-theme="dark"] .detail{background:#0f172a;border-color:#475569;}
+html[data-theme="dark"] .detail th{background:#334155;color:#c7d2fe;}
+html[data-theme="dark"] .detail td,html[data-theme="dark"] .detail th{border-color:#475569;}
+html[data-theme="dark"] .detail code{background:#334155;}
+html[data-theme="dark"] .tab{background:#334155;color:#c7d2fe;}
+html[data-theme="dark"] .tab.active{background:#2563eb;color:#fff;}
+html[data-theme="dark"] pre{background:#0f172a;color:#e2e8f0;}
+</style>
 </head>
 <body>
 <div class="container">
@@ -50,6 +72,8 @@
 </script>
 
 
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:#2563eb;color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}</script>
 <!--SITE-LINKS-->
 <div style="margin-top:28px;padding:14px 0;text-align:center;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;">🔗 项目: <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub 仓库</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">gjx.z321.cc.cd</a></div>
 

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <title>配速换算 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 800px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input, .row select { padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; flex:1; min-width:100px; }
+        textarea { width:100%; padding:10px; border:1px solid #d1d5db; border-radius:10px; font-size:0.9rem; min-height:90px; resize:vertical; font-family:monospace; margin:8px 0; }
+        .flex { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .btn.gray { background:#6b7280; }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; white-space:pre-wrap; word-break:break-all; max-height:280px; overflow-y:auto; font-size:0.9rem; font-family:monospace; }
+    </style>
+    <style>
+html[data-theme="dark"] body{background:#0f172a;color:#e2e8f0;}
+html[data-theme="dark"] .container{background:#1e293b;color:#e2e8f0;box-shadow:none;}
+html[data-theme="dark"] .back{color:#93c5fd;}
+html[data-theme="dark"] h2{color:#e2e8f0;}
+html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] textarea{background:#0f172a;color:#e2e8f0;border-color:#475569;}
+html[data-theme="dark"] .output-box{background:#0f172a;color:#e2e8f0;border-color:#475569;}
+html[data-theme="dark"] .row span,html[data-theme="dark"] .label,html[data-theme="dark"] .desc,html[data-theme="dark"] .empty{color:#cbd5e1;}
+html[data-theme="dark"] .btn.gray{background:#475569;}
+html[data-theme="dark"] .btn.green{background:#15803d;}
+html[data-theme="dark"] .chip{background:#334155;color:#c7d2fe;}
+html[data-theme="dark"] .chip:hover{background:#475569;}
+html[data-theme="dark"] .detail{background:#0f172a;border-color:#475569;}
+html[data-theme="dark"] .detail th{background:#334155;color:#c7d2fe;}
+html[data-theme="dark"] .detail td,html[data-theme="dark"] .detail th{border-color:#475569;}
+html[data-theme="dark"] .detail code{background:#334155;}
+html[data-theme="dark"] .tab{background:#334155;color:#c7d2fe;}
+html[data-theme="dark"] .tab.active{background:#2563eb;color:#fff;}
+html[data-theme="dark"] pre{background:#0f172a;color:#e2e8f0;}
+</style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>🏃 配速换算</h2>
+    <div id="fields"></div>
+    <div class="flex">
+        <button class="btn" onclick="run()">换算</button>
+        <button class="btn gray" onclick="document.getElementById('result').textContent='已清空'">清空</button>
+    </div>
+    <div class="output-box" id="result">等待操作...</div>
+</div>
+<script>
+    var FIELDS = [{"id":"v","type":"text","ph":"数值","def":"5"},{"id":"u","type":"select","options":[{"v":"minkm","t":"分/公里"},{"v":"kmh","t":"公里/时"},{"v":"minmi","t":"分/英里"},{"v":"mph","t":"英里/时"}]}];
+    function get(id){ return document.getElementById(id).value; }
+    (function(){ var h=""; FIELDS.forEach(function(f){ if(f.type==="area"){ h+='<textarea id="'+f.id+'" placeholder="'+f.ph+'">'+(f.def||"")+'</textarea>'; } else if(f.type==="select"){ h+='<div class="row"><span>'+(f.label||"")+'</span><select id="'+f.id+'">'+f.options.map(function(o){return '<option value="'+o.v+'">'+o.t+'</option>';}).join('')+('</select></div>'); } else { h+='<div class="row"><input type="'+(f.type||"text")+'" id="'+f.id+'" placeholder="'+f.ph+'" value="'+(f.def||"")+'"></div>'; } }); document.getElementById("fields").innerHTML=h; })();
+    function run(){ try { document.getElementById("result").textContent = compute(); } catch(e){ document.getElementById("result").textContent = "错误: " + e.message; } }
+function compute(){
+  var v=parseFloat(get('v')),u=get('u'); if(isNaN(v))return '请输入数值';
+  var minkm = u==='minkm'? v : (u==='kmh'? 60/v : (u==='minmi'? v*1.60934 : 60/(v*1.60934)));
+  return '分/公里: '+minkm.toFixed(2)+'\n公里/时: '+(60/minkm).toFixed(2)+'\n分/英里: '+(minkm*1.60934).toFixed(2)+'\n英里/时: '+(60/(minkm*1.60934)).toFixed(2);
+}
+</script>
+
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:#2563eb;color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}</script>
+<!--SITE-LINKS-->
+<div style="margin-top:28px;padding:14px 0;text-align:center;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;">🔗 项目: <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub 仓库</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">gjx.z321.cc.cd</a></div>
+</body>
+</html>

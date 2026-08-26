@@ -1,60 +1,132 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Base64 编解码 · 超能工具箱</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
-        .container { max-width: 700px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .container { max-width: 800px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
         .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
         h2 { margin-bottom:16px; }
-        textarea { width:100%; padding:10px; border:1px solid #d1d5db; border-radius:10px; font-size:0.95rem; min-height:100px; resize:vertical; }
+        .tabs { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+        .tab { padding:8px 16px; border:1px solid #d1d5db; border-radius:30px; background:#fff; cursor:pointer; font-size:0.85rem; font-weight:600; color:#475569; }
+        .tab.active { background:#2563eb; color:#fff; border-color:#2563eb; }
+        textarea { width:100%; padding:10px; border:1px solid #d1d5db; border-radius:10px; font-size:0.9rem; min-height:110px; resize:vertical; font-family:monospace; }
+        input[type=file] { margin:10px 0; font-size:0.9rem; }
         .flex { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; }
         .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; font-size:0.9rem; }
         .btn:active { transform:scale(0.96); }
         .btn.green { background:#16a34a; }
         .btn.gray { background:#6b7280; }
-        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; word-break:break-all; max-height:200px; overflow-y:auto; font-size:0.9rem; }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; word-break:break-all; max-height:240px; overflow-y:auto; font-size:0.85rem; font-family:monospace; }
         .hint { font-size:0.75rem; color:#94a3b8; margin-top:6px; }
+        .pane { display:none; }
+        .pane.active { display:block; }
+        #imgPreview { max-width:100%; border:1px solid #e2e8f0; border-radius:10px; margin-top:10px; }
     </style>
+    <style>
+html[data-theme="dark"] body{background:#0f172a;color:#e2e8f0;}
+html[data-theme="dark"] .container{background:#1e293b;color:#e2e8f0;box-shadow:none;}
+html[data-theme="dark"] .back{color:#93c5fd;}
+html[data-theme="dark"] h2{color:#e2e8f0;}
+html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] textarea{background:#0f172a;color:#e2e8f0;border-color:#475569;}
+html[data-theme="dark"] .output-box{background:#0f172a;color:#e2e8f0;border-color:#475569;}
+html[data-theme="dark"] .row span,html[data-theme="dark"] .label,html[data-theme="dark"] .desc,html[data-theme="dark"] .empty{color:#cbd5e1;}
+html[data-theme="dark"] .btn.gray{background:#475569;}
+html[data-theme="dark"] .btn.green{background:#15803d;}
+html[data-theme="dark"] .chip{background:#334155;color:#c7d2fe;}
+html[data-theme="dark"] .chip:hover{background:#475569;}
+html[data-theme="dark"] .detail{background:#0f172a;border-color:#475569;}
+html[data-theme="dark"] .detail th{background:#334155;color:#c7d2fe;}
+html[data-theme="dark"] .detail td,html[data-theme="dark"] .detail th{border-color:#475569;}
+html[data-theme="dark"] .detail code{background:#334155;}
+html[data-theme="dark"] .tab{background:#334155;color:#c7d2fe;}
+html[data-theme="dark"] .tab.active{background:#2563eb;color:#fff;}
+html[data-theme="dark"] pre{background:#0f172a;color:#e2e8f0;}
+</style>
 </head>
 <body>
 <div class="container">
     <a class="back" href="../../index.html">← 返回工具箱</a>
-    <h2>🔐 Base64 编解码</h2>
-    <textarea id="inputArea" placeholder="输入要编码/解码的文本">Hello 世界</textarea>
-    <div class="flex">
-        <button class="btn" onclick="encodeB64()">🔒 编码</button>
-        <button class="btn green" onclick="decodeB64()">🔓 解码</button>
-        <button class="btn gray" onclick="clearAll()">清空</button>
+    <h2>🔐 Base64 编解码 (文字 + 图片)</h2>
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('tEnc')">📝 文字编码</div>
+        <div class="tab" onclick="switchTab('tDec')">📝 文字解码</div>
+        <div class="tab" onclick="switchTab('iEnc')">🖼️ 图片编码</div>
+        <div class="tab" onclick="switchTab('iDec')">🖼️ 图片解码</div>
     </div>
-    <div class="output-box" id="result">等待操作...</div>
+
+    <div class="pane active" id="tEnc">
+        <textarea id="txtIn" placeholder="输入要编码的文本">Hello 世界 🌍</textarea>
+        <div class="flex">
+            <button class="btn" onclick="txtEncode()">🔒 编码为 Base64</button>
+            <button class="btn gray" onclick="clr('txtIn','txtOut')">清空</button>
+        </div>
+        <div class="output-box" id="txtOut">等待编码...</div>
+    </div>
+
+    <div class="pane" id="tDec">
+        <textarea id="txtIn2" placeholder="粘贴 Base64 文本"></textarea>
+        <div class="flex">
+            <button class="btn green" onclick="txtDecode()">🔓 解码为文本</button>
+            <button class="btn gray" onclick="clr('txtIn2','txtOut2')">清空</button>
+        </div>
+        <div class="output-box" id="txtOut2">等待解码...</div>
+    </div>
+
+    <div class="pane" id="iEnc">
+        <input type="file" id="fileInput" onchange="imgEncode()">
+        <div class="hint">选择图片后自动编码为 Data URL (Base64)</div>
+        <div class="output-box" id="imgOut">等待编码...</div>
+    </div>
+
+    <div class="pane" id="iDec">
+        <textarea id="imgIn" placeholder="粘贴图片的 Base64 / Data URL"></textarea>
+        <div class="flex">
+            <button class="btn" onclick="imgDecode()">🔓 预览 / 下载</button>
+            <button class="btn gray" onclick="clr('imgIn','imgPrevWrap')">清空</button>
+        </div>
+        <div id="imgPrevWrap"></div>
+    </div>
     <div class="hint">💡 支持中文、emoji 等 Unicode 字符</div>
 </div>
 <script>
-    function encodeB64() {
-        const input = document.getElementById('inputArea').value;
-        try {
-            const encoded = btoa(unescape(encodeURIComponent(input)));
-            document.getElementById('result').textContent = encoded;
-        } catch(e) { document.getElementById('result').textContent = '编码失败: ' + e.message; }
+    function switchTab(id) {
+        var panes = document.getElementsByClassName('pane'), tabs = document.getElementsByClassName('tab');
+        for (var i=0;i<panes.length;i++) panes[i].classList.remove('active');
+        for (var j=0;j<tabs.length;j++) tabs[j].classList.remove('active');
+        document.getElementById(id).classList.add('active');
+        event.currentTarget.classList.add('active');
     }
-    function decodeB64() {
-        const input = document.getElementById('inputArea').value;
-        try {
-            const decoded = decodeURIComponent(escape(atob(input)));
-            document.getElementById('result').textContent = decoded;
-        } catch(e) { document.getElementById('result').textContent = '解码失败，请检查输入是否为合法 Base64'; }
+    function utf8ToB64(s){ return btoa(unescape(encodeURIComponent(s))); }
+    function b64ToUtf8(s){ return decodeURIComponent(escape(atob(s))); }
+    function txtEncode(){ try { document.getElementById('txtOut').textContent = utf8ToB64(document.getElementById('txtIn').value); } catch(e){ document.getElementById('txtOut').textContent='编码失败: '+e.message; } }
+    function txtDecode(){ try { document.getElementById('txtOut2').textContent = b64ToUtf8(document.getElementById('txtIn2').value.trim()); } catch(e){ document.getElementById('txtOut2').textContent='解码失败，请检查是否为合法 Base64'; } }
+    function imgEncode(){
+        var file = document.getElementById('fileInput').files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(e){ document.getElementById('imgOut').textContent = e.target.result; };
+        reader.readAsDataURL(file);
     }
-    function clearAll() {
-        document.getElementById('inputArea').value = '';
-        document.getElementById('result').textContent = '已清空';
+    function imgDecode(){
+        var v = document.getElementById('imgIn').value.trim();
+        if (!v) { document.getElementById('imgPrevWrap').innerHTML=''; return; }
+        if (v.indexOf('data:') !== 0) v = 'data:image/png;base64,' + v;
+        var ext = (v.match(/data:image\/([a-zA-Z0-9.+-]+)/) || [,'png'])[1];
+        document.getElementById('imgPrevWrap').innerHTML =
+            '<img id="imgPreview" src="'+v+'">' +
+            '<div class="flex"><a class="btn green" download="decoded.'+ext+'" href="'+v+'">⬇️ 下载图片</a></div>';
     }
+    function clr(a,b){ document.getElementById(a).value=''; document.getElementById(b).innerHTML = document.getElementById(b).id==='imgPrevWrap' ? '' : '已清空'; }
 </script>
 
-
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:#2563eb;color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}</script>
 <!--SITE-LINKS-->
 <div style="margin-top:28px;padding:14px 0;text-align:center;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;">🔗 项目: <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub 仓库</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">gjx.z321.cc.cd</a></div>
 

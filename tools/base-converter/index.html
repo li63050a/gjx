@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
     <title>进制转换 · 超能工具箱</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -10,46 +13,131 @@
         .container { max-width: 700px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
         .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
         h2 { margin-bottom:16px; }
+        .tabs { display:flex; gap:8px; margin-bottom:16px; }
+        .tab { flex:1; padding:10px; border:none; border-radius:12px; background:#eef2ff; color:#4338ca; font-weight:600; cursor:pointer; }
+        .tab.active { background:#2563eb; color:#fff; }
         .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
-        .row input, .row select { padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; flex:1; min-width:100px; }
+        .row input, .row select, textarea { padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; width:100%; }
+        textarea { min-height:80px; resize:vertical; font-family:monospace; }
         .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
         .btn:active { transform:scale(0.96); }
-        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; font-size:0.95rem; word-break:break-all; font-family:monospace; }
-        .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+        .btn.gray { background:#6b7280; }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; font-size:0.95rem; word-break:break-all; font-family:monospace; white-space:pre-wrap; }
+        .hidden { display:none; }
     </style>
+    <style>
+html[data-theme="dark"] body{background:#0f172a;color:#e2e8f0;}
+html[data-theme="dark"] .container{background:#1e293b;color:#e2e8f0;box-shadow:none;}
+html[data-theme="dark"] .back{color:#93c5fd;}
+html[data-theme="dark"] h2{color:#e2e8f0;}
+html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] textarea{background:#0f172a;color:#e2e8f0;border-color:#475569;}
+html[data-theme="dark"] .output-box{background:#0f172a;color:#e2e8f0;border-color:#475569;}
+html[data-theme="dark"] .row span,html[data-theme="dark"] .label,html[data-theme="dark"] .desc,html[data-theme="dark"] .empty{color:#cbd5e1;}
+html[data-theme="dark"] .btn.gray{background:#475569;}
+html[data-theme="dark"] .btn.green{background:#15803d;}
+html[data-theme="dark"] .chip{background:#334155;color:#c7d2fe;}
+html[data-theme="dark"] .chip:hover{background:#475569;}
+html[data-theme="dark"] .detail{background:#0f172a;border-color:#475569;}
+html[data-theme="dark"] .detail th{background:#334155;color:#c7d2fe;}
+html[data-theme="dark"] .detail td,html[data-theme="dark"] .detail th{border-color:#475569;}
+html[data-theme="dark"] .detail code{background:#334155;}
+html[data-theme="dark"] .tab{background:#334155;color:#c7d2fe;}
+html[data-theme="dark"] .tab.active{background:#2563eb;color:#fff;}
+html[data-theme="dark"] pre{background:#0f172a;color:#e2e8f0;}
+</style>
 </head>
 <body>
 <div class="container">
     <a class="back" href="../../index.html">← 返回工具箱</a>
     <h2>🔢 进制转换</h2>
-    <div class="row">
-        <input type="text" id="numInput" placeholder="输入数字" value="255">
-        <select id="fromBase">
-            <option value="10">十进制 (10)</option>
-            <option value="2">二进制 (2)</option>
-            <option value="8">八进制 (8)</option>
-            <option value="16">十六进制 (16)</option>
-        </select>
-        <button class="btn" onclick="convertBase()">转换</button>
+    <div class="tabs">
+        <button class="tab active" id="tabNum" onclick="switchTab('num')">数字转换</button>
+        <button class="tab" id="tabText" onclick="switchTab('text')">文字 ⇄ 编码</button>
     </div>
-    <div class="output-box" id="result">等待转换...</div>
+
+    <div id="numArea">
+        <div class="row">
+            <input type="text" id="numInput" placeholder="输入数字" value="255">
+            <select id="fromBase">
+                <option value="10">十进制 (10)</option>
+                <option value="2">二进制 (2)</option>
+                <option value="8">八进制 (8)</option>
+                <option value="16">十六进制 (16)</option>
+            </select>
+            <button class="btn" onclick="convertBase()">转换</button>
+        </div>
+        <div class="output-box" id="numResult">等待转换...</div>
+    </div>
+
+    <div id="textArea" class="hidden">
+        <textarea id="textIn" placeholder="输入文字，如 Hello 世界"></textarea>
+        <div class="row">
+            <select id="enc">
+                <option value="2">二进制</option>
+                <option value="16" selected>十六进制</option>
+                <option value="8">八进制</option>
+            </select>
+            <button class="btn" onclick="textToCode()">文字 → 编码</button>
+        </div>
+        <textarea id="codeIn" placeholder="输入编码，用空格或逗号分隔，如 48 65 6c 6c 6f"></textarea>
+        <div class="row">
+            <button class="btn" onclick="codeToText()">编码 → 文字</button>
+            <button class="btn gray" onclick="swapText()">⇅ 互换上下</button>
+        </div>
+        <div class="output-box" id="textResult">等待操作...</div>
+    </div>
 </div>
 <script>
+    function switchTab(t){
+        document.getElementById('tabNum').classList.toggle('active', t==='num');
+        document.getElementById('tabText').classList.toggle('active', t==='text');
+        document.getElementById('numArea').classList.toggle('hidden', t!=='num');
+        document.getElementById('textArea').classList.toggle('hidden', t!=='text');
+    }
     function convertBase() {
-        const val = document.getElementById('numInput').value.trim();
-        const from = parseInt(document.getElementById('fromBase').value);
-        if (!val) { document.getElementById('result').textContent = '请输入数字'; return; }
-        const dec = parseInt(val, from);
-        if (isNaN(dec)) { document.getElementById('result').textContent = '❌ 无效数字'; return; }
-        document.getElementById('result').innerHTML =
-            '🔢 十进制: ' + dec + '<br>' +
-            '🔢 二进制: ' + dec.toString(2) + '<br>' +
-            '🔢 八进制: ' + dec.toString(8) + '<br>' +
-            '🔢 十六进制: ' + dec.toString(16).toUpperCase();
+        var val = document.getElementById('numInput').value.trim();
+        var from = parseInt(document.getElementById('fromBase').value);
+        if (!val) { document.getElementById('numResult').textContent = '请输入数字'; return; }
+        var dec = parseInt(val, from);
+        if (isNaN(dec)) { document.getElementById('numResult').textContent = '❌ 无效数字'; return; }
+        document.getElementById('numResult').innerHTML =
+            '十进制: ' + dec + '\n' +
+            '二进制: ' + dec.toString(2) + '\n' +
+            '八进制: ' + dec.toString(8) + '\n' +
+            '十六进制: ' + dec.toString(16).toUpperCase();
+    }
+    function encBase(){ var e=document.getElementById('enc').value; return e==='2'?2:(e==='8'?8:16); }
+    function textToCode(){
+        var t = document.getElementById('textIn').value;
+        var b = encBase();
+        if(!t){ document.getElementById('textResult').textContent='请输入文字'; return; }
+        var out=[];
+        for(var i=0;i<t.length;i++){ out.push(t.charCodeAt(i).toString(b)); }
+        document.getElementById('codeIn').value = out.join(' ');
+        document.getElementById('textResult').textContent = '已生成 ' + out.length + ' 个编码（见上方输入框）';
+    }
+    function codeToText(){
+        var c = document.getElementById('codeIn').value.trim();
+        var b = encBase();
+        if(!c){ document.getElementById('textResult').textContent='请输入编码'; return; }
+        var parts = c.split(/[\s,]+/).filter(Boolean);
+        var out='';
+        for(var i=0;i<parts.length;i++){
+            var n = parseInt(parts[i], b);
+            if(isNaN(n)){ document.getElementById('textResult').textContent='❌ 第 '+(i+1)+' 段无法解析为'+(b===2?'二进制':b===8?'八进制':'十六进制'); return; }
+            out += String.fromCharCode(n);
+        }
+        document.getElementById('textIn').value = out;
+        document.getElementById('textResult').textContent = '解码结果（见上方输入框）：\n' + out;
+    }
+    function swapText(){
+        var a=document.getElementById('textIn').value, c=document.getElementById('codeIn').value;
+        document.getElementById('textIn').value=c; document.getElementById('codeIn').value=a;
     }
 </script>
 
-
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:#2563eb;color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}</script>
 <!--SITE-LINKS-->
 <div style="margin-top:28px;padding:14px 0;text-align:center;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;">🔗 项目: <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub 仓库</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">gjx.z321.cc.cd</a></div>
 

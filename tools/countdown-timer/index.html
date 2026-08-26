@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
     <title>倒计时 · 超能工具箱</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -11,46 +14,86 @@
         .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
         h2 { margin-bottom:16px; }
         .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
-        .row input { flex:1; min-width:150px; padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; }
-        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none;border-radius:30px; font-weight:600; cursor:pointer; }
+        .row span { font-weight:600; color:#475569; }
+        .row input { width:80px; min-width:auto; padding:8px 12px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; text-align:center; }
+        .flex { display:flex; flex-wrap:wrap; gap:10px; margin:14px 0; }
+        .btn { padding:8px 22px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
         .btn:active { transform:scale(0.96); }
+        .btn.green { background:#16a34a; }
         .btn.gray { background:#6b7280; }
-        .output-box { background:#0f172a; color:#22d3ee; padding:20px; border-radius:10px; margin-top:12px; text-align:center; font-size:2rem; font-family:monospace; letter-spacing:2px; }
+        .output-box { background:#0f172a; color:#22d3ee; padding:24px; border-radius:10px; margin-top:12px; text-align:center; font-size:3rem; font-family:monospace; letter-spacing:2px; }
+        .label { text-align:center; font-size:1rem; color:#64748b; margin-top:8px; }
     </style>
+    <style>
+html[data-theme="dark"] body{background:#0f172a;color:#e2e8f0;}
+html[data-theme="dark"] .container{background:#1e293b;color:#e2e8f0;box-shadow:none;}
+html[data-theme="dark"] .back{color:#93c5fd;}
+html[data-theme="dark"] h2{color:#e2e8f0;}
+html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] textarea{background:#0f172a;color:#e2e8f0;border-color:#475569;}
+html[data-theme="dark"] .output-box{background:#0f172a;color:#e2e8f0;border-color:#475569;}
+html[data-theme="dark"] .row span,html[data-theme="dark"] .label,html[data-theme="dark"] .desc,html[data-theme="dark"] .empty{color:#cbd5e1;}
+html[data-theme="dark"] .btn.gray{background:#475569;}
+html[data-theme="dark"] .btn.green{background:#15803d;}
+html[data-theme="dark"] .chip{background:#334155;color:#c7d2fe;}
+html[data-theme="dark"] .chip:hover{background:#475569;}
+html[data-theme="dark"] .detail{background:#0f172a;border-color:#475569;}
+html[data-theme="dark"] .detail th{background:#334155;color:#c7d2fe;}
+html[data-theme="dark"] .detail td,html[data-theme="dark"] .detail th{border-color:#475569;}
+html[data-theme="dark"] .detail code{background:#334155;}
+html[data-theme="dark"] .tab{background:#334155;color:#c7d2fe;}
+html[data-theme="dark"] .tab.active{background:#2563eb;color:#fff;}
+html[data-theme="dark"] pre{background:#0f172a;color:#e2e8f0;}
+</style>
 </head>
 <body>
 <div class="container">
     <a class="back" href="../../index.html">← 返回工具箱</a>
     <h2>⏳ 倒计时</h2>
     <div class="row">
-        <input type="datetime-local" id="target">
-        <button class="btn" onclick="start()">开始</button>
-        <button class="btn gray" onclick="stop()">停止</button>
+        <span>时</span><input type="number" id="hh" min="0" value="0">
+        <span>分</span><input type="number" id="mm" min="0" value="5">
+        <span>秒</span><input type="number" id="ss" min="0" value="0">
+        <button class="btn" onclick="applyFromInputs()">设置</button>
     </div>
-    <div class="output-box" id="result">--:--:--:--</div>
+    <div class="flex">
+        <button class="btn green" onclick="start()">开始</button>
+        <button class="btn gray" onclick="pause()">暂停</button>
+        <button class="btn gray" onclick="reset()">重置</button>
+    </div>
+    <div class="output-box" id="result">00:00:00</div>
+    <div class="label" id="phase">已设置 05:00</div>
 </div>
 <script>
-    var timer = null;
-    document.getElementById('target').value = new Date(Date.now()+3600000).toISOString().slice(0,16);
+    var total = 0, left = 0, running = false, timer = null;
     function pad(n){ return (n<10?'0':'')+n; }
-    function start() {
-        stop();
-        var t = new Date(document.getElementById('target').value).getTime();
-        if (isNaN(t)) { document.getElementById('result').textContent = '❌ 请选择时间'; return; }
-        timer = setInterval(function() {
-            var diff = t - Date.now();
-            if (diff <= 0) { document.getElementById('result').textContent = '00:00:00:00 时间到!'; stop(); return; }
-            var d = Math.floor(diff/86400000);
-            var h = Math.floor(diff%86400000/3600000);
-            var m = Math.floor(diff%3600000/60000);
-            var s = Math.floor(diff%60000/1000);
-            document.getElementById('result').textContent = pad(d)+':'+pad(h)+':'+pad(m)+':'+pad(s);
+    function show(){ var h=Math.floor(left/3600), m=Math.floor(left%3600/60), s=left%60; document.getElementById('result').textContent = pad(h)+':'+pad(m)+':'+pad(s); }
+    function applyFromInputs(){
+        var h = parseInt(document.getElementById('hh').value)||0;
+        var m = parseInt(document.getElementById('mm').value)||0;
+        var s = parseInt(document.getElementById('ss').value)||0;
+        pause();
+        total = h*3600 + m*60 + s; left = total;
+        show();
+        document.getElementById('phase').textContent = '已设置 ' + pad(h)+':'+pad(m)+':'+pad(s);
+    }
+    function start(){
+        if (running) return;
+        if (left <= 0) applyFromInputs();
+        if (left <= 0) { document.getElementById('phase').textContent = '请先设置时间'; return; }
+        running = true;
+        document.getElementById('phase').textContent = '倒计时中...';
+        timer = setInterval(function(){
+            if (left <= 0) { clearInterval(timer); running=false; document.getElementById('result').textContent = '⏰ 时间到!'; document.getElementById('phase').textContent = '已完成'; return; }
+            left--; show();
         }, 1000);
     }
-    function stop() { if (timer) clearInterval(timer); }
+    function pause(){ running=false; if(timer) clearInterval(timer); if(left>0) document.getElementById('phase').textContent = '已暂停'; }
+    function reset(){ pause(); left = total; show(); document.getElementById('phase').textContent = '已重置'; }
+    applyFromInputs();
 </script>
 
-
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:#2563eb;color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}</script>
 <!--SITE-LINKS-->
 <div style="margin-top:28px;padding:14px 0;text-align:center;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;">🔗 项目: <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub 仓库</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">gjx.z321.cc.cd</a></div>
 

@@ -3,558 +3,310 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧰 超能工具箱 - 导航</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <title>超能工具箱 · 纯前端多功能工具集</title>
     <style>
+        :root { --bg:#f1f5f9; --card:#fff; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --accent:#2563eb; --chip:#eff6ff; }
+        html[data-theme="dark"] { --bg:#0f172a; --card:#1e293b; --text:#e2e8f0; --muted:#94a3b8; --line:#334155; --accent:#60a5fa; --chip:#334155; }
         * { margin:0; padding:0; box-sizing:border-box; }
-        body {
-            font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: #f1f5f9;
-            padding: 30px 20px;
-            color: #0f172a;
-        }
-        .container { max-width: 1000px; margin:0 auto; }
-        h1 {
-            font-size: 2.4rem;
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
-        }
-        .sub { color: #475569; margin-bottom: 30px; font-size: 1rem; }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 16px;
-        }
-        .card {
-            background: #fff;
-            border-radius: 16px;
-            padding: 20px 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            text-align: center;
-            text-decoration: none;
-            color: #0f172a;
-            transition: 0.2s;
-            border: 1px solid #e2e8f0;
-        }
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-            border-color: #2563eb;
-        }
-        .card .icon { font-size: 2.4rem; display: block; margin-bottom: 8px; }
-        .card .name { font-weight: 600; font-size: 1rem; }
-        .card .desc { font-size: 0.75rem; color: #64748b; margin-top: 4px; }
-        .badge {
-            display: inline-block;
-            background: #dcfce7;
-            color: #166534;
-            font-size: 0.6rem;
-            padding: 2px 10px;
-            border-radius: 20px;
-            margin-top: 6px;
-        }
-        .badge.js { background: #dbeafe; color: #1d4ed8; }
+        body { font-family:-apple-system,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); padding-bottom:30px; transition:background .2s,color .2s; }
+        .topbar { position:sticky; top:0; z-index:30; display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--card); border-bottom:1px solid var(--line); }
+        .hamb { font-size:1.5rem; background:none; border:none; cursor:pointer; color:var(--text); }
+        .brand { flex:1; display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.2rem; }
+        .brand .logo { width:30px; height:30px; border-radius:8px; }
+        .theme { font-size:1.3rem; background:none; border:none; cursor:pointer; }
+        .drawer { position:fixed; top:0; left:0; height:100%; width:82%; max-width:330px; background:var(--card); border-right:1px solid var(--line); transform:translateX(-100%); transition:transform .25s; z-index:50; padding:16px; overflow-y:auto; }
+        .drawer.open { transform:translateX(0); }
+        .drawer-title { font-weight:700; margin-bottom:10px; color:var(--muted); }
+        .drawer-search { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:10px; font-size:1rem; margin-bottom:12px; background:var(--bg); color:var(--text); }
+        .dl { display:block; padding:9px 10px; color:var(--text); text-decoration:none; border-radius:8px; font-size:0.92rem; }
+        .dl:hover { background:var(--chip); }
+        .overlay { position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:40; display:none; }
+        .overlay.show { display:block; }
+        .main { max-width:1080px; margin:0 auto; padding:18px 16px; }
+        .sub { text-align:center; color:var(--muted); font-size:0.85rem; margin:6px 0 16px; }
+        .sub a { color:var(--accent); text-decoration:none; }
+        .search { width:100%; padding:14px 16px; border:1px solid var(--line); border-radius:14px; font-size:1rem; margin-bottom:18px; background:var(--card); color:var(--text); box-shadow:0 1px 6px rgba(0,0,0,.05); }
+        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px; }
+        .card { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:18px 10px; background:var(--card); border:1px solid var(--line); border-radius:16px; text-decoration:none; color:var(--text); box-shadow:0 1px 6px rgba(0,0,0,.05); transition:transform .12s, box-shadow .12s; }
+        .card:hover { transform:translateY(-3px); box-shadow:0 6px 18px rgba(0,0,0,.12); }
+        .card .ico { font-size:1.8rem; }
+        .card .nm { font-size:0.9rem; font-weight:600; text-align:center; }
+        .empty { text-align:center; color:var(--muted); padding:30px; grid-column:1/-1; }
+        @media (max-width:480px){ .grid { grid-template-columns:repeat(auto-fill,minmax(115px,1fr)); gap:10px; } .card .nm { font-size:0.82rem; } }
+        @media (min-width:1024px){ .grid { grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); } }
     </style>
+    <script>var t=localStorage.getItem("theme"); if(t)document.documentElement.dataset.theme=t;</script>
 </head>
 <body>
-    <div class="container">
-        <h1>🧰 超能工具箱</h1>
-        <p class="sub">点击卡片进入工具，每个工具都是独立页面，纯前端实现，兼容老旧浏览器</p>
-        <p class="sub" style="margin-top:6px;">🔗 项目仓库: <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener" style="color:#2563eb;">github.com/li63050a/gjx</a> · GitHub Pages: <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener" style="color:#2563eb;">li63050a.github.io/gjx</a> · 在线演示: <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener" style="color:#2563eb;">gjx.z321.cc.cd</a></p>
-        <div class="grid">
-            <!-- ===== 计算器 ===== -->
-            <a href="tools/calculator/" class="card">
-                <span class="icon">📐</span>
-                <div class="name">计算器</div>
-                <div class="desc">加减乘除</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== Base64 编解码 ===== -->
-            <a href="tools/base64/" class="card">
-                <span class="icon">🔐</span>
-                <div class="name">Base64 编解码</div>
-                <div class="desc">文本/图片编码</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 时间戳转换 ===== -->
-            <a href="tools/timestamp/" class="card">
-                <span class="icon">⏰</span>
-                <div class="name">时间戳转换</div>
-                <div class="desc">秒 ↔ 日期互转</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 颜色转换 ===== -->
-            <a href="tools/color-converter/" class="card">
-                <span class="icon">🎨</span>
-                <div class="name">颜色转换</div>
-                <div class="desc">HEX ↔ RGB ↔ HSL</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== JSON 格式化 ===== -->
-            <a href="tools/json-formatter/" class="card">
-                <span class="icon">📋</span>
-                <div class="name">JSON 格式化</div>
-                <div class="desc">美化 / 压缩</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 密码生成器 ===== -->
-            <a href="tools/password-generator/" class="card">
-                <span class="icon">🔑</span>
-                <div class="name">密码生成器</div>
-                <div class="desc">自定义强度</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 字数统计 ===== -->
-            <a href="tools/word-counter/" class="card">
-                <span class="icon">📊</span>
-                <div class="name">字数统计</div>
-                <div class="desc">字符/单词/段落</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 大小写转换 ===== -->
-            <a href="tools/case-converter/" class="card">
-                <span class="icon">📝</span>
-                <div class="name">大小写转换</div>
-                <div class="desc">多种转换模式</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== UUID 生成器 ===== -->
-            <a href="tools/uuid-generator/" class="card">
-                <span class="icon">🆔</span>
-                <div class="name">UUID 生成</div>
-                <div class="desc">v4 版本</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== URL 编解码 ===== -->
-            <a href="tools/url-encoder/" class="card">
-                <span class="icon">🌐</span>
-                <div class="name">URL 编解码</div>
-                <div class="desc">编码/解码 URL</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 随机数生成器 ===== -->
-            <a href="tools/random-generator/" class="card">
-                <span class="icon">🎲</span>
-                <div class="name">随机数生成</div>
-                <div class="desc">整数 / 列表</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 进制转换 ===== -->
-            <a href="tools/base-converter/" class="card">
-                <span class="icon">🔢</span>
-                <div class="name">进制转换</div>
-                <div class="desc">2/8/10/16 互转</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 字节换算 ===== -->
-            <a href="tools/byte-converter/" class="card">
-                <span class="icon">📦</span>
-                <div class="name">字节换算</div>
-                <div class="desc">B ↔ KB ↔ MB ↔ GB</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 正则测试 ===== -->
-            <a href="tools/regex-tester/" class="card">
-                <span class="icon">🧪</span>
-                <div class="name">正则测试</div>
-                <div class="desc">测试正则表达式</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== HTML 实体 ===== -->
-            <a href="tools/html-entity/" class="card">
-                <span class="icon">🔣</span>
-                <div class="name">HTML 实体</div>
-                <div class="desc">转义 / 反转义</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 日期计算 ===== -->
-            <a href="tools/date-calculator/" class="card">
-                <span class="icon">📅</span>
-                <div class="name">日期计算</div>
-                <div class="desc">天数 / 周数 / 月数</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 文本行处理 ===== -->
-            <a href="tools/text-processor/" class="card">
-                <span class="icon">📝</span>
-                <div class="name">文本行处理</div>
-                <div class="desc">排序 / 去重 / 反转</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 温度换算 ===== -->
-            <a href="tools/temperature-converter/" class="card">
-                <span class="icon">🌡️</span>
-                <div class="name">温度换算</div>
-                <div class="desc">摄氏/华氏/开尔文</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 长度换算 ===== -->
-            <a href="tools/length-converter/" class="card">
-                <span class="icon">📏</span>
-                <div class="name">长度换算</div>
-                <div class="desc">m/km/英寸/英尺</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 重量换算 ===== -->
-            <a href="tools/weight-converter/" class="card">
-                <span class="icon">⚖️</span>
-                <div class="name">重量换算</div>
-                <div class="desc">kg/g/磅/盎司</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 速度换算 ===== -->
-            <a href="tools/speed-converter/" class="card">
-                <span class="icon">💨</span>
-                <div class="name">速度换算</div>
-                <div class="desc">m/s/km/h/节</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 面积换算 ===== -->
-            <a href="tools/area-converter/" class="card">
-                <span class="icon">🟦</span>
-                <div class="name">面积换算</div>
-                <div class="desc">m²/公顷/英亩</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 体积换算 ===== -->
-            <a href="tools/volume-converter/" class="card">
-                <span class="icon">🪣</span>
-                <div class="name">体积换算</div>
-                <div class="desc">L/加仑/杯</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 摩斯密码 ===== -->
-            <a href="tools/morse-code/" class="card">
-                <span class="icon">📻</span>
-                <div class="name">摩斯密码</div>
-                <div class="desc">文本 ⇄ 摩斯</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== Unicode 编码 ===== -->
-            <a href="tools/unicode-converter/" class="card">
-                <span class="icon">🔡</span>
-                <div class="name">Unicode 编码</div>
-                <div class="desc">码点编解码</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== MD5 哈希 ===== -->
-            <a href="tools/md5-generator/" class="card">
-                <span class="icon">🔐</span>
-                <div class="name">MD5 哈希</div>
-                <div class="desc">纯 JS 计算</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== Base64 图片 ===== -->
-            <a href="tools/base64-image/" class="card">
-                <span class="icon">🖼️</span>
-                <div class="name">Base64 图片</div>
-                <div class="desc">图片转 DataURL</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 文本对比 ===== -->
-            <a href="tools/text-diff/" class="card">
-                <span class="icon">🔍</span>
-                <div class="name">文本对比</div>
-                <div class="desc">行级差异</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 查找替换 ===== -->
-            <a href="tools/find-replace/" class="card">
-                <span class="icon">🔎</span>
-                <div class="name">查找替换</div>
-                <div class="desc">支持正则</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== CSV ⇄ MD ===== -->
-            <a href="tools/csv-markdown/" class="card">
-                <span class="icon">📊</span>
-                <div class="name">CSV ⇄ MD</div>
-                <div class="desc">表格互转</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 词频统计 ===== -->
-            <a href="tools/word-frequency/" class="card">
-                <span class="icon">📈</span>
-                <div class="name">词频统计</div>
-                <div class="desc">出现次数</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 颜色选择器 ===== -->
-            <a href="tools/color-picker/" class="card">
-                <span class="icon">🎨</span>
-                <div class="name">颜色选择器</div>
-                <div class="desc">HEX/RGB/HSL</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== Cron 解析 ===== -->
-            <a href="tools/cron-explainer/" class="card">
-                <span class="icon">⏲️</span>
-                <div class="name">Cron 解析</div>
-                <div class="desc">表达式说明</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== SQL 格式化 ===== -->
-            <a href="tools/sql-formatter/" class="card">
-                <span class="icon">🗄️</span>
-                <div class="name">SQL 格式化</div>
-                <div class="desc">美化语句</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== Lorem 生成 ===== -->
-            <a href="tools/lorem-generator/" class="card">
-                <span class="icon">📝</span>
-                <div class="name">Lorem 生成</div>
-                <div class="desc">占位文本</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 罗马数字 ===== -->
-            <a href="tools/roman-numeral/" class="card">
-                <span class="icon">🏛️</span>
-                <div class="name">罗马数字</div>
-                <div class="desc">互转 1-3999</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 金额大写 ===== -->
-            <a href="tools/number-to-chinese/" class="card">
-                <span class="icon">💴</span>
-                <div class="name">金额大写</div>
-                <div class="desc">数字转中文</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 年龄计算 ===== -->
-            <a href="tools/age-calculator/" class="card">
-                <span class="icon">🎂</span>
-                <div class="name">年龄计算</div>
-                <div class="desc">岁 / 月 / 天</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== BMI 计算 ===== -->
-            <a href="tools/bmi-calculator/" class="card">
-                <span class="icon">⚖️</span>
-                <div class="name">BMI 计算</div>
-                <div class="desc">身体质量指数</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 随机抽签 ===== -->
-            <a href="tools/random-picker/" class="card">
-                <span class="icon">🎯</span>
-                <div class="name">随机抽签</div>
-                <div class="desc">选项抽取</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 倒计时 ===== -->
-            <a href="tools/countdown-timer/" class="card">
-                <span class="icon">⏳</span>
-                <div class="name">倒计时</div>
-                <div class="desc">至目标时间</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 秒表 ===== -->
-            <a href="tools/stopwatch/" class="card">
-                <span class="icon">⏱️</span>
-                <div class="name">秒表</div>
-                <div class="desc">计时器</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== URL 解析 ===== -->
-            <a href="tools/url-parser/" class="card">
-                <span class="icon">🌐</span>
-                <div class="name">URL 解析</div>
-                <div class="desc">拆分参数</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== Slug 生成 ===== -->
-            <a href="tools/slug-generator/" class="card">
-                <span class="icon">🔗</span>
-                <div class="name">Slug 生成</div>
-                <div class="desc">URL 友好</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 月历生成 ===== -->
-            <a href="tools/calendar-generator/" class="card">
-                <span class="icon">📆</span>
-                <div class="name">月历生成</div>
-                <div class="desc">当月日历</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 百分比计算 ===== -->
-            <a href="tools/percentage-calculator/" class="card">
-                <span class="icon">📊</span>
-                <div class="name">百分比计算</div>
-                <div class="desc">占比 / 增减</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 小费分摊 ===== -->
-            <a href="tools/tip-calculator/" class="card">
-                <span class="icon">🍽️</span>
-                <div class="name">小费分摊</div>
-                <div class="desc">账单 / 人均</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 时间换算 ===== -->
-            <a href="tools/time-converter/" class="card">
-                <span class="icon">⏱️</span>
-                <div class="name">时间换算</div>
-                <div class="desc">秒/分/时/天/周</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 压强换算 ===== -->
-            <a href="tools/pressure-converter/" class="card">
-                <span class="icon">🧮</span>
-                <div class="name">压强换算</div>
-                <div class="desc">Pa/atm/bar/psi</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== JWT 解析 ===== -->
-            <a href="tools/jwt-decoder/" class="card">
-                <span class="icon">🪪</span>
-                <div class="name">JWT 解析</div>
-                <div class="desc">解码 payload</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== HTTP 状态码 ===== -->
-            <a href="tools/http-status/" class="card">
-                <span class="icon">🌐</span>
-                <div class="name">HTTP 状态码</div>
-                <div class="desc">速查表</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 对比度检测 ===== -->
-            <a href="tools/contrast-checker/" class="card">
-                <span class="icon">🎭</span>
-                <div class="name">对比度检测</div>
-                <div class="desc">WCAG 校验</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== UA 解析 ===== -->
-            <a href="tools/user-agent-parser/" class="card">
-                <span class="icon">🕵️</span>
-                <div class="name">UA 解析</div>
-                <div class="desc">浏览器/系统</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== JSON ⇄ CSV ===== -->
-            <a href="tools/json-csv/" class="card">
-                <span class="icon">🔁</span>
-                <div class="name">JSON ⇄ CSV</div>
-                <div class="desc">数据互转</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== HTML 压缩 ===== -->
-            <a href="tools/html-minifier/" class="card">
-                <span class="icon">🗜️</span>
-                <div class="name">HTML 压缩</div>
-                <div class="desc">去注释/空白</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== Markdown 预览 ===== -->
-            <a href="tools/markdown-preview/" class="card">
-                <span class="icon">📄</span>
-                <div class="name">Markdown 预览</div>
-                <div class="desc">即时渲染</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 提取链接 ===== -->
-            <a href="tools/extract-links/" class="card">
-                <span class="icon">🔗</span>
-                <div class="name">提取链接</div>
-                <div class="desc">链接 / 邮箱</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 文本清洗 ===== -->
-            <a href="tools/text-cleaner/" class="card">
-                <span class="icon">🧼</span>
-                <div class="name">文本清洗</div>
-                <div class="desc">去空/去重</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== ASCII 编码 ===== -->
-            <a href="tools/ascii-converter/" class="card">
-                <span class="icon">🔤</span>
-                <div class="name">ASCII 编码</div>
-                <div class="desc">文本⇄码值</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 数学工具 ===== -->
-            <a href="tools/math-lab/" class="card">
-                <span class="icon">🧮</span>
-                <div class="name">数学工具</div>
-                <div class="desc">素数/GCD/斐波</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 表情符号 ===== -->
-            <a href="tools/emoji-picker/" class="card">
-                <span class="icon">😀</span>
-                <div class="name">表情符号</div>
-                <div class="desc">一键复制</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 骰子 ===== -->
-            <a href="tools/dice-roller/" class="card">
-                <span class="icon">🎲</span>
-                <div class="name">骰子</div>
-                <div class="desc">多面多颗</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 抛硬币 ===== -->
-            <a href="tools/coin-flip/" class="card">
-                <span class="icon">🪙</span>
-                <div class="name">抛硬币</div>
-                <div class="desc">正/反</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 彩票生成 ===== -->
-            <a href="tools/lottery-generator/" class="card">
-                <span class="icon">🎰</span>
-                <div class="name">彩票生成</div>
-                <div class="desc">随机号码</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 番茄钟 ===== -->
-            <a href="tools/pomodoro/" class="card">
-                <span class="icon">🍅</span>
-                <div class="name">番茄钟</div>
-                <div class="desc">专注计时</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 星期查询 ===== -->
-            <a href="tools/weekday-finder/" class="card">
-                <span class="icon">📅</span>
-                <div class="name">星期查询</div>
-                <div class="desc">日期→星期</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 闰年判断 ===== -->
-            <a href="tools/leap-year/" class="card">
-                <span class="icon">🗓️</span>
-                <div class="name">闰年判断</div>
-                <div class="desc">年份校验</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 文本反转 ===== -->
-            <a href="tools/text-reverser/" class="card">
-                <span class="icon">🔃</span>
-                <div class="name">文本反转</div>
-                <div class="desc">字符/词/行</div>
-                <span class="badge js">JS</span>
-            </a>
-            <!-- ===== 密码强度 ===== -->
-            <a href="tools/password-strength/" class="card">
-                <span class="icon">🔐</span>
-                <div class="name">密码强度</div>
-                <div class="desc">强度检测</div>
-                <span class="badge js">JS</span>
-            </a>
-        </div>
-        <p style="margin-top: 30px; font-size:0.8rem; color:#94a3b8; text-align:center;">
-            所有工具兼容 IE11 及更高版本浏览器，纯 JavaScript 实现，无需任何外部依赖
-        </p>
-    </div>
-
-
-<!--SITE-LINKS-->
-<div style="margin-top:28px;padding:14px 0;text-align:center;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;">🔗 项目: <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub 仓库</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">gjx.z321.cc.cd</a></div>
-
+<header class="topbar">
+    <button class="hamb" onclick="toggleDrawer()" aria-label="菜单">☰</button>
+    <div class="brand"><img class="logo" src="favicon.svg" alt="logo"> 超能工具箱</div>
+    <button class="theme" onclick="toggleTheme()" id="themeBtn" aria-label="主题">🌙</button>
+</header>
+<div class="drawer" id="drawer"><div class="drawer-title">全部工具 (126)</div><input class="drawer-search" id="drawerSearch" placeholder="搜索工具..." oninput="filterCards(this.value)"><div id="drawerList"><a class="dl" href="tools/word-wrap/index.html" data-name="按宽度换行">📏 按宽度换行</a>
+<a class="dl" href="tools/percentage-calculator/index.html" data-name="百分比计算">📊 百分比计算</a>
+<a class="dl" href="tools/ratio-simplifier/index.html" data-name="比例化简">⚖️ 比例化简</a>
+<a class="dl" href="tools/bit-converter/index.html" data-name="比特换算">🔢 比特换算</a>
+<a class="dl" href="tools/anagram-checker/index.html" data-name="变位词检测">🔤 变位词检测</a>
+<a class="dl" href="tools/emoji-picker/index.html" data-name="表情符号速选">😀 表情符号速选</a>
+<a class="dl" href="tools/lottery-generator/index.html" data-name="彩票号码生成">🎰 彩票号码生成</a>
+<a class="dl" href="tools/find-replace/index.html" data-name="查找替换">🔎 查找替换</a>
+<a class="dl" href="tools/word-frequency/index.html" data-name="词频统计">📈 词频统计</a>
+<a class="dl" href="tools/text-shuffle/index.html" data-name="打乱行序">🔀 打乱行序</a>
+<a class="dl" href="tools/case-converter/index.html" data-name="大小写转换">📝 大小写转换</a>
+<a class="dl" href="tools/unit-price-calculator/index.html" data-name="单价计算">🛒 单价计算</a>
+<a class="dl" href="tools/countdown-timer/index.html" data-name="倒计时">⏳ 倒计时</a>
+<a class="dl" href="tools/inductance-converter/index.html" data-name="电感换算">🌀 电感换算</a>
+<a class="dl" href="tools/electric-charge-converter/index.html" data-name="电荷换算">⚡ 电荷换算</a>
+<a class="dl" href="tools/electric-current-converter/index.html" data-name="电流换算">🔋 电流换算</a>
+<a class="dl" href="tools/capacitance-converter/index.html" data-name="电容换算">🧲 电容换算</a>
+<a class="dl" href="tools/voltage-converter/index.html" data-name="电压换算">🔋 电压换算</a>
+<a class="dl" href="tools/resistance-converter/index.html" data-name="电阻换算">🧱 电阻换算</a>
+<a class="dl" href="tools/port-numbers/index.html" data-name="端口速查">🔌 端口速查</a>
+<a class="dl" href="tools/pomodoro/index.html" data-name="番茄钟">🍅 番茄钟</a>
+<a class="dl" href="tools/radioactivity-converter/index.html" data-name="放射性">☢️ 放射性</a>
+<a class="dl" href="tools/compound-interest/index.html" data-name="复利计算">💹 复利计算</a>
+<a class="dl" href="tools/power-converter/index.html" data-name="功率换算">🔌 功率换算</a>
+<a class="dl" href="tools/palindrome-checker/index.html" data-name="回文检测">🪞 回文检测</a>
+<a class="dl" href="tools/acceleration-converter/index.html" data-name="加速度换算">🚀 加速度换算</a>
+<a class="dl" href="tools/calculator/index.html" data-name="简易计算器">📐 简易计算器</a>
+<a class="dl" href="tools/gradient-generator/index.html" data-name="渐变生成">🌈 渐变生成</a>
+<a class="dl" href="tools/angle-converter/index.html" data-name="角度换算">📐 角度换算</a>
+<a class="dl" href="tools/base-converter/index.html" data-name="进制转换">🔢 进制转换</a>
+<a class="dl" href="tools/force-converter/index.html" data-name="力换算">💪 力换算</a>
+<a class="dl" href="tools/volume-flow-converter/index.html" data-name="流量换算">💧 流量换算</a>
+<a class="dl" href="tools/roman-numeral/index.html" data-name="罗马数字转换">🏛️ 罗马数字转换</a>
+<a class="dl" href="tools/density-converter/index.html" data-name="密度换算">🪨 密度换算</a>
+<a class="dl" href="tools/password-strength/index.html" data-name="密码强度检测">🔐 密码强度检测</a>
+<a class="dl" href="tools/password-generator/index.html" data-name="密码生成器">🔑 密码生成器</a>
+<a class="dl" href="tools/area-converter/index.html" data-name="面积换算">🟦 面积换算</a>
+<a class="dl" href="tools/stopwatch/index.html" data-name="秒表">⏱️ 秒表</a>
+<a class="dl" href="tools/morse-code/index.html" data-name="摩斯密码">📻 摩斯密码</a>
+<a class="dl" href="tools/magic-8-ball/index.html" data-name="魔法8号球">🎱 魔法8号球</a>
+<a class="dl" href="tools/energy-converter/index.html" data-name="能量换算">⚡ 能量换算</a>
+<a class="dl" href="tools/age-calculator/index.html" data-name="年龄计算器">🎂 年龄计算器</a>
+<a class="dl" href="tools/torque-converter/index.html" data-name="扭矩换算">🔧 扭矩换算</a>
+<a class="dl" href="tools/coin-flip/index.html" data-name="抛硬币">🪙 抛硬币</a>
+<a class="dl" href="tools/pace-converter/index.html" data-name="配速换算">🏃 配速换算</a>
+<a class="dl" href="tools/cooking-converter/index.html" data-name="烹饪换算">🍳 烹饪换算</a>
+<a class="dl" href="tools/frequency-converter/index.html" data-name="频率换算">📶 频率换算</a>
+<a class="dl" href="tools/average-calculator/index.html" data-name="平均值计算">📊 平均值计算</a>
+<a class="dl" href="tools/screen-size-converter/index.html" data-name="屏幕尺寸">📺 屏幕尺寸</a>
+<a class="dl" href="tools/remove-accents/index.html" data-name="去重音符号">🧹 去重音符号</a>
+<a class="dl" href="tools/weekday-finder/index.html" data-name="日期→星期">📅 日期→星期</a>
+<a class="dl" href="tools/date-calculator/index.html" data-name="日期计算器">📅 日期计算器</a>
+<a class="dl" href="tools/date-add/index.html" data-name="日期加减">📅 日期加减</a>
+<a class="dl" href="tools/leap-year/index.html" data-name="闰年判断">🗓️ 闰年判断</a>
+<a class="dl" href="tools/rock-paper-scissors/index.html" data-name="石头剪刀布">✊ 石头剪刀布</a>
+<a class="dl" href="tools/timestamp/index.html" data-name="时间戳转换">⏰ 时间戳转换</a>
+<a class="dl" href="tools/time-converter/index.html" data-name="时间换算">⏰ 时间换算</a>
+<a class="dl" href="tools/world-clock/index.html" data-name="世界时钟">🌍 世界时钟</a>
+<a class="dl" href="tools/math-lab/index.html" data-name="数学工具箱">🧮 数学工具箱</a>
+<a class="dl" href="tools/number-to-chinese/index.html" data-name="数字转中文大写">💴 数字转中文大写</a>
+<a class="dl" href="tools/tax-calculator/index.html" data-name="税费计算">🧾 税费计算</a>
+<a class="dl" href="tools/speed-converter/index.html" data-name="速度换算">💨 速度换算</a>
+<a class="dl" href="tools/data-rate-converter/index.html" data-name="速率换算">📡 速率换算</a>
+<a class="dl" href="tools/random-picker/index.html" data-name="随机抽签">🎯 随机抽签</a>
+<a class="dl" href="tools/random-word/index.html" data-name="随机单词">🔤 随机单词</a>
+<a class="dl" href="tools/color-palette/index.html" data-name="随机调色板">🎨 随机调色板</a>
+<a class="dl" href="tools/credit-card-generator/index.html" data-name="随机卡号">💳 随机卡号</a>
+<a class="dl" href="tools/random-generator/index.html" data-name="随机数生成器">🎲 随机数生成器</a>
+<a class="dl" href="tools/fake-data/index.html" data-name="随机信息">🧪 随机信息</a>
+<a class="dl" href="tools/extract-links/index.html" data-name="提取链接 / 邮箱">🔗 提取链接 / 邮箱</a>
+<a class="dl" href="tools/extract-numbers/index.html" data-name="提取数字">🔢 提取数字</a>
+<a class="dl" href="tools/volume-converter/index.html" data-name="体积换算">🪣 体积换算</a>
+<a class="dl" href="tools/dice-roller/index.html" data-name="骰子投掷">🎲 骰子投掷</a>
+<a class="dl" href="tools/temperature-converter/index.html" data-name="温度换算">🌡️ 温度换算</a>
+<a class="dl" href="tools/text-diff/index.html" data-name="文本对比 (行差异)">🔍 文本对比 (行差异)</a>
+<a class="dl" href="tools/text-reverser/index.html" data-name="文本反转">🔃 文本反转</a>
+<a class="dl" href="tools/text-cleaner/index.html" data-name="文本清洗">🧼 文本清洗</a>
+<a class="dl" href="tools/pad-text/index.html" data-name="文本填充对齐">📐 文本填充对齐</a>
+<a class="dl" href="tools/text-similarity/index.html" data-name="文本相似度">📊 文本相似度</a>
+<a class="dl" href="tools/text-processor/index.html" data-name="文本行处理">📝 文本行处理</a>
+<a class="dl" href="tools/string-repeat/index.html" data-name="文本重复">🔁 文本重复</a>
+<a class="dl" href="tools/pixel-converter/index.html" data-name="像素换算">🖥️ 像素换算</a>
+<a class="dl" href="tools/tip-calculator/index.html" data-name="小费分摊">🍽️ 小费分摊</a>
+<a class="dl" href="tools/pressure-converter/index.html" data-name="压强换算">🧮 压强换算</a>
+<a class="dl" href="tools/contrast-checker/index.html" data-name="颜色对比度 (WCAG)">🎭 颜色对比度 (WCAG)</a>
+<a class="dl" href="tools/color-picker/index.html" data-name="颜色选择器">🎨 颜色选择器</a>
+<a class="dl" href="tools/username-generator/index.html" data-name="用户名生成">👤 用户名生成</a>
+<a class="dl" href="tools/fuel-economy/index.html" data-name="油耗换算">⛽ 油耗换算</a>
+<a class="dl" href="tools/loan-calculator/index.html" data-name="月供计算">🏦 月供计算</a>
+<a class="dl" href="tools/calendar-generator/index.html" data-name="月历生成">📆 月历生成</a>
+<a class="dl" href="tools/percentage-change/index.html" data-name="增长率">📈 增长率</a>
+<a class="dl" href="tools/length-converter/index.html" data-name="长度换算">📏 长度换算</a>
+<a class="dl" href="tools/illuminance-converter/index.html" data-name="照度换算">💡 照度换算</a>
+<a class="dl" href="tools/discount-calculator/index.html" data-name="折扣计算">🏷️ 折扣计算</a>
+<a class="dl" href="tools/regex-tester/index.html" data-name="正则表达式测试">🧪 正则表达式测试</a>
+<a class="dl" href="tools/weight-converter/index.html" data-name="重量换算">⚖️ 重量换算</a>
+<a class="dl" href="tools/count-chars/index.html" data-name="字符统计">🔢 字符统计</a>
+<a class="dl" href="tools/byte-converter/index.html" data-name="字节单位换算">📦 字节单位换算</a>
+<a class="dl" href="tools/word-counter/index.html" data-name="字数统计">📊 字数统计</a>
+<a class="dl" href="tools/ascii-converter/index.html" data-name="ASCII 编解码">🔤 ASCII 编解码</a>
+<a class="dl" href="tools/base64/index.html" data-name="Base64 编解码 (文字 + 图片)">🔐 Base64 编解码 (文字 + 图片)</a>
+<a class="dl" href="tools/base64-image/index.html" data-name="Base64 图片编码">🖼️ Base64 图片编码</a>
+<a class="dl" href="tools/bmi-calculator/index.html" data-name="BMI 身体质量指数">⚖️ BMI 身体质量指数</a>
+<a class="dl" href="tools/cron-explainer/index.html" data-name="Cron 表达式解析">⏲️ Cron 表达式解析</a>
+<a class="dl" href="tools/css-minifier/index.html" data-name="CSS 压缩">🗜️ CSS 压缩</a>
+<a class="dl" href="tools/csv-markdown/index.html" data-name="CSV ⇄ Markdown 表格">📊 CSV ⇄ Markdown 表格</a>
+<a class="dl" href="tools/color-converter/index.html" data-name="HEX ↔ RGB ↔ HSL">🎨 HEX ↔ RGB ↔ HSL</a>
+<a class="dl" href="tools/html-entity/index.html" data-name="HTML 实体编解码">🔣 HTML 实体编解码</a>
+<a class="dl" href="tools/html-minifier/index.html" data-name="HTML 压缩">🗜️ HTML 压缩</a>
+<a class="dl" href="tools/http-status/index.html" data-name="HTTP 状态码速查">🌐 HTTP 状态码速查</a>
+<a class="dl" href="tools/json-csv/index.html" data-name="JSON ⇄ CSV">🔁 JSON ⇄ CSV</a>
+<a class="dl" href="tools/json-formatter/index.html" data-name="JSON 格式化 / 压缩">📋 JSON 格式化 / 压缩</a>
+<a class="dl" href="tools/json-validator/index.html" data-name="JSON 校验">✅ JSON 校验</a>
+<a class="dl" href="tools/jwt-decoder/index.html" data-name="JWT 解析 (仅解码，不验证)">🪪 JWT 解析 (仅解码，不验证)</a>
+<a class="dl" href="tools/linux-commands/index.html" data-name="Linux 命令速查（详解版）">🐧 Linux 命令速查（详解版）</a>
+<a class="dl" href="tools/lorem-generator/index.html" data-name="Lorem 占位文本">📝 Lorem 占位文本</a>
+<a class="dl" href="tools/markdown-preview/index.html" data-name="Markdown 预览">📄 Markdown 预览</a>
+<a class="dl" href="tools/md5-generator/index.html" data-name="MD5 哈希">🔐 MD5 哈希</a>
+<a class="dl" href="tools/mime-types/index.html" data-name="MIME 速查">📄 MIME 速查</a>
+<a class="dl" href="tools/sql-formatter/index.html" data-name="SQL 格式化">🗄️ SQL 格式化</a>
+<a class="dl" href="tools/unicode-converter/index.html" data-name="Unicode 编码">🔡 Unicode 编码</a>
+<a class="dl" href="tools/url-encoder/index.html" data-name="URL 编码 / 解码">🌐 URL 编码 / 解码</a>
+<a class="dl" href="tools/url-parser/index.html" data-name="URL 解析">🌐 URL 解析</a>
+<a class="dl" href="tools/slug-generator/index.html" data-name="URL Slug 生成">🔗 URL Slug 生成</a>
+<a class="dl" href="tools/user-agent-parser/index.html" data-name="User-Agent 解析">🕵️ User-Agent 解析</a>
+<a class="dl" href="tools/uuid-generator/index.html" data-name="UUID 生成器 (v4)">🆔 UUID 生成器 (v4)</a></div></div>
+<div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
+<main class="main">
+    <p class="sub">🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub 仓库</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">GitHub Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></p>
+    <input class="search" id="search" placeholder="搜索 126 个工具..." oninput="filterCards(this.value)">
+    <div class="grid" id="grid"><a class="card" href="tools/word-wrap/index.html" data-name="按宽度换行"><span class="ico">📏</span><span class="nm">按宽度换行</span></a>
+<a class="card" href="tools/percentage-calculator/index.html" data-name="百分比计算"><span class="ico">📊</span><span class="nm">百分比计算</span></a>
+<a class="card" href="tools/ratio-simplifier/index.html" data-name="比例化简"><span class="ico">⚖️</span><span class="nm">比例化简</span></a>
+<a class="card" href="tools/bit-converter/index.html" data-name="比特换算"><span class="ico">🔢</span><span class="nm">比特换算</span></a>
+<a class="card" href="tools/anagram-checker/index.html" data-name="变位词检测"><span class="ico">🔤</span><span class="nm">变位词检测</span></a>
+<a class="card" href="tools/emoji-picker/index.html" data-name="表情符号速选"><span class="ico">😀</span><span class="nm">表情符号速选</span></a>
+<a class="card" href="tools/lottery-generator/index.html" data-name="彩票号码生成"><span class="ico">🎰</span><span class="nm">彩票号码生成</span></a>
+<a class="card" href="tools/find-replace/index.html" data-name="查找替换"><span class="ico">🔎</span><span class="nm">查找替换</span></a>
+<a class="card" href="tools/word-frequency/index.html" data-name="词频统计"><span class="ico">📈</span><span class="nm">词频统计</span></a>
+<a class="card" href="tools/text-shuffle/index.html" data-name="打乱行序"><span class="ico">🔀</span><span class="nm">打乱行序</span></a>
+<a class="card" href="tools/case-converter/index.html" data-name="大小写转换"><span class="ico">📝</span><span class="nm">大小写转换</span></a>
+<a class="card" href="tools/unit-price-calculator/index.html" data-name="单价计算"><span class="ico">🛒</span><span class="nm">单价计算</span></a>
+<a class="card" href="tools/countdown-timer/index.html" data-name="倒计时"><span class="ico">⏳</span><span class="nm">倒计时</span></a>
+<a class="card" href="tools/inductance-converter/index.html" data-name="电感换算"><span class="ico">🌀</span><span class="nm">电感换算</span></a>
+<a class="card" href="tools/electric-charge-converter/index.html" data-name="电荷换算"><span class="ico">⚡</span><span class="nm">电荷换算</span></a>
+<a class="card" href="tools/electric-current-converter/index.html" data-name="电流换算"><span class="ico">🔋</span><span class="nm">电流换算</span></a>
+<a class="card" href="tools/capacitance-converter/index.html" data-name="电容换算"><span class="ico">🧲</span><span class="nm">电容换算</span></a>
+<a class="card" href="tools/voltage-converter/index.html" data-name="电压换算"><span class="ico">🔋</span><span class="nm">电压换算</span></a>
+<a class="card" href="tools/resistance-converter/index.html" data-name="电阻换算"><span class="ico">🧱</span><span class="nm">电阻换算</span></a>
+<a class="card" href="tools/port-numbers/index.html" data-name="端口速查"><span class="ico">🔌</span><span class="nm">端口速查</span></a>
+<a class="card" href="tools/pomodoro/index.html" data-name="番茄钟"><span class="ico">🍅</span><span class="nm">番茄钟</span></a>
+<a class="card" href="tools/radioactivity-converter/index.html" data-name="放射性"><span class="ico">☢️</span><span class="nm">放射性</span></a>
+<a class="card" href="tools/compound-interest/index.html" data-name="复利计算"><span class="ico">💹</span><span class="nm">复利计算</span></a>
+<a class="card" href="tools/power-converter/index.html" data-name="功率换算"><span class="ico">🔌</span><span class="nm">功率换算</span></a>
+<a class="card" href="tools/palindrome-checker/index.html" data-name="回文检测"><span class="ico">🪞</span><span class="nm">回文检测</span></a>
+<a class="card" href="tools/acceleration-converter/index.html" data-name="加速度换算"><span class="ico">🚀</span><span class="nm">加速度换算</span></a>
+<a class="card" href="tools/calculator/index.html" data-name="简易计算器"><span class="ico">📐</span><span class="nm">简易计算器</span></a>
+<a class="card" href="tools/gradient-generator/index.html" data-name="渐变生成"><span class="ico">🌈</span><span class="nm">渐变生成</span></a>
+<a class="card" href="tools/angle-converter/index.html" data-name="角度换算"><span class="ico">📐</span><span class="nm">角度换算</span></a>
+<a class="card" href="tools/base-converter/index.html" data-name="进制转换"><span class="ico">🔢</span><span class="nm">进制转换</span></a>
+<a class="card" href="tools/force-converter/index.html" data-name="力换算"><span class="ico">💪</span><span class="nm">力换算</span></a>
+<a class="card" href="tools/volume-flow-converter/index.html" data-name="流量换算"><span class="ico">💧</span><span class="nm">流量换算</span></a>
+<a class="card" href="tools/roman-numeral/index.html" data-name="罗马数字转换"><span class="ico">🏛️</span><span class="nm">罗马数字转换</span></a>
+<a class="card" href="tools/density-converter/index.html" data-name="密度换算"><span class="ico">🪨</span><span class="nm">密度换算</span></a>
+<a class="card" href="tools/password-strength/index.html" data-name="密码强度检测"><span class="ico">🔐</span><span class="nm">密码强度检测</span></a>
+<a class="card" href="tools/password-generator/index.html" data-name="密码生成器"><span class="ico">🔑</span><span class="nm">密码生成器</span></a>
+<a class="card" href="tools/area-converter/index.html" data-name="面积换算"><span class="ico">🟦</span><span class="nm">面积换算</span></a>
+<a class="card" href="tools/stopwatch/index.html" data-name="秒表"><span class="ico">⏱️</span><span class="nm">秒表</span></a>
+<a class="card" href="tools/morse-code/index.html" data-name="摩斯密码"><span class="ico">📻</span><span class="nm">摩斯密码</span></a>
+<a class="card" href="tools/magic-8-ball/index.html" data-name="魔法8号球"><span class="ico">🎱</span><span class="nm">魔法8号球</span></a>
+<a class="card" href="tools/energy-converter/index.html" data-name="能量换算"><span class="ico">⚡</span><span class="nm">能量换算</span></a>
+<a class="card" href="tools/age-calculator/index.html" data-name="年龄计算器"><span class="ico">🎂</span><span class="nm">年龄计算器</span></a>
+<a class="card" href="tools/torque-converter/index.html" data-name="扭矩换算"><span class="ico">🔧</span><span class="nm">扭矩换算</span></a>
+<a class="card" href="tools/coin-flip/index.html" data-name="抛硬币"><span class="ico">🪙</span><span class="nm">抛硬币</span></a>
+<a class="card" href="tools/pace-converter/index.html" data-name="配速换算"><span class="ico">🏃</span><span class="nm">配速换算</span></a>
+<a class="card" href="tools/cooking-converter/index.html" data-name="烹饪换算"><span class="ico">🍳</span><span class="nm">烹饪换算</span></a>
+<a class="card" href="tools/frequency-converter/index.html" data-name="频率换算"><span class="ico">📶</span><span class="nm">频率换算</span></a>
+<a class="card" href="tools/average-calculator/index.html" data-name="平均值计算"><span class="ico">📊</span><span class="nm">平均值计算</span></a>
+<a class="card" href="tools/screen-size-converter/index.html" data-name="屏幕尺寸"><span class="ico">📺</span><span class="nm">屏幕尺寸</span></a>
+<a class="card" href="tools/remove-accents/index.html" data-name="去重音符号"><span class="ico">🧹</span><span class="nm">去重音符号</span></a>
+<a class="card" href="tools/weekday-finder/index.html" data-name="日期→星期"><span class="ico">📅</span><span class="nm">日期→星期</span></a>
+<a class="card" href="tools/date-calculator/index.html" data-name="日期计算器"><span class="ico">📅</span><span class="nm">日期计算器</span></a>
+<a class="card" href="tools/date-add/index.html" data-name="日期加减"><span class="ico">📅</span><span class="nm">日期加减</span></a>
+<a class="card" href="tools/leap-year/index.html" data-name="闰年判断"><span class="ico">🗓️</span><span class="nm">闰年判断</span></a>
+<a class="card" href="tools/rock-paper-scissors/index.html" data-name="石头剪刀布"><span class="ico">✊</span><span class="nm">石头剪刀布</span></a>
+<a class="card" href="tools/timestamp/index.html" data-name="时间戳转换"><span class="ico">⏰</span><span class="nm">时间戳转换</span></a>
+<a class="card" href="tools/time-converter/index.html" data-name="时间换算"><span class="ico">⏰</span><span class="nm">时间换算</span></a>
+<a class="card" href="tools/world-clock/index.html" data-name="世界时钟"><span class="ico">🌍</span><span class="nm">世界时钟</span></a>
+<a class="card" href="tools/math-lab/index.html" data-name="数学工具箱"><span class="ico">🧮</span><span class="nm">数学工具箱</span></a>
+<a class="card" href="tools/number-to-chinese/index.html" data-name="数字转中文大写"><span class="ico">💴</span><span class="nm">数字转中文大写</span></a>
+<a class="card" href="tools/tax-calculator/index.html" data-name="税费计算"><span class="ico">🧾</span><span class="nm">税费计算</span></a>
+<a class="card" href="tools/speed-converter/index.html" data-name="速度换算"><span class="ico">💨</span><span class="nm">速度换算</span></a>
+<a class="card" href="tools/data-rate-converter/index.html" data-name="速率换算"><span class="ico">📡</span><span class="nm">速率换算</span></a>
+<a class="card" href="tools/random-picker/index.html" data-name="随机抽签"><span class="ico">🎯</span><span class="nm">随机抽签</span></a>
+<a class="card" href="tools/random-word/index.html" data-name="随机单词"><span class="ico">🔤</span><span class="nm">随机单词</span></a>
+<a class="card" href="tools/color-palette/index.html" data-name="随机调色板"><span class="ico">🎨</span><span class="nm">随机调色板</span></a>
+<a class="card" href="tools/credit-card-generator/index.html" data-name="随机卡号"><span class="ico">💳</span><span class="nm">随机卡号</span></a>
+<a class="card" href="tools/random-generator/index.html" data-name="随机数生成器"><span class="ico">🎲</span><span class="nm">随机数生成器</span></a>
+<a class="card" href="tools/fake-data/index.html" data-name="随机信息"><span class="ico">🧪</span><span class="nm">随机信息</span></a>
+<a class="card" href="tools/extract-links/index.html" data-name="提取链接 / 邮箱"><span class="ico">🔗</span><span class="nm">提取链接 / 邮箱</span></a>
+<a class="card" href="tools/extract-numbers/index.html" data-name="提取数字"><span class="ico">🔢</span><span class="nm">提取数字</span></a>
+<a class="card" href="tools/volume-converter/index.html" data-name="体积换算"><span class="ico">🪣</span><span class="nm">体积换算</span></a>
+<a class="card" href="tools/dice-roller/index.html" data-name="骰子投掷"><span class="ico">🎲</span><span class="nm">骰子投掷</span></a>
+<a class="card" href="tools/temperature-converter/index.html" data-name="温度换算"><span class="ico">🌡️</span><span class="nm">温度换算</span></a>
+<a class="card" href="tools/text-diff/index.html" data-name="文本对比 (行差异)"><span class="ico">🔍</span><span class="nm">文本对比 (行差异)</span></a>
+<a class="card" href="tools/text-reverser/index.html" data-name="文本反转"><span class="ico">🔃</span><span class="nm">文本反转</span></a>
+<a class="card" href="tools/text-cleaner/index.html" data-name="文本清洗"><span class="ico">🧼</span><span class="nm">文本清洗</span></a>
+<a class="card" href="tools/pad-text/index.html" data-name="文本填充对齐"><span class="ico">📐</span><span class="nm">文本填充对齐</span></a>
+<a class="card" href="tools/text-similarity/index.html" data-name="文本相似度"><span class="ico">📊</span><span class="nm">文本相似度</span></a>
+<a class="card" href="tools/text-processor/index.html" data-name="文本行处理"><span class="ico">📝</span><span class="nm">文本行处理</span></a>
+<a class="card" href="tools/string-repeat/index.html" data-name="文本重复"><span class="ico">🔁</span><span class="nm">文本重复</span></a>
+<a class="card" href="tools/pixel-converter/index.html" data-name="像素换算"><span class="ico">🖥️</span><span class="nm">像素换算</span></a>
+<a class="card" href="tools/tip-calculator/index.html" data-name="小费分摊"><span class="ico">🍽️</span><span class="nm">小费分摊</span></a>
+<a class="card" href="tools/pressure-converter/index.html" data-name="压强换算"><span class="ico">🧮</span><span class="nm">压强换算</span></a>
+<a class="card" href="tools/contrast-checker/index.html" data-name="颜色对比度 (WCAG)"><span class="ico">🎭</span><span class="nm">颜色对比度 (WCAG)</span></a>
+<a class="card" href="tools/color-picker/index.html" data-name="颜色选择器"><span class="ico">🎨</span><span class="nm">颜色选择器</span></a>
+<a class="card" href="tools/username-generator/index.html" data-name="用户名生成"><span class="ico">👤</span><span class="nm">用户名生成</span></a>
+<a class="card" href="tools/fuel-economy/index.html" data-name="油耗换算"><span class="ico">⛽</span><span class="nm">油耗换算</span></a>
+<a class="card" href="tools/loan-calculator/index.html" data-name="月供计算"><span class="ico">🏦</span><span class="nm">月供计算</span></a>
+<a class="card" href="tools/calendar-generator/index.html" data-name="月历生成"><span class="ico">📆</span><span class="nm">月历生成</span></a>
+<a class="card" href="tools/percentage-change/index.html" data-name="增长率"><span class="ico">📈</span><span class="nm">增长率</span></a>
+<a class="card" href="tools/length-converter/index.html" data-name="长度换算"><span class="ico">📏</span><span class="nm">长度换算</span></a>
+<a class="card" href="tools/illuminance-converter/index.html" data-name="照度换算"><span class="ico">💡</span><span class="nm">照度换算</span></a>
+<a class="card" href="tools/discount-calculator/index.html" data-name="折扣计算"><span class="ico">🏷️</span><span class="nm">折扣计算</span></a>
+<a class="card" href="tools/regex-tester/index.html" data-name="正则表达式测试"><span class="ico">🧪</span><span class="nm">正则表达式测试</span></a>
+<a class="card" href="tools/weight-converter/index.html" data-name="重量换算"><span class="ico">⚖️</span><span class="nm">重量换算</span></a>
+<a class="card" href="tools/count-chars/index.html" data-name="字符统计"><span class="ico">🔢</span><span class="nm">字符统计</span></a>
+<a class="card" href="tools/byte-converter/index.html" data-name="字节单位换算"><span class="ico">📦</span><span class="nm">字节单位换算</span></a>
+<a class="card" href="tools/word-counter/index.html" data-name="字数统计"><span class="ico">📊</span><span class="nm">字数统计</span></a>
+<a class="card" href="tools/ascii-converter/index.html" data-name="ASCII 编解码"><span class="ico">🔤</span><span class="nm">ASCII 编解码</span></a>
+<a class="card" href="tools/base64/index.html" data-name="Base64 编解码 (文字 + 图片)"><span class="ico">🔐</span><span class="nm">Base64 编解码 (文字 + 图片)</span></a>
+<a class="card" href="tools/base64-image/index.html" data-name="Base64 图片编码"><span class="ico">🖼️</span><span class="nm">Base64 图片编码</span></a>
+<a class="card" href="tools/bmi-calculator/index.html" data-name="BMI 身体质量指数"><span class="ico">⚖️</span><span class="nm">BMI 身体质量指数</span></a>
+<a class="card" href="tools/cron-explainer/index.html" data-name="Cron 表达式解析"><span class="ico">⏲️</span><span class="nm">Cron 表达式解析</span></a>
+<a class="card" href="tools/css-minifier/index.html" data-name="CSS 压缩"><span class="ico">🗜️</span><span class="nm">CSS 压缩</span></a>
+<a class="card" href="tools/csv-markdown/index.html" data-name="CSV ⇄ Markdown 表格"><span class="ico">📊</span><span class="nm">CSV ⇄ Markdown 表格</span></a>
+<a class="card" href="tools/color-converter/index.html" data-name="HEX ↔ RGB ↔ HSL"><span class="ico">🎨</span><span class="nm">HEX ↔ RGB ↔ HSL</span></a>
+<a class="card" href="tools/html-entity/index.html" data-name="HTML 实体编解码"><span class="ico">🔣</span><span class="nm">HTML 实体编解码</span></a>
+<a class="card" href="tools/html-minifier/index.html" data-name="HTML 压缩"><span class="ico">🗜️</span><span class="nm">HTML 压缩</span></a>
+<a class="card" href="tools/http-status/index.html" data-name="HTTP 状态码速查"><span class="ico">🌐</span><span class="nm">HTTP 状态码速查</span></a>
+<a class="card" href="tools/json-csv/index.html" data-name="JSON ⇄ CSV"><span class="ico">🔁</span><span class="nm">JSON ⇄ CSV</span></a>
+<a class="card" href="tools/json-formatter/index.html" data-name="JSON 格式化 / 压缩"><span class="ico">📋</span><span class="nm">JSON 格式化 / 压缩</span></a>
+<a class="card" href="tools/json-validator/index.html" data-name="JSON 校验"><span class="ico">✅</span><span class="nm">JSON 校验</span></a>
+<a class="card" href="tools/jwt-decoder/index.html" data-name="JWT 解析 (仅解码，不验证)"><span class="ico">🪪</span><span class="nm">JWT 解析 (仅解码，不验证)</span></a>
+<a class="card" href="tools/linux-commands/index.html" data-name="Linux 命令速查（详解版）"><span class="ico">🐧</span><span class="nm">Linux 命令速查（详解版）</span></a>
+<a class="card" href="tools/lorem-generator/index.html" data-name="Lorem 占位文本"><span class="ico">📝</span><span class="nm">Lorem 占位文本</span></a>
+<a class="card" href="tools/markdown-preview/index.html" data-name="Markdown 预览"><span class="ico">📄</span><span class="nm">Markdown 预览</span></a>
+<a class="card" href="tools/md5-generator/index.html" data-name="MD5 哈希"><span class="ico">🔐</span><span class="nm">MD5 哈希</span></a>
+<a class="card" href="tools/mime-types/index.html" data-name="MIME 速查"><span class="ico">📄</span><span class="nm">MIME 速查</span></a>
+<a class="card" href="tools/sql-formatter/index.html" data-name="SQL 格式化"><span class="ico">🗄️</span><span class="nm">SQL 格式化</span></a>
+<a class="card" href="tools/unicode-converter/index.html" data-name="Unicode 编码"><span class="ico">🔡</span><span class="nm">Unicode 编码</span></a>
+<a class="card" href="tools/url-encoder/index.html" data-name="URL 编码 / 解码"><span class="ico">🌐</span><span class="nm">URL 编码 / 解码</span></a>
+<a class="card" href="tools/url-parser/index.html" data-name="URL 解析"><span class="ico">🌐</span><span class="nm">URL 解析</span></a>
+<a class="card" href="tools/slug-generator/index.html" data-name="URL Slug 生成"><span class="ico">🔗</span><span class="nm">URL Slug 生成</span></a>
+<a class="card" href="tools/user-agent-parser/index.html" data-name="User-Agent 解析"><span class="ico">🕵️</span><span class="nm">User-Agent 解析</span></a>
+<a class="card" href="tools/uuid-generator/index.html" data-name="UUID 生成器 (v4)"><span class="ico">🆔</span><span class="nm">UUID 生成器 (v4)</span></a></div>
+    <div class="empty" id="empty" style="display:none">未找到匹配工具</div>
+</main>
+<script>
+function toggleDrawer(){ document.getElementById("drawer").classList.toggle("open"); document.getElementById("overlay").classList.toggle("show"); }
+function toggleTheme(){ var d=document.documentElement.dataset.theme==="dark"; document.documentElement.dataset.theme=d?"":"dark"; localStorage.setItem("theme", d?"":"dark"); document.getElementById("themeBtn").textContent=d?"🌙":"☀️"; }
+document.getElementById("themeBtn").textContent = document.documentElement.dataset.theme==="dark" ? "☀️" : "🌙";
+function filterCards(q){ q=(q||"").toLowerCase(); var n=0; document.querySelectorAll(".card").forEach(function(c){ var ok=c.dataset.name.toLowerCase().indexOf(q)>-1; c.style.display=ok?"":"none"; if(ok)n++; }); document.querySelectorAll(".dl").forEach(function(c){ c.style.display=c.dataset.name.toLowerCase().indexOf(q)>-1?"":"none"; }); document.getElementById("empty").style.display=n?"none":"block"; }
+</script>
 </body>
 </html>
