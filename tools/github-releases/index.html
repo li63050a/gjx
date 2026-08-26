@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <title>GitHub 发行 / 加速下载 · 超能工具箱</title>
+    <script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:-apple-system,'Segoe UI',Roboto,sans-serif; background:#f1f5f9; padding:20px; color:#0f172a; }
+        .container { max-width:860px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:14px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input { flex:1; min-width:100px; padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .btn.gray { background:#6b7280; }
+        .out { margin-top:14px; }
+        .rel { border:1px solid #e2e8f0; border-radius:14px; padding:16px; margin-bottom:14px; }
+        .rel h3 { color:#1d4ed8; margin-bottom:4px; }
+        .rel .meta { color:#64748b; font-size:0.85rem; margin-bottom:10px; }
+        .asset { background:#f8fafc; border-radius:10px; padding:10px 12px; margin-top:8px; font-size:0.9rem; }
+        .asset .fn { font-weight:600; word-break:break-all; }
+        .asset .links a { color:#2563eb; text-decoration:none; margin-right:12px; font-weight:600; }
+        .asset .links a.acc { color:#16a34a; }
+        .readme { background:#0f172a; color:#e2e8f0; padding:14px; border-radius:10px; max-height:420px; overflow:auto; white-space:pre-wrap; font-family:monospace; font-size:0.82rem; }
+        .msg { color:#b91c1c; font-size:0.9rem; margin-top:8px; }
+        .tabs { display:flex; gap:8px; margin-bottom:12px; }
+        .tab { flex:1; padding:10px; border:none; border-radius:12px; background:#eef2ff; color:#4338ca; font-weight:600; cursor:pointer; }
+        .tab.active { background:#2563eb; color:#fff; }
+        .hidden { display:none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>🐙 GitHub 发行 / 加速下载</h2>
+    <div class="row">
+        <input id="owner" value="li63050a" placeholder="所有者">
+        <input id="repo" value="gjx" placeholder="仓库">
+        <input id="branch" value="main" placeholder="分支(README)" style="max-width:120px">
+    </div>
+    <div class="row">
+        <button class="btn" onclick="loadReleases()">加载发行列表</button>
+        <button class="btn gray" onclick="loadReadme()">加载 README.md</button>
+    </div>
+    <div class="tabs">
+        <button class="tab active" id="tRel" onclick="switchTab('rel')">发行列表</button>
+        <button class="tab" id="tRead" onclick="switchTab('read')">README</button>
+    </div>
+    <div class="out" id="relOut"><p class="meta">点击“加载发行列表”查看版本、资源与加速下载链接。</p></div>
+    <div class="out hidden" id="readOut"><pre class="readme" id="readme">点击“加载 README.md”获取仓库介绍。</pre></div>
+    <div class="msg" id="msg"></div>
+    <p class="meta" style="margin-top:10px">加速说明：通用 <code>https://g.z321.cc.cd/</code> 前缀任意链接；<code>https://777.z321.cc.cd/</code> 仅用于 GitHub 链接。数据来自 GitHub 公开 API（未登录限流 60 次/小时）。</p>
+</div>
+<script>
+    function setMsg(m){ document.getElementById('msg').textContent = m || ''; }
+    function switchTab(t){
+        document.getElementById('tRel').classList.toggle('active', t==='rel');
+        document.getElementById('tRead').classList.toggle('active', t==='read');
+        document.getElementById('relOut').classList.toggle('hidden', t!=='rel');
+        document.getElementById('readOut').classList.toggle('hidden', t!=='read');
+    }
+    function accLinks(url){
+        return '<a href="'+url+'" target="_blank" rel="noopener">原链接</a>'
+            + '<a class="acc" href="https://g.z321.cc.cd/'+url+'" target="_blank" rel="noopener">加速(通用)</a>'
+            + '<a class="acc" href="https://777.z321.cc.cd/'+url+'" target="_blank" rel="noopener">加速(GitHub)</a>';
+    }
+    function fmtSize(b){ if(b==null) return ''; if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(2)+' MB'; }
+    function loadReleases(){
+        var o = document.getElementById('owner').value.trim();
+        var r = document.getElementById('repo').value.trim();
+        if(!o||!r){ setMsg('请填写所有者和仓库'); return; }
+        setMsg('加载中...');
+        fetch('https://api.github.com/repos/'+o+'/'+r+'/releases?per_page=30')
+            .then(function(res){ if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); })
+            .then(function(list){
+                if(!list.length){ document.getElementById('relOut').innerHTML='<p class="meta">该仓库暂无发行版本。</p>'; setMsg(''); return; }
+                var html = list.map(function(rel){
+                    var assets = (rel.assets||[]).map(function(a){
+                        return '<div class="asset"><div class="fn">📦 '+a.name+' <span class="meta">('+fmtSize(a.size)+')</span></div>'
+                            + '<div class="links">'+accLinks(a.browser_download_url)+'</div></div>';
+                    }).join('');
+                    return '<div class="rel"><h3>'+ (rel.name||rel.tag_name) +' <span class="meta">('+rel.tag_name+')</span></h3>'
+                        + '<div class="meta">发布：'+ (rel.published_at?rel.published_at.replace('T',' ').replace('Z',''):'—') + (rel.prerelease?' · 预发布':'') +'</div>'
+                        + (assets || '<div class="meta">无附加资源（可能是源码标签）。</div>') + '</div>';
+                }).join('');
+                document.getElementById('relOut').innerHTML = html;
+                setMsg('');
+            })
+            .catch(function(e){ setMsg('加载失败：'+e.message+'（可能限流或仓库不存在）'); });
+    }
+    function loadReadme(){
+        var o = document.getElementById('owner').value.trim();
+        var r = document.getElementById('repo').value.trim();
+        var b = document.getElementById('branch').value.trim() || 'main';
+        if(!o||!r){ setMsg('请填写所有者和仓库'); return; }
+        setMsg('加载中...');
+        fetch('https://raw.githubusercontent.com/'+o+'/'+r+'/'+b+'/README.md')
+            .then(function(res){ if(!res.ok) throw new Error('HTTP '+res.status); return res.text(); })
+            .then(function(t){ document.getElementById('readme').textContent = t; setMsg(''); switchTab('read'); })
+            .catch(function(e){ setMsg('README 加载失败：'+e.message+'（请检查分支名）'); });
+    }
+</script>
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:#2563eb;color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}</script>
+<!--SITE-LINKS-->
+<div style="margin-top:28px;padding:14px 0;text-align:center;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;">🔗 项目: <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub 仓库</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">gjx.z321.cc.cd</a></div>
+</body>
+</html>

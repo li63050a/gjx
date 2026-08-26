@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
     <title>二维码生成 · 超能工具箱</title>
-    <script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;<\/script>
+    <script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
@@ -19,7 +19,7 @@
         .btn:active { transform:scale(0.96); }
         .btn.gray { background:#6b7280; }
         .out { text-align:center; margin-top:16px; }
-        canvas { background:#fff; padding:12px; border-radius:12px; max-width:100%; }
+        .out canvas { background:#fff; padding:12px; border-radius:12px; max-width:100%; }
         .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; word-break:break-all; font-size:0.85rem; font-family:monospace; white-space:pre-wrap; }
         .dark-note { color:#64748b; font-size:0.85rem; margin-top:6px; }
     </style>
@@ -31,44 +31,37 @@
     <textarea id="text" placeholder="输入文本或网址，如 https://github.com/li63050a/gjx">https://github.com/li63050a/gjx</textarea>
     <div class="row">
         <select id="ec"><option value="L">纠错 L (7%)</option><option value="M" selected>纠错 M (15%)</option><option value="Q">纠错 Q (25%)</option><option value="H">纠错 H (30%)</option></select>
-        <select id="size"><option value="4">模块 4px</option><option value="6" selected>模块 6px</option><option value="8">模块 8px</option><option value="10">模块 10px</option></select>
+        <select id="size"><option value="192">尺寸 192</option><option value="256" selected>尺寸 256</option><option value="320">尺寸 320</option><option value="400">尺寸 400</option></select>
     </div>
     <div class="flex" style="display:flex;gap:10px;flex-wrap:wrap;">
         <button class="btn" onclick="gen()">生成</button>
         <button class="btn gray" onclick="download()">下载 PNG</button>
     </div>
-    <div class="out"><canvas id="cv" width="240" height="240"></canvas><div class="dark-note">提示：手机可长按图片保存</div></div>
+    <div class="out"><div id="cvbox" style="display:inline-block;background:#fff;padding:12px;border-radius:12px;box-shadow:0 1px 8px rgba(0,0,0,.1);"></div><div class="dark-note">提示：手机可长按图片保存</div></div>
     <div class="output-box" id="msg">输入内容后点击“生成”</div>
 </div>
-<script src="../../js/qrcode.js"></script>
+<script src="../../js/qrcode.min.js"></script>
 <script>
+    var qr = null;
     function gen(){
         var txt = document.getElementById('text').value;
         var ec = document.getElementById('ec').value;
-        var px = parseInt(document.getElementById('size').value) || 6;
+        var sz = parseInt(document.getElementById('size').value) || 256;
         if (!txt) { document.getElementById('msg').textContent = '请输入内容'; return; }
         try {
-            var qr = qrcode(0, ec);
-            qr.addData(txt);
-            qr.make();
-            var n = qr.getModuleCount();
-            var cv = document.getElementById('cv');
-            cv.width = cv.height = n * px;
-            var ctx = cv.getContext('2d');
-            ctx.fillStyle = '#fff'; ctx.fillRect(0,0,cv.width,cv.height);
-            ctx.fillStyle = '#000';
-            for (var r=0;r<n;r++) for (var c=0;c<n;c++) if (qr.isDark(r,c)) ctx.fillRect(c*px, r*px, px, px);
-            document.getElementById('msg').textContent = '已生成 · 版本模块 ' + n + '×' + n;
+            var lvl = QRCode.CorrectLevel[ec] !== undefined ? QRCode.CorrectLevel[ec] : QRCode.CorrectLevel.M;
+            if (!qr) { qr = new QRCode(document.getElementById('cvbox'), { width:sz, height:sz, colorDark:'#000000', colorLight:'#ffffff', correctLevel:lvl }); }
+            else { qr._htOption.width=sz; qr._htOption.height=sz; qr._htOption.correctLevel=lvl; }
+            qr.makeCode(txt);
+            document.getElementById('msg').textContent = '已生成（' + sz + '×' + sz + '，纠错 ' + ec + '）';
         } catch(e) {
-            document.getElementById('msg').textContent = '生成失败：' + e.message + '（内容可能过长，请降低纠错级别或缩短内容）';
+            document.getElementById('msg').textContent = '生成失败：' + e.message;
         }
     }
     function download(){
-        var cv = document.getElementById('cv');
-        var a = document.createElement('a');
-        a.download = 'qrcode.png';
-        a.href = cv.toDataURL('image/png');
-        a.click();
+        var cv = document.querySelector('#cvbox canvas');
+        if (!cv) { document.getElementById('msg').textContent = '请先生成二维码'; return; }
+        var a = document.createElement('a'); a.download = 'qrcode.png'; a.href = cv.toDataURL('image/png'); a.click();
     }
     gen();
 </script>
