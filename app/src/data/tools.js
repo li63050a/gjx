@@ -1065,6 +1065,11 @@ export const categories = [
     "icon": "⭐"
   },
   {
+    "key": "all",
+    "label": "全部",
+    "icon": "🗂️"
+  },
+  {
     "key": "单位换算",
     "label": "单位换算",
     "icon": "📐"

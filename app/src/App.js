@@ -35,6 +35,8 @@ export default defineComponent({
         count:
           c.key === 'common'
             ? tools.filter((t) => t.common).length
+            : c.key === 'all'
+            ? tools.length
             : tools.filter((t) => t.category === c.key).length
       }))
     )
@@ -43,7 +45,7 @@ export default defineComponent({
       const matched = matchTools(search.value, tools)
       const cat = activeCategory.value
       return matched.filter((t) =>
-        cat === 'common' ? t.common === true : t.category === cat
+        cat === 'common' ? t.common === true : cat === 'all' ? true : t.category === cat
       )
     })
 
