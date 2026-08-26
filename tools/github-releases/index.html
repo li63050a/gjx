@@ -4,105 +4,189 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
-    <title>GitHub 发行 / 加速下载 · 超能工具箱</title>
+    <title>GitHub 工具箱 · 超能工具箱</title>
     <script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
     <style>
+        :root{
+            --bg:#f1f5f9; --fg:#0f172a; --card:#fff; --border:#e2e8f0; --muted:#64748b;
+            --tab:#eef2ff; --tabc:#4338ca; --accent:#2563eb; --accent2:#16a34a;
+            --asset-bg:#f8fafc; --hover:#eef2ff; --note-bg:#fffbeb; --note-bd:#fde68a; --note-fg:#92400e;
+            --code-bg:#0f172a; --code-fg:#e2e8f0;
+        }
+        [data-theme="dark"]{
+            --bg:#0b1120; --fg:#e2e8f0; --card:#111827; --border:#243044; --muted:#94a3b8;
+            --tab:#1e293b; --tabc:#c7d2fe; --accent:#3b82f6; --accent2:#22c55e;
+            --asset-bg:#0f172a; --hover:#1e293b; --note-bg:#1f2937; --note-bd:#374151; --note-fg:#fbbf24;
+            --code-bg:#020617; --code-fg:#e2e8f0;
+        }
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family:-apple-system,'Segoe UI',Roboto,sans-serif; background:#f1f5f9; padding:20px; color:#0f172a; }
-        .container { max-width:860px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,.06); }
-        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        body { font-family:-apple-system,'Segoe UI',Roboto,sans-serif; background:var(--bg); padding:20px; color:var(--fg); transition:background .2s,color .2s; }
+        .container { max-width:920px; margin:0 auto; background:var(--card); border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,.06); transition:background .2s; }
+        .brand { text-decoration:none; color:var(--accent); font-weight:700; font-size:1.05rem; display:inline-block; margin-bottom:6px; }
+        .brand:hover { text-decoration:underline; }
+        .back { text-decoration:none; color:var(--accent); font-weight:600; display:inline-block; margin-bottom:16px; }
         h2 { margin-bottom:14px; }
         .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
-        .row input { flex:1; min-width:100px; padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; }
-        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .row input { flex:1; min-width:120px; padding:9px 14px; border:1px solid var(--border); border-radius:10px; font-size:1rem; background:var(--card); color:var(--fg); }
+        .btn { padding:8px 18px; background:var(--accent); color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
         .btn:active { transform:scale(0.96); }
         .btn.gray { background:#6b7280; }
-        .out { margin-top:14px; }
-        .rel { border:1px solid #e2e8f0; border-radius:14px; padding:16px; margin-bottom:14px; }
-        .rel h3 { color:#1d4ed8; margin-bottom:4px; }
-        .rel .meta { color:#64748b; font-size:0.85rem; margin-bottom:10px; }
-        .asset { background:#f8fafc; border-radius:10px; padding:10px 12px; margin-top:8px; font-size:0.9rem; }
-        .asset .fn { font-weight:600; word-break:break-all; }
-        .asset .links a { color:#2563eb; text-decoration:none; margin-right:12px; font-weight:600; }
-        .asset .links a.acc { color:#16a34a; }
-        .readme { background:#0f172a; color:#e2e8f0; padding:14px; border-radius:10px; max-height:420px; overflow:auto; white-space:pre-wrap; font-family:monospace; font-size:0.82rem; }
-        .msg { color:#b91c1c; font-size:0.9rem; margin-top:8px; }
-        .tabs { display:flex; gap:8px; margin-bottom:12px; }
-        .tab { flex:1; padding:10px; border:none; border-radius:12px; background:#eef2ff; color:#4338ca; font-weight:600; cursor:pointer; }
-        .tab.active { background:#2563eb; color:#fff; }
+        .btn.green { background:var(--accent2); }
+        .tabs { display:flex; gap:8px; margin:14px 0; flex-wrap:wrap; }
+        .tab { flex:1; min-width:90px; padding:10px; border:none; border-radius:12px; background:var(--tab); color:var(--tabc); font-weight:600; cursor:pointer; }
+        .tab.active { background:var(--accent); color:#fff; }
         .hidden { display:none; }
+        .meta { color:var(--muted); font-size:0.88rem; }
+        .rel { border:1px solid var(--border); border-radius:14px; padding:16px; margin:12px 0; }
+        .rel h3 { color:var(--accent); margin-bottom:4px; }
+        .asset { background:var(--asset-bg); border-radius:10px; padding:10px 12px; margin-top:8px; font-size:0.9rem; }
+        .asset .fn { font-weight:600; word-break:break-all; }
+        .asset a { color:var(--accent); text-decoration:none; margin-right:12px; font-weight:600; }
+        .asset a.acc { color:var(--accent2); }
+        .readme { background:var(--code-bg); color:var(--code-fg); padding:14px; border-radius:10px; max-height:420px; overflow:auto; white-space:pre-wrap; font-family:monospace; font-size:0.82rem; }
+        .file { padding:6px 8px; border-radius:8px; cursor:pointer; font-size:0.88rem; word-break:break-all; }
+        .file:hover { background:var(--hover); }
+        .file .ic { display:inline-block; width:22px; color:var(--muted); }
+        pre.code { background:var(--code-bg); color:var(--code-fg); padding:14px; border-radius:10px; max-height:460px; overflow:auto; white-space:pre-wrap; font-family:monospace; font-size:0.82rem; }
+        .msg { color:#b91c1c; font-size:0.9rem; margin-top:8px; white-space:pre-wrap; }
+        .ok { color:var(--accent2); }
+        .note { background:var(--note-bg); border:1px solid var(--note-bd); color:var(--note-fg); padding:10px 12px; border-radius:10px; font-size:0.85rem; margin-top:10px; }
     </style>
 </head>
 <body>
 <div class="container">
-    <a class="back" href="../../index.html">← 返回工具箱</a>
-    <h2>🐙 GitHub 发行 / 加速下载</h2>
+    <a class="brand" href="../../index.html">🧰 超能工具箱</a>
+    <a class="back" href="../../index.html">← 返回主页</a>
+    <h2>🐙 GitHub 工具箱</h2>
     <div class="row">
-        <input id="owner" value="li63050a" placeholder="所有者">
-        <input id="repo" value="gjx" placeholder="仓库">
-        <input id="branch" value="main" placeholder="分支(README)" style="max-width:120px">
+        <input id="repo" value="https://github.com/li63050a/gjx" placeholder="仓库地址或 owner/repo">
+        <button class="btn" onclick="go()">加载</button>
     </div>
     <div class="row">
-        <button class="btn" onclick="loadReleases()">加载发行列表</button>
-        <button class="btn gray" onclick="loadReadme()">加载 README.md</button>
+        <input id="token" type="password" placeholder="个人访问令牌 Token（可选，填后可提高 API 限额到 5000/小时）">
+        <button class="btn gray" onclick="saveToken()">保存令牌</button>
+        <button class="btn gray" onclick="clearToken()">清除</button>
     </div>
+    <div class="note">令牌仅保存在本机浏览器(localStorage)，不会上传到任何服务器，仅用于调用 GitHub API 的 Authorization 头。公开仓库即使不填也能用（限流 60/小时）。</div>
+
+    <div id="repoMeta" class="meta" style="margin:12px 0"></div>
+    <div class="row"><button class="btn green" onclick="downloadRepo()">📦 下载整个仓库 (.zip)</button><span class="meta" id="dlRepo"></span></div>
+
     <div class="tabs">
         <button class="tab active" id="tRel" onclick="switchTab('rel')">发行列表</button>
         <button class="tab" id="tRead" onclick="switchTab('read')">README</button>
+        <button class="tab" id="tFile" onclick="switchTab('file')">文件浏览</button>
     </div>
-    <div class="out" id="relOut"><p class="meta">点击“加载发行列表”查看版本、资源与加速下载链接。</p></div>
-    <div class="out hidden" id="readOut"><pre class="readme" id="readme">点击“加载 README.md”获取仓库介绍。</pre></div>
+
+    <div id="relOut"><p class="meta">加载中…</p></div>
+    <div id="readOut" class="hidden"><pre class="readme" id="readme">加载中…</pre></div>
+        <div id="fileOut" class="hidden">
+            <div id="tree" class="meta">点击“文件浏览”标签后自动列出文件…</div>
+            <div id="fileHead"></div>
+            <pre class="code hidden" id="fileView"></pre>
+        </div>
+
     <div class="msg" id="msg"></div>
-    <p class="meta" style="margin-top:10px">加速说明：通用 <code>https://g.z321.cc.cd/</code> 前缀任意链接；<code>https://777.z321.cc.cd/</code> 仅用于 GitHub 链接。数据来自 GitHub 公开 API（未登录限流 60 次/小时）。</p>
+    <p class="meta" style="margin-top:10px">加速说明：通用 <code>https://g.z321.cc.cd/</code> 前缀任意链接；<code>https://777.z321.cc.cd/</code> 仅用于 GitHub 链接。</p>
 </div>
 <script>
-    function setMsg(m){ document.getElementById('msg').textContent = m || ''; }
-    function switchTab(t){
-        document.getElementById('tRel').classList.toggle('active', t==='rel');
-        document.getElementById('tRead').classList.toggle('active', t==='read');
-        document.getElementById('relOut').classList.toggle('hidden', t!=='rel');
-        document.getElementById('readOut').classList.toggle('hidden', t!=='read');
+    function setMsg(m, ok){ var el=document.getElementById('msg'); el.textContent=m||''; el.style.color=ok?'#16a34a':'#b91c1c'; }
+    function getToken(){ return localStorage.getItem('gh_token') || ''; }
+    function saveToken(){ var v=document.getElementById('token').value.trim(); localStorage.setItem('gh_token', v); setMsg(v?'令牌已保存（本机）':'', true); }
+    function clearToken(){ localStorage.removeItem('gh_token'); document.getElementById('token').value=''; setMsg('令牌已清除', true); }
+
+    function parseRepo(){
+        var s=document.getElementById('repo').value.trim().replace(/\.git$/,'');
+        var m=s.match(/github\.com[/:]([^/]+)\/([^/?#]+)/);
+        if(m) return { owner:m[1], repo:m[2] };
+        var p=s.split('/');
+        if(p.length>=2) return { owner:p[0], repo:p[1] };
+        return { owner:'li63050a', repo:'gjx' };
     }
-    function accLinks(url){
-        return '<a href="'+url+'" target="_blank" rel="noopener">原链接</a>'
-            + '<a class="acc" href="https://g.z321.cc.cd/'+url+'" target="_blank" rel="noopener">加速(通用)</a>'
-            + '<a class="acc" href="https://777.z321.cc.cd/'+url+'" target="_blank" rel="noopener">加速(GitHub)</a>';
+    function gh(url){
+        var h={'Accept':'application/vnd.github+json'};
+        var t=getToken(); if(t) h['Authorization']='Bearer '+t;
+        var urls=['https://g.z321.cc.cd/'+url, url];
+        var i=0;
+        function next(){ if(i>=urls.length) return Promise.reject(new Error('请求失败')); var u=urls[i++]; return fetch(u,{headers:h}).then(function(r){
+            if(r.status===403||r.status===429) throw new Error('API 限额已满（'+(t?'请检查令牌权限':'未填令牌，限流 60/小时，建议填写令牌')+'）');
+            if(!r.ok) throw new Error('HTTP '+r.status); return r;
+        }).catch(function(e){ if(e&&e.message&&e.message.indexOf('限额')>-1) throw e; return next(); }); }
+        return next().then(function(r){ return r.json(); });
+    }
+    function accLinks(rawUrl){
+        return '<a href="'+rawUrl+'" target="_blank" rel="noopener">原链接</a>'
+            + '<a class="acc" href="https://g.z321.cc.cd/'+rawUrl+'" target="_blank" rel="noopener">加速(通用)</a>'
+            + '<a class="acc" href="https://777.z321.cc.cd/'+rawUrl+'" target="_blank" rel="noopener">加速(GitHub)</a>';
     }
     function fmtSize(b){ if(b==null) return ''; if(b<1024) return b+' B'; if(b<1048576) return (b/1024).toFixed(1)+' KB'; return (b/1048576).toFixed(2)+' MB'; }
-    function loadReleases(){
-        var o = document.getElementById('owner').value.trim();
-        var r = document.getElementById('repo').value.trim();
-        if(!o||!r){ setMsg('请填写所有者和仓库'); return; }
-        setMsg('加载中...');
-        fetch('https://api.github.com/repos/'+o+'/'+r+'/releases?per_page=30')
-            .then(function(res){ if(!res.ok) throw new Error('HTTP '+res.status); return res.json(); })
-            .then(function(list){
-                if(!list.length){ document.getElementById('relOut').innerHTML='<p class="meta">该仓库暂无发行版本。</p>'; setMsg(''); return; }
-                var html = list.map(function(rel){
-                    var assets = (rel.assets||[]).map(function(a){
-                        return '<div class="asset"><div class="fn">📦 '+a.name+' <span class="meta">('+fmtSize(a.size)+')</span></div>'
-                            + '<div class="links">'+accLinks(a.browser_download_url)+'</div></div>';
-                    }).join('');
-                    return '<div class="rel"><h3>'+ (rel.name||rel.tag_name) +' <span class="meta">('+rel.tag_name+')</span></h3>'
-                        + '<div class="meta">发布：'+ (rel.published_at?rel.published_at.replace('T',' ').replace('Z',''):'—') + (rel.prerelease?' · 预发布':'') +'</div>'
-                        + (assets || '<div class="meta">无附加资源（可能是源码标签）。</div>') + '</div>';
+    function switchTab(t){
+        ['rel','read','file'].forEach(function(x){ document.getElementById('t'+x[0].toUpperCase()+x.slice(1)).classList.toggle('active', x===t); });
+        document.getElementById('relOut').classList.toggle('hidden', t!=='rel');
+        document.getElementById('readOut').classList.toggle('hidden', t!=='read');
+        document.getElementById('fileOut').classList.toggle('hidden', t!=='file');
+        if(t==='file' && !document.getElementById('tree').dataset.loaded) loadFiles();
+    }
+    var BRANCH='main';
+    function go(){
+        setMsg('');
+        var p=parseRepo();
+        gh('https://api.github.com/repos/'+p.owner+'/'+p.repo).then(function(info){
+            BRANCH = info.default_branch || 'main';
+            document.getElementById('repoMeta').innerHTML = '⭐ '+info.stargazers_count+' · 🍴 '+info.forks_count
+                + ' · 默认分支 <b>'+BRANCH+'</b><br><span class="meta">'+ (info.description||'') +'</span>';
+            var zip='https://github.com/'+p.owner+'/'+p.repo+'/archive/refs/heads/'+BRANCH+'.zip';
+            document.getElementById('dlRepo').innerHTML = accLinks(zip);
+            loadReleases(p); loadReadme(p);
+        }).catch(function(e){ setMsg('仓库信息加载失败：'+e.message); });
+    }
+    function downloadRepo(){
+        var p=parseRepo();
+        var zip='https://github.com/'+p.owner+'/'+p.repo+'/archive/refs/heads/'+BRANCH+'.zip';
+        var a=document.createElement('a'); a.href='https://g.z321.cc.cd/'+zip; a.target='_blank'; a.rel='noopener'; a.click();
+    }
+    function loadReleases(p){
+        gh('https://api.github.com/repos/'+p.owner+'/'+p.repo+'/releases?per_page=30').then(function(list){
+            if(!list.length){ document.getElementById('relOut').innerHTML='<p class="meta">该仓库暂无发行版本。</p>'; return; }
+            document.getElementById('relOut').innerHTML = list.map(function(rel){
+                var assets=(rel.assets||[]).map(function(a){
+                    return '<div class="asset"><div class="fn">📦 '+a.name+' <span class="meta">('+fmtSize(a.size)+')</span></div><div>'+accLinks(a.browser_download_url)+'</div></div>';
                 }).join('');
-                document.getElementById('relOut').innerHTML = html;
-                setMsg('');
-            })
-            .catch(function(e){ setMsg('加载失败：'+e.message+'（可能限流或仓库不存在）'); });
+                return '<div class="rel"><h3>'+(rel.name||rel.tag_name)+' <span class="meta">('+rel.tag_name+')</span></h3>'
+                    + '<div class="meta">发布：'+(rel.published_at?rel.published_at.replace('T',' ').replace('Z',''):'—')+(rel.prerelease?' · 预发布':'')+'</div>'
+                    + (assets||'<div class="meta">无附加资源（可能仅源码标签）。</div>')+'</div>';
+            }).join('');
+        }).catch(function(e){ document.getElementById('relOut').innerHTML='<p class="msg">'+e.message+'</p>'; });
     }
-    function loadReadme(){
-        var o = document.getElementById('owner').value.trim();
-        var r = document.getElementById('repo').value.trim();
-        var b = document.getElementById('branch').value.trim() || 'main';
-        if(!o||!r){ setMsg('请填写所有者和仓库'); return; }
-        setMsg('加载中...');
-        fetch('https://raw.githubusercontent.com/'+o+'/'+r+'/'+b+'/README.md')
-            .then(function(res){ if(!res.ok) throw new Error('HTTP '+res.status); return res.text(); })
-            .then(function(t){ document.getElementById('readme').textContent = t; setMsg(''); switchTab('read'); })
-            .catch(function(e){ setMsg('README 加载失败：'+e.message+'（请检查分支名）'); });
+    function loadReadme(p){
+        function tryRaw(br){ var raw='https://raw.githubusercontent.com/'+p.owner+'/'+p.repo+'/'+br+'/README.md'; var urls=['https://g.z321.cc.cd/'+raw, raw]; var i=0;
+            function nx(){ if(i>=urls.length) return Promise.reject(0); var u=urls[i++]; return fetch(u).then(function(r){ if(!r.ok) throw 0; return r.text(); }).catch(function(){ return nx(); }); }
+            return nx(); }
+        tryRaw(BRANCH).catch(function(){ return tryRaw('master'); }).then(function(t){ document.getElementById('readme').textContent=t; setMsg(''); }).catch(function(){ document.getElementById('readme').textContent='（未找到 README.md）'; });
     }
+    function loadFiles(){
+        var p=parseRepo();
+        gh('https://api.github.com/repos/'+p.owner+'/'+p.repo+'/git/trees/'+BRANCH+'?recursive=1').then(function(tree){
+            var items=(tree.tree||[]).filter(function(x){ return x.type==='blob'; });
+            var box=document.getElementById('tree'); box.dataset.loaded='1';
+            box.innerHTML = items.map(function(x){
+                var d=x.path.split('/').length-1;
+                var ic = /\.(png|jpe?g|gif|svg|ico|webp)$/i.test(x.path)?'🖼️':(/\.(md|txt|json|js|ts|css|html|yml|yaml|xml|sh|py|java|go|rs|c|cpp|h)$/i.test(x.path)?'📄':'📦');
+                return '<div class="file" style="padding-left:'+(8+d*16)+'px" onclick="showFile(\''+p.owner+'\',\''+p.repo+'\',\''+x.path.replace(/'/g,"\\'")+'\')"><span class="ic">'+ic+'</span>'+x.path+'</div>';
+            }).join('') || '<p class="meta">无文件</p>';
+        }).catch(function(e){ document.getElementById('tree').innerHTML='<p class="msg">'+e.message+'</p>'; });
+    }
+    function showFile(owner, repo, path){
+        var raw='https://raw.githubusercontent.com/'+owner+'/'+repo+'/'+BRANCH+'/'+path;
+        var urls=['https://g.z321.cc.cd/'+raw, raw]; var i=0;
+        function nx(){ if(i>=urls.length) return Promise.reject(new Error('读取失败')); var u=urls[i++]; return fetch(u).then(function(r){ if(!r.ok) throw 0; return r.text(); }).catch(function(){ return nx(); }); }
+        nx().then(function(txt){
+            document.getElementById('fileHead').innerHTML='<div class="asset" style="margin-bottom:10px"><div class="fn">'+path+'</div><div>'+accLinks(raw)+'</div></div>';
+            var view=document.getElementById('fileView'); view.classList.remove('hidden'); view.textContent=txt; switchTab('file');
+        }).catch(function(e){ document.getElementById('fileView').textContent='读取失败：'+e.message; });
+    }
+    document.getElementById('token').value = getToken();
+    go();
 </script>
 <button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:#2563eb;color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
 <script>function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}</script>
