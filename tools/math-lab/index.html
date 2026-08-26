@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数学工具 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 700px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input { padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; flex:1; min-width:100px; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; font-size:0.95rem; word-break:break-all; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>🧮 数学工具箱</h2>
+    <div class="row">
+        <input type="text" id="n1" placeholder="数字 A" value="12">
+        <input type="text" id="n2" placeholder="数字 B" value="18">
+        <button class="btn" onclick="gcd()">最大公约数</button>
+        <button class="btn" onclick="lcm()">最小公倍数</button>
+    </div>
+    <div class="row">
+        <input type="text" id="n3" placeholder="数字 N" value="7">
+        <button class="btn" onclick="factorial()">阶乘 N!</button>
+        <button class="btn" onclick="fib()">斐波那契 第N项</button>
+        <button class="btn" onclick="isPrime()">是否素数</button>
+    </div>
+    <div class="output-box" id="result">等待计算...</div>
+</div>
+<script>
+    function gcd2(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ var t=b; b=a%b; a=t; } return a; }
+    function gnum(){ return parseInt(document.getElementById('n1').value); }
+    function gnum2(){ return parseInt(document.getElementById('n2').value); }
+    function gcd(){ var a=gnum(), b=gnum2(); if(isNaN(a)||isNaN(b)){r('请输入数字');return;} r('GCD('+a+', '+b+') = ' + gcd2(a,b)); }
+    function lcm(){ var a=gnum(), b=gnum2(); if(isNaN(a)||isNaN(b)||a===0||b===0){r('请输入非零数字');return;} r('LCM('+a+', '+b+') = ' + Math.abs(a*b)/gcd2(a,b)); }
+    function factorial(){ var n=parseInt(document.getElementById('n3').value); if(isNaN(n)||n<0||n>170){r('请输入 0-170 的整数');return;} var f=1; for(var i=2;i<=n;i++)f*=i; r(n+'! = ' + f); }
+    function fib(){ var n=parseInt(document.getElementById('n3').value); if(isNaN(n)||n<0||n>1000){r('请输入 0-1000 的整数');return;} var a=0,b=1; for(var i=0;i<n;i++){var t=a+b;a=b;b=t;} r('F('+n+') = ' + a); }
+    function isPrime(){ var n=parseInt(document.getElementById('n3').value); if(isNaN(n)||n<2){r(n+' 不是素数');return;} var p=true; for(var i=2;i*i<=n;i++) if(n%i===0){p=false;break;} r(n + (p?' 是素数 ✅':' 不是素数 ❌')); }
+    function r(s){ document.getElementById('result').textContent = s; }
+</script>
+</body>
+</html>

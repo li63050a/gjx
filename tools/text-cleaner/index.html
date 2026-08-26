@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文本清洗 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 800px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        textarea { width:100%; padding:10px; border:1px solid #d1d5db; border-radius:10px; font-size:0.85rem; min-height:110px; resize:vertical; font-family:monospace; }
+        .flex { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+        .btn { padding:6px 16px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; font-size:0.85rem; }
+        .btn:active { transform:scale(0.96); }
+        .btn.gray { background:#6b7280; }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; white-space:pre-wrap; max-height:240px; overflow-y:auto; font-size:0.8rem; font-family:monospace; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>🧼 文本清洗</h2>
+    <textarea id="text" placeholder="粘贴待清洗文本">  hello   world  
+
+  foo   bar  
+
+test</textarea>
+    <div class="flex">
+        <button class="btn" onclick="trimLines()">去首尾空格</button>
+        <button class="btn" onclick="rmBlank()">删除空行</button>
+        <button class="btn" onclick="collapse()">合并多空行</button>
+        <button class="btn" onclick="rmDup()">删除重复行</button>
+        <button class="btn gray" onclick="document.getElementById('text').value=''">清空</button>
+    </div>
+    <div class="output-box" id="result">等待操作...</div>
+</div>
+<script>
+    function get(){ return document.getElementById('text').value; }
+    function set(s){ document.getElementById('result').textContent = s; }
+    function trimLines(){ set(get().split('\n').map(function(x){return x.trim();}).join('\n')); }
+    function rmBlank(){ set(get().split('\n').filter(function(x){return x.trim()!=='';}).join('\n')); }
+    function collapse(){
+        var out=[], prevBlank=false;
+        get().split('\n').forEach(function(l){
+            if (l.trim()===''){ if(!prevBlank) out.push(''); prevBlank=true; } else { out.push(l); prevBlank=false; }
+        });
+        set(out.join('\n'));
+    }
+    function rmDup(){
+        var seen={}, out=[];
+        get().split('\n').forEach(function(l){ if(!seen[l]){ seen[l]=1; out.push(l); } });
+        set(out.join('\n'));
+    }
+</script>
+</body>
+</html>

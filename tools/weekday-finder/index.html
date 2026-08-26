@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星期查询 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 700px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input { flex:1; min-width:150px; padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; font-size:1.2rem; text-align:center; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>📅 日期→星期</h2>
+    <div class="row">
+        <input type="date" id="d">
+        <button class="btn" onclick="find()">查询</button>
+    </div>
+    <div class="output-box" id="result">请选择日期</div>
+</div>
+<script>
+    document.getElementById('d').value = new Date().toISOString().slice(0,10);
+    function find() {
+        var v = document.getElementById('d').value;
+        if (!v) { document.getElementById('result').textContent='请选择日期'; return; }
+        var names = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+        var wd = new Date(v).getDay();
+        document.getElementById('result').textContent = v + ' 是 ' + names[wd];
+    }
+</script>
+</body>
+</html>

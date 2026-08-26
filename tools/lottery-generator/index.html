@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>彩票生成 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 700px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input { padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; width:80px; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; font-size:1.1rem; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>🎰 彩票号码生成</h2>
+    <div class="row">
+        <span>个数:</span><input type="text" id="cnt" value="6">
+        <span>范围:</span><input type="text" id="min" value="1"><input type="text" id="max" value="33">
+        <button class="btn" onclick="gen()">生成</button>
+    </div>
+    <div class="output-box" id="result">等待生成...</div>
+</div>
+<script>
+    function gen() {
+        var cnt = parseInt(document.getElementById('cnt').value) || 1;
+        var min = parseInt(document.getElementById('min').value);
+        var max = parseInt(document.getElementById('max').value);
+        if (isNaN(min) || isNaN(max) || min >= max) { document.getElementById('result').textContent='范围无效'; return; }
+        var pool = [], res = [];
+        for (var i = min; i <= max; i++) pool.push(i);
+        cnt = Math.min(cnt, pool.length);
+        for (var j = 0; j < cnt; j++) {
+            var idx = Math.floor(Math.random()*pool.length);
+            res.push(pool[idx]); pool.splice(idx,1);
+        }
+        document.getElementById('result').textContent = res.sort(function(a,b){return a-b;}).join('  ,  ');
+    }
+</script>
+</body>
+</html>

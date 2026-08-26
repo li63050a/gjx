@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UA 解析 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 800px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        textarea { width:100%; padding:10px; border:1px solid #d1d5db; border-radius:10px; font-size:0.85rem; min-height:70px; resize:vertical; font-family:monospace; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .btn.gray { background:#6b7280; }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; white-space:pre-wrap; font-size:0.9rem; font-family:monospace; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>🕵️ User-Agent 解析</h2>
+    <textarea id="ua" placeholder="粘贴 UA 字符串"></textarea>
+    <div class="flex" style="display:flex;gap:10px;margin:10px 0;">
+        <button class="btn" onclick="parse()">解析</button>
+        <button class="btn" onclick="useMine()">填入我的 UA</button>
+        <button class="btn gray" onclick="document.getElementById('ua').value=''">清空</button>
+    </div>
+    <div class="output-box" id="result">等待解析...</div>
+</div>
+<script>
+    function pick(ua, re, def){ var m = ua.match(re); return m ? m[1] : def; }
+    function parse() {
+        var ua = document.getElementById('ua').value;
+        if (!ua) { document.getElementById('result').textContent='请输入 UA'; return; }
+        var browser = '未知', os = '未知', device = '桌面';
+        if (/Edg\//.test(ua)) browser = 'Edge';
+        else if (/OPR\/|Opera/.test(ua)) browser = 'Opera';
+        else if (/Chrome\//.test(ua)) browser = 'Chrome';
+        else if (/Firefox\//.test(ua)) browser = 'Firefox';
+        else if (/Safari\//.test(ua)) browser = 'Safari';
+        else if (/MSIE|Trident/.test(ua)) browser = 'Internet Explorer';
+        if (/Windows NT 10/.test(ua)) os = 'Windows 10/11';
+        else if (/Windows NT/.test(ua)) os = 'Windows';
+        else if (/Mac OS X/.test(ua)) os = 'macOS';
+        else if (/Android/.test(ua)) os = 'Android';
+        else if (/iPhone|iPad|iPod/.test(ua)) os = 'iOS';
+        else if (/Linux/.test(ua)) os = 'Linux';
+        if (/Mobile/.test(ua)) device = '手机';
+        else if (/Tablet|iPad/.test(ua)) device = '平板';
+        var ver = pick(ua, /(Chrome\/|Firefox\/|Edg\/|Version\/|OPR\/|MSIE |rv:)([\d.]+)/, '未知');
+        document.getElementById('result').textContent =
+            '浏览器: ' + browser + ' ' + ver + '\n' +
+            '操作系统: ' + os + '\n' +
+            '设备类型: ' + device;
+    }
+    function useMine() { document.getElementById('ua').value = navigator.userAgent; parse(); }
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>密码强度 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 700px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        input[type=text] { width:100%; padding:10px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; }
+        .bar { height:12px; border-radius:6px; background:#e2e8f0; margin-top:14px; overflow:hidden; }
+        .bar > div { height:100%; width:0; transition:0.2s; }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; font-size:0.95rem; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>🔐 密码强度检测</h2>
+    <input type="text" id="pwd" placeholder="输入密码" oninput="check()">
+    <div class="bar"><div id="barFill"></div></div>
+    <div class="output-box" id="result">等待输入...</div>
+</div>
+<script>
+    function check() {
+        var p = document.getElementById('pwd').value;
+        if (!p) { document.getElementById('barFill').style.width='0'; document.getElementById('result').textContent='等待输入...'; return; }
+        var score = 0;
+        if (p.length >= 8) score++;
+        if (p.length >= 12) score++;
+        if (/[a-z]/.test(p) && /[A-Z]/.test(p)) score++;
+        if (/\d/.test(p)) score++;
+        if (/[^a-zA-Z0-9]/.test(p)) score++;
+        var labels = ['极弱','弱','一般','较强','强','非常强'];
+        var colors = ['#dc2626','#dc2626','#f59e0b','#eab308','#16a34a','#15803d'];
+        var pct = (score/5)*100;
+        document.getElementById('barFill').style.width = pct + '%';
+        document.getElementById('barFill').style.background = colors[score];
+        document.getElementById('result').innerHTML =
+            '强度: <b>' + labels[score] + '</b> (' + score + '/5)<br>' +
+            '长度: ' + p.length + ' 字符';
+    }
+</script>
+</body>
+</html>

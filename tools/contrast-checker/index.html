@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>对比度检测 · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 700px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input { padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; flex:1; min-width:120px; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .preview { padding:20px; border-radius:10px; margin-top:10px; text-align:center; font-weight:700; font-size:1.1rem; }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; font-size:0.95rem; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>🎭 颜色对比度 (WCAG)</h2>
+    <div class="row">
+        <input type="text" id="fg" placeholder="前景色 #000000" value="#000000">
+        <input type="text" id="bg" placeholder="背景色 #ffffff" value="#ffffff">
+        <button class="btn" onclick="check()">检测</button>
+    </div>
+    <div class="preview" id="preview">示例文字 Preview</div>
+    <div class="output-box" id="result">等待检测...</div>
+</div>
+<script>
+    function lum(hex) {
+        hex = hex.replace('#','');
+        if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+        var r = parseInt(hex.substr(0,2),16)/255, g = parseInt(hex.substr(2,2),16)/255, b = parseInt(hex.substr(4,2),16)/255;
+        function f(c){ return c <= 0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055, 2.4); }
+        return 0.2126*f(r) + 0.7152*f(g) + 0.0722*f(b);
+    }
+    function check() {
+        var fg = document.getElementById('fg').value, bg = document.getElementById('bg').value;
+        if (!/^#?[0-9a-fA-F]{6}$/.test(fg) || !/^#?[0-9a-fA-F]{6}$/.test(bg)) { document.getElementById('result').textContent='请输入6位十六进制颜色'; return; }
+        if (fg[0] !== '#') fg = '#'+fg; if (bg[0] !== '#') bg = '#'+bg;
+        var L1 = lum(fg), L2 = lum(bg);
+        var ratio = (Math.max(L1,L2)+0.05)/(Math.min(L1,L2)+0.05);
+        document.getElementById('preview').style.color = fg;
+        document.getElementById('preview').style.background = bg;
+        document.getElementById('result').innerHTML =
+            '对比度: <b>' + ratio.toFixed(2) + ':1</b><br>' +
+            'WCAG AA (普通文字 ≥ 4.5): ' + (ratio>=4.5?'✅ 通过':'❌ 未通过') + '<br>' +
+            'WCAG AA (大号文字 ≥ 3.0): ' + (ratio>=3?'✅ 通过':'❌ 未通过') + '<br>' +
+            'WCAG AAA (普通文字 ≥ 7.0): ' + (ratio>=7?'✅ 通过':'❌ 未通过');
+    }
+</script>
+</body>
+</html>

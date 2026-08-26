@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON ⇄ CSV · 超能工具箱</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 800px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        textarea { width:100%; padding:10px; border:1px solid #d1d5db; border-radius:10px; font-size:0.85rem; min-height:110px; resize:vertical; font-family:monospace; }
+        .flex { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .btn.green { background:#16a34a; }
+        .btn.gray { background:#6b7280; }
+        .output-box { background:#f8fafc; padding:12px 16px; border-radius:10px; margin-top:12px; border-left:4px solid #2563eb; white-space:pre-wrap; max-height:250px; overflow-y:auto; font-size:0.8rem; font-family:monospace; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>🔁 JSON ⇄ CSV</h2>
+    <textarea id="text" placeholder="粘贴 JSON 数组 或 CSV">[{"name":"Alice","age":30},{"name":"Bob","age":25}]</textarea>
+    <div class="flex">
+        <button class="btn" onclick="j2c()">JSON → CSV</button>
+        <button class="btn green" onclick="c2j()">CSV → JSON</button>
+        <button class="btn gray" onclick="document.getElementById('text').value=''">清空</button>
+    </div>
+    <div class="output-box" id="result">等待操作...</div>
+</div>
+<script>
+    function j2c() {
+        try {
+            var arr = JSON.parse(document.getElementById('text').value);
+            if (!Array.isArray(arr) || !arr.length) { document.getElementById('result').textContent='需为对象数组'; return; }
+            var cols = []; for (var k in arr[0]) cols.push(k);
+            var rows = [cols.join(',')];
+            for (var i = 0; i < arr.length; i++) {
+                var r = [];
+                for (var c = 0; c < cols.length; c++) r.push(arr[i][cols[c]]);
+                rows.push(r.join(','));
+            }
+            document.getElementById('result').textContent = rows.join('\n');
+        } catch (e) { document.getElementById('result').textContent = '❌ ' + e.message; }
+    }
+    function c2j() {
+        try {
+            var lines = document.getElementById('text').value.trim().split('\n');
+            var cols = lines[0].split(',');
+            var out = [];
+            for (var i = 1; i < lines.length; i++) {
+                var cells = lines[i].split(',');
+                var o = {};
+                for (var c = 0; c < cols.length; c++) o[cols[c]] = cells[c];
+                out.push(o);
+            }
+            document.getElementById('result').textContent = JSON.stringify(out, null, 2);
+        } catch (e) { document.getElementById('result').textContent = '❌ ' + e.message; }
+    }
+</script>
+</body>
+</html>
