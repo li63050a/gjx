@@ -5,9 +5,10 @@
 ## 🌍 相关链接
 
 - **GitHub 仓库**：https://github.com/li63050a/gjx
+- **GitHub Pages**：https://li63050a.github.io/gjx/
 - **在线演示**：https://gjx.z321.cc.cd/
 
-每个工具页面底部均标注了以上两个链接。
+每个工具页面底部均标注了以上三个链接。
 
 ## 📁 项目结构
 
