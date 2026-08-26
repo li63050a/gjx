@@ -1,5 +1,3 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import './styles/tokens.css'
+import App from './App.js'
 
-createApp(App).mount('#app')
+Vue.createApp(App).mount('#app')
