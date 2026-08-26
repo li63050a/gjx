@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <title>头像生成器 · 超能工具箱</title>
+    <script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;<\/script>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
+        .container { max-width: 760px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
+        h2 { margin-bottom:16px; }
+        .row { display:flex; flex-wrap:wrap; gap:10px; margin:10px 0; align-items:center; }
+        .row input, .row select { padding:8px 14px; border:1px solid #d1d5db; border-radius:10px; font-size:1rem; flex:1; min-width:120px; }
+        .btn { padding:8px 20px; background:#2563eb; color:#fff; border:none; border-radius:30px; font-weight:600; cursor:pointer; }
+        .btn:active { transform:scale(0.96); }
+        .btn.gray { background:#6b7280; }
+        .out { text-align:center; margin-top:16px; }
+        canvas { background:#fff; padding:12px; border-radius:12px; box-shadow:0 1px 8px rgba(0,0,0,.1); }
+        .hint { color:#64748b; font-size:0.85rem; margin-top:8px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back" href="../../index.html">← 返回工具箱</a>
+    <h2>🧑 头像生成器</h2>
+    <div class="row">
+        <input type="text" id="seed" placeholder="输入文字/昵称（相同文字生成相同头像）" value="opencode">
+        <select id="style"><option value="identicon">几何方块</option><option value="initials" selected>首字母</option><option value="pixel">像素图案</option></select>
+        <select id="size"><option value="128">128px</option><option value="256" selected>256px</option><option value="512">512px</option></select>
+    </div>
+    <div class="flex" style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn" onclick="gen()">生成</button>
+        <button class="btn gray" onclick="download()">下载 PNG</button>
+        <button class="btn gray" onclick="rand()">随机</button>
+    </div>
+    <div class="out"><canvas id="cv" width="256" height="256"></canvas><div class="hint">纯前端生成，无水印 · 手机可长按保存</div></div>
+</div>
+<script>
+    function hash(str){
+        var h = 2166136261;
+        for (var i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = (h * 16777619) >>> 0; }
+        return h >>> 0;
+    }
+    function gen(){
+        var seed = document.getElementById('seed').value || 'guest';
+        var style = document.getElementById('style').value;
+        var S = parseInt(document.getElementById('size').value) || 256;
+        var h = hash(seed);
+        var cv = document.getElementById('cv'); cv.width = cv.height = S;
+        var ctx = cv.getContext('2d');
+        var hue = h % 360;
+        if (style === 'identicon' || style === 'pixel'){
+            var bg = '#' + (h & 0xffffff).toString(16).padStart(6,'0');
+            ctx.fillStyle = bg; ctx.fillRect(0,0,S,S);
+            var grid = 5, cell = S / grid;
+            var col = 'hsl(' + hue + ',70%,55%)';
+            ctx.fillStyle = col;
+            for (var y=0;y<grid;y++){
+                for (var x=0;x<Math.ceil(grid/2);x++){
+                    var bit = (hash(seed + y + ',' + x) >> 3) & 1;
+                    if (bit){
+                        ctx.fillRect(x*cell, y*cell, cell, cell);
+                        if (x !== grid-1-x) ctx.fillRect((grid-1-x)*cell, y*cell, cell, cell);
+                    }
+                }
+            }
+        } else {
+            var g = ctx.createLinearGradient(0,0,S,S);
+            g.addColorStop(0, 'hsl(' + hue + ',75%,55%)');
+            g.addColorStop(1, 'hsl(' + ((hue+60)%360) + ',75%,45%)');
+            ctx.fillStyle = g; ctx.fillRect(0,0,S,S);
+            var ini = seed.trim().split(/\s+/).map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase() || '?';
+            ctx.fillStyle = '#fff'; ctx.font = 'bold ' + (S*0.42) + 'px sans-serif';
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+            ctx.fillText(ini, S/2, S/2 + S*0.02);
+        }
+    }
+    function download(){
+        var a = document.createElement('a'); a.download = 'avatar.png';
+        a.href = document.getElementById('cv').toDataURL('image/png'); a.click();
+    }
+    function rand(){ document.getElementById('seed').value = Math.random().toString(36).slice(2,9); gen(); }
+    gen();
+</script>
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:#2563eb;color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}</script>
+<!--SITE-LINKS-->
+<div style="margin-top:28px;padding:14px 0;text-align:center;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;">🔗 项目: <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub 仓库</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">gjx.z321.cc.cd</a></div>
+</body>
+</html>

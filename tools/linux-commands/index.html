@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
     <title>Linux 命令速查 · 超能工具箱</title>
+    <script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; background: #f1f5f9; padding: 20px; color: #0f172a; }
-        .container { max-width: 900px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+        body { font-family:-apple-system,"Segoe UI",Roboto,sans-serif; background:#f1f5f9; padding:20px; color:#0f172a; }
+        .container { max-width:940px; margin:0 auto; background:#fff; border-radius:20px; padding:24px; box-shadow:0 2px 12px rgba(0,0,0,.06); }
         .back { text-decoration:none; color:#2563eb; font-weight:600; display:inline-block; margin-bottom:16px; }
         h2 { margin-bottom:12px; }
         .search { width:100%; padding:12px 16px; border:1px solid #d1d5db; border-radius:12px; font-size:1rem; margin-bottom:12px; }
-        .grid { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+        .grid { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; max-height:230px; overflow-y:auto; }
         .chip { padding:6px 14px; background:#eef2ff; color:#4338ca; border:none; border-radius:20px; cursor:pointer; font-size:0.9rem; font-weight:600; }
         .chip:hover { background:#e0e7ff; }
         .detail { background:#f8fafc; border:1px solid #e2e8f0; border-radius:14px; padding:20px; display:none; }
@@ -30,212 +29,52 @@
         .empty { text-align:center; color:#94a3b8; padding:20px; }
     </style>
     <style>
-html[data-theme="dark"] body{background:#0f172a;color:#e2e8f0;}
-html[data-theme="dark"] .container{background:#1e293b;color:#e2e8f0;box-shadow:none;}
-html[data-theme="dark"] .back{color:#93c5fd;}
-html[data-theme="dark"] h2{color:#e2e8f0;}
-html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] textarea{background:#0f172a;color:#e2e8f0;border-color:#475569;}
-html[data-theme="dark"] .output-box{background:#0f172a;color:#e2e8f0;border-color:#475569;}
-html[data-theme="dark"] .row span,html[data-theme="dark"] .label,html[data-theme="dark"] .desc,html[data-theme="dark"] .empty{color:#cbd5e1;}
-html[data-theme="dark"] .btn.gray{background:#475569;}
-html[data-theme="dark"] .btn.green{background:#15803d;}
-html[data-theme="dark"] .chip{background:#334155;color:#c7d2fe;}
-html[data-theme="dark"] .chip:hover{background:#475569;}
-html[data-theme="dark"] .detail{background:#0f172a;border-color:#475569;}
-html[data-theme="dark"] .detail th{background:#334155;color:#c7d2fe;}
-html[data-theme="dark"] .detail td,html[data-theme="dark"] .detail th{border-color:#475569;}
-html[data-theme="dark"] .detail code{background:#334155;}
-html[data-theme="dark"] .tab{background:#334155;color:#c7d2fe;}
-html[data-theme="dark"] .tab.active{background:#2563eb;color:#fff;}
-html[data-theme="dark"] pre{background:#0f172a;color:#e2e8f0;}
-</style>
+    html[data-theme="dark"] body{background:#0f172a;color:#e2e8f0;}
+    html[data-theme="dark"] .container{background:#1e293b;color:#e2e8f0;box-shadow:none;}
+    html[data-theme="dark"] .back{color:#93c5fd;}
+    html[data-theme="dark"] .chip{background:#334155;color:#c7d2fe;}
+    html[data-theme="dark"] .chip:hover{background:#475569;}
+    html[data-theme="dark"] .detail{background:#0f172a;border-color:#475569;}
+    html[data-theme="dark"] .detail th{background:#334155;color:#c7d2fe;}
+    html[data-theme="dark"] .detail td,html[data-theme="dark"] .detail th{border-color:#475569;}
+    html[data-theme="dark"] .detail code{background:#334155;}
+    html[data-theme="dark"] .search{background:#0f172a;color:#e2e8f0;border-color:#475569;}
+    </style>
 </head>
 <body>
 <div class="container">
     <a class="back" href="../../index.html">← 返回工具箱</a>
-    <h2>🐧 Linux 命令速查（详解版）</h2>
-    <input class="search" id="q" placeholder="搜索命令，如 ls / grep / 权限 ..." oninput="renderList()">
+    <h2>🐧 Linux 命令速查（详解版 · 共 187 条）</h2>
+    <input class="search" id="q" placeholder="搜索命令，如 ls / grep / 权限 / 网络 ..." oninput="renderList()">
     <div class="grid" id="chips"></div>
     <div class="detail" id="detail"></div>
     <div class="empty" id="empty">请选择上方命令查看详细说明</div>
 </div>
 <script>
-var CMDS = [
-  { name:'ls', desc:'列出目录内容。最常用命令之一，用于查看当前或指定目录下的文件与文件夹。', syntax:'ls [选项] [目录...]',
-    opts:[['-l','以长格式显示，包含权限、所有者、大小、修改时间等详细信息'],['-a','显示所有文件，包含以 . 开头的隐藏文件'],['-h','与 -l 配合使用，以人类可读单位（K/M/G）显示文件大小'],['-R','递归列出子目录内容'],['-t','按修改时间排序（新→旧）'],['--color','以彩色区分文件类型']],
-    ex:['ls -la /home        # 长格式列出 /home 全部文件（含隐藏）','ls -lh *.log        # 以可读大小列出日志文件'] },
-  { name:'cd', desc:'切换当前工作目录（change directory）。不加参数时回到当前用户主目录。', syntax:'cd [目录]',
-    opts:[['..','返回上一级目录'],['-','返回上一次所在的目录'],['~','回到当前用户主目录'],['/','回到根目录']],
-    ex:['cd /var/www        # 进入 /var/www','cd ..              # 返回上级','cd ~               # 回主目录'] },
-  { name:'pwd', desc:'显示当前所在工作目录的绝对路径（print working directory）。', syntax:'pwd [选项]',
-    opts:[['-P','显示物理路径，解析所有符号链接'],['-L','显示逻辑路径（默认）']],
-    ex:['pwd                # 输出如 /home/user/project'] },
-  { name:'cp', desc:'复制文件或目录（copy）。复制目录时必须使用 -r 递归选项。', syntax:'cp [选项] 源 目标',
-    opts:[['-r / -R','递归复制目录及其内容'],['-i','若目标已存在则询问是否覆盖'],['-v','显示复制过程详情'],['-p','保留原文件的时间戳、权限等属性'],['-a','归档式复制，保留全部属性并递归']],
-    ex:['cp file.txt bak.txt        # 复制文件','cp -r dir1 dir2            # 复制整个目录'] },
-  { name:'mv', desc:'移动文件/目录，或对文件重命名（move）。同一分区内实为“改名”。', syntax:'mv [选项] 源 目标',
-    opts:[['-i','覆盖前询问'],['-f','强制覆盖，不询问'],['-v','显示移动详情'],['-u','仅当源文件更新时才移动']],
-    ex:['mv a.txt b.txt        # 重命名','mv file /tmp/           # 移动到 /tmp'] },
-  { name:'rm', desc:'删除文件或目录（remove）。删除目录需 -r，操作不可恢复，务必谨慎。', syntax:'rm [选项] 文件...',
-    opts:[['-r / -R','递归删除目录及内容'],['-f','强制删除，忽略不存在的文件与提示'],['-i','删除前逐一询问'],['-v','显示删除详情']],
-    ex:['rm -rf old_dir        # 强制递归删除目录（慎用！）','rm -i *.tmp           # 逐个确认删除'] },
-  { name:'mkdir', desc:'创建新目录（make directory）。', syntax:'mkdir [选项] 目录...',
-    opts:[['-p','递归创建多级目录，父目录不存在时自动创建'],['-m','创建时直接指定权限，如 -m 755']],
-    ex:['mkdir -p a/b/c        # 一次性创建多级目录'] },
-  { name:'touch', desc:'更新文件时间戳；若文件不存在则创建一个空文件。', syntax:'touch [选项] 文件...',
-    opts:[['-a','只更新访问时间'],['-m','只更新修改时间'],['-d','指定时间，如 -d "2024-01-01 10:00"'],['-c','不创建新文件']],
-    ex:['touch newfile.txt        # 新建空文件','touch -d "yesterday" f.txt   # 改时间戳'] },
-  { name:'cat', desc:'连接并打印文件内容到标准输出，常用于查看文件。', syntax:'cat [选项] 文件...',
-    opts:[['-n','显示行号'],['-b','显示行号（跳过空行）'],['-A','显示不可见字符（结尾 $、制表符 ^I）'],['-s','合并连续空行为一个']],
-    ex:['cat -n config.conf        # 带行号查看','cat a.txt b.txt > c.txt    # 合并文件'] },
-  { name:'more / less', desc:'分页查看长文件内容。less 功能更强，支持上下滚动与搜索。', syntax:'less 文件',
-    opts:[['空格','向下翻页'],['b','向上翻页'],['/关键词','向下搜索'],['?关键词','向上搜索'],['q','退出'],['G','跳到文件末尾']],
-    ex:['less /var/log/syslog        # 分页查看日志'] },
-  { name:'head', desc:'显示文件开头部分（默认前 10 行）。', syntax:'head [选项] 文件',
-    opts:[['-n N','显示前 N 行，如 -n 20'],['-c N','显示前 N 个字节']],
-    ex:['head -n 50 access.log        # 查看前 50 行'] },
-  { name:'tail', desc:'显示文件末尾部分（默认后 10 行）。常用于实时查看日志。', syntax:'tail [选项] 文件',
-    opts:[['-n N','显示后 N 行'],['-f','实时跟踪文件新增内容（follow）'],['-F','跟踪并在文件重建后继续']],
-    ex:['tail -f /var/log/nginx/access.log    # 实时监控日志'] },
-  { name:'grep', desc:'强大的文本搜索工具，按正则表达式匹配行。', syntax:'grep [选项] 模式 文件...',
-    opts:[['-i','忽略大小写'],['-r','递归搜索目录'],['-n','显示匹配行号'],['-v','反向匹配（显示不含模式的行）'],['-w','整词匹配'],['-c','仅统计匹配行数'],['-E','使用扩展正则（同 egrep）'],['--color','高亮匹配内容']],
-    ex:['grep -rn "error" /var/log        # 递归搜错误','grep -i "fail" app.log | wc -l  # 统计失败次数'] },
-  { name:'find', desc:'按条件在目录树中查找文件，功能极其丰富。', syntax:'find 路径 [条件] [动作]',
-    opts:[['-name','按文件名匹配（支持通配符）'],['-type f/d','只找文件/目录'],['-size','按大小，如 -size +10M'],['-mtime','按修改天数，如 -mtime -7（7天内）'],['-exec','对结果执行命令，如 -exec rm {} \\;'],['-user','按所有者查找']],
-    ex:['find . -name "*.tmp" -delete          # 删临时文件','find / -type f -size +100M        # 找大于100M文件'] },
-  { name:'chmod', desc:'修改文件或目录的权限（change mode）。可用数字或符号方式。', syntax:'chmod [选项] 模式 文件',
-    opts:[['u/g/o/a','用户/组/其他/全部'],['+/-/=','增加/去除/设定权限'],['r/w/x','读/写/执行'],['数字法','如 755 = rwxr-xr-x，644 = rw-r--r--'],['-R','递归修改']],
-    ex:['chmod 755 script.sh        # 所有者全权限，其他读执行','chmod u+x run.sh          # 给所有者加执行权限'] },
-  { name:'chown', desc:'修改文件所有者与所属组（change owner）。通常需要 root 权限。', syntax:'chown [选项] 用户:组 文件',
-    opts:[['-R','递归修改'],['用户:组','如 root:www-data'],[':组','只改组，如 :staff']],
-    ex:['chown -R www:www /var/www        # 递归改归属'] },
-  { name:'ps', desc:'查看当前进程快照（process status）。', syntax:'ps [选项]',
-    opts:[['aux','BSD 风格，显示全部用户详细进程'],['-ef','System V 风格，全格式'],['-u 用户','只看某用户'],['--sort','按某列排序']],
-    ex:['ps aux | grep nginx        # 查 nginx 进程'] },
-  { name:'top / htop', desc:'实时动态查看系统进程与资源占用（CPU、内存）。htop 更友好需额外安装。', syntax:'top',
-    opts:[['P','按 CPU 排序'],['M','按内存排序'],['k','终止某进程（输入 PID）'],['q','退出'],['1','展开多核 CPU']],
-    ex:['top -p 1234        # 只监控 PID 1234'] },
-  { name:'kill', desc:'向进程发送信号，默认 TERM 终止进程。', syntax:'kill [信号] PID',
-    opts:[['-9 / -KILL','强制杀死（不可忽略）'],['-15 / -TERM','正常终止（默认）'],['-l','列出所有信号'],['-1 / -HUP','挂起/重载配置']],
-    ex:['kill -9 1234        # 强制结束进程','kill -HUP 5678      # 让进程重读配置'] },
-  { name:'df', desc:'显示磁盘分区的空间使用情况。', syntax:'df [选项]',
-    opts:[['-h','人类可读单位'],['-T','显示文件系统类型'],['-i','显示 inode 使用情况']],
-    ex:['df -h            # 查看各挂载点剩余空间'] },
-  { name:'du', desc:'统计目录或文件的磁盘占用量。', syntax:'du [选项] [路径]',
-    opts:[['-h','人类可读'],['-s','只显示总和（summary）'],['--max-depth=N','限制目录深度']],
-    ex:['du -sh /var/*        # 各子目录总大小','du -h --max-depth=1 .   # 当前目录一级占用'] },
-  { name:'free', desc:'查看系统内存与交换分区使用情况。', syntax:'free [选项]',
-    opts:[['-h','人类可读'],['-m','以 MB 显示'],['-s N','每 N 秒刷新一次']],
-    ex:['free -h            # 查看内存概览'] },
-  { name:'tar', desc:'打包/解包归档文件，常与 gzip 配合压缩。', syntax:'tar [选项] 文件',
-    opts:[['-c','创建归档'],['-x','解包'],['-v','显示过程'],['-f','指定文件名'],['-z','用 gzip 压缩/解压'],['-j','用 bzip2'],['-C','指定解包目录']],
-    ex:['tar -czvf bak.tar.gz /data        # 打包压缩','tar -xzvf bak.tar.gz -C /tmp   # 解压到 /tmp'] },
-  { name:'gzip / gunzip', desc:'GNU 压缩工具，压缩后原文件变为 .gz。', syntax:'gzip [选项] 文件',
-    opts:[['-d','解压（同 gunzip）'],['-k','保留原文件'],['-9','最高压缩率'],['-r','递归处理目录']],
-    ex:['gzip -k log.txt        # 压缩并保留原文件','gzip -d log.txt.gz      # 解压'] },
-  { name:'zip / unzip', desc:'跨平台压缩格式，Windows 也常用。', syntax:'zip [选项] 包名 文件',
-    opts:[['-r','递归压缩目录'],['-q','静默模式'],['unzip -l','查看压缩包内容'],['unzip -d','指定解压目录']],
-    ex:['zip -r site.zip ./site        # 压缩目录','unzip site.zip -d /tmp     # 解压'] },
-  { name:'ssh', desc:'安全地远程登录或执行命令（Secure Shell）。', syntax:'ssh [选项] 用户@主机',
-    opts:[['-p 端口','指定端口，如 -p 2222'],['-i 密钥','指定私钥文件'],['-X','开启 X11 转发'],['命令','远程执行单条命令']],
-    ex:['ssh root@192.168.1.10            # 登录','ssh -p 22 user@host "uptime"   # 远程执行'] },
-  { name:'scp', desc:'基于 SSH 的安全文件拷贝（本地↔远程）。', syntax:'scp [选项] 源 目标',
-    opts:[['-r','递归拷贝目录'],['-P 端口','指定端口'],['-i 密钥','指定私钥']],
-    ex:['scp file.txt user@host:/tmp/        # 上传','scp user@host:/etc/nginx.conf .  # 下载'] },
-  { name:'rsync', desc:'高效的文件同步工具，只传输差异部分，支持远程。', syntax:'rsync [选项] 源 目标',
-    opts:[['-a','归档模式（保留属性、递归）'],['-v','显示详情'],['-z','传输时压缩'],['--delete','删除目标中多余文件'],['-e ssh','通过 ssh 传输']],
-    ex:['rsync -avz ./site/ user@host:/var/www/    # 增量同步'] },
-  { name:'wget', desc:'命令行下载工具，支持 HTTP/HTTPS/FTP，可断点续传。', syntax:'wget [选项] URL',
-    opts:[['-c','断点续传'],['-O','指定保存文件名'],['-b','后台下载'],['-r','递归下载整站'],['--limit-rate','限速，如 --limit-rate=500k']],
-    ex:['wget -c https://example.com/big.iso        # 续传下载'] },
-  { name:'curl', desc:'强大的网络数据传输工具，常用于接口调试与下载。', syntax:'curl [选项] URL',
-    opts:[['-O','按原文件名保存'],['-o','指定保存名'],['-I','只取响应头'],['-X','指定方法，如 -X POST'],['-d','发送数据（POST）'],['-H','自定义请求头'],['-s','静默模式']],
-    ex:['curl -I https://example.com            # 看响应头','curl -X POST -d "a=1" api.com/x   # POST 数据'] },
-  { name:'systemctl', desc:'Systemd 服务管理命令（现代发行版主流）。', syntax:'systemctl [动作] 服务',
-    opts:[['start','启动服务'],['stop','停止'],['restart','重启'],['status','查看状态'],['enable','开机自启'],['disable','取消自启'],['reload','重载配置']],
-    ex:['systemctl restart nginx        # 重启 nginx','systemctl status docker      # 查状态'] },
-  { name:'apt', desc:'Debian/Ubuntu 系列包管理器。', syntax:'apt [选项] 子命令',
-    opts:[['update','刷新软件源索引'],['upgrade','升级全部可升级包'],['install 包','安装软件'],['remove 包','卸载'],['purge','卸载并删配置'],['search','搜索软件']],
-    ex:['sudo apt update && sudo apt install nginx    # 装 nginx'] },
-  { name:'yum / dnf', desc:'RHEL/CentOS/Fedora 系列的包管理器（新版用 dnf）。', syntax:'dnf [子命令] 包',
-    opts:[['install','安装'],['remove','卸载'],['update','升级系统'],['search','搜索'],['list installed','已装列表']],
-    ex:['sudo dnf install vim        # 安装 vim'] },
-  { name:'dpkg', desc:'Debian 底层包管理，直接操作 .deb 文件（不自动解决依赖）。', syntax:'dpkg [选项] 包.deb',
-    opts:[['-i','安装 deb 包'],['-r','移除'],['-l','列出已装包'],['-L','列出包安装的文件'],['-s','查看包状态']],
-    ex:['sudo dpkg -i package.deb        # 安装本地 deb'] },
-  { name:'ping', desc:'检测网络连通性与延迟（ICMP）。', syntax:'ping [选项] 主机',
-    opts:[['-c N','发送 N 个包后停止'],['-i','发包间隔（秒）'],['-s','指定包大小']],
-    ex:['ping -c 4 8.8.8.8        # 发 4 个包测试'] },
-  { name:'ss / netstat', desc:'查看网络连接、端口监听状态。ss 更快更现代。', syntax:'ss [选项]',
-    opts:[['-t','TCP 连接'],['-u','UDP'],['-l','监听中的端口'],['-n','不解析名称'],['-p','显示进程'],['-a','全部']],
-    ex:['ss -tlnp            # 查看监听端口及进程','ss -an | grep :80     # 查 80 端口'] },
-  { name:'ip', desc:'现代网络配置命令，取代旧 ifconfig。', syntax:'ip [对象] 动作',
-    opts:[['addr','查看/配置 IP 地址'],['link','查看网卡'],['route','查看路由表'],['-s','统计信息']],
-    ex:['ip addr show            # 看网卡IP','ip route show           # 看路由'] },
-  { name:'journalctl', desc:'查看 systemd 日志（journal）。', syntax:'journalctl [选项]',
-    opts:[['-u 服务','只看某服务日志'],['-f','实时跟踪'],['--since','指定起始时间'],['-p err','只看错误级别'],['-n N','最近 N 行']],
-    ex:['journalctl -u nginx -f        # 实时看 nginx 日志'] },
-  { name:'crontab', desc:'管理定时任务（cron）。', syntax:'crontab [选项]',
-    opts:[['-e','编辑当前用户任务'],['-l','列出任务'],['-r','删除全部任务']],
-    ex:['0 2 * * * /backup.sh        # 每天2点执行备份'] },
-  { name:'date', desc:'显示或设置系统日期时间。', syntax:'date [选项] [格式]',
-    opts:[['+格式','自定义输出，如 +%Y-%m-%d %H:%M:%S'],['-d','显示指定时间'],['-s','设置系统时间（需权限）']],
-    ex:['date "+%Y-%m-%d %H:%M:%S"        # 格式化输出','date -d "next monday"              # 下周一'] },
-  { name:'sed', desc:'流式文本编辑器，常用于替换、删除、提取（非交互）。', syntax:'sed [选项] 脚本 文件',
-    opts:[['s/旧/新/','替换（默认每行首个）'],['s/旧/新/g','全局替换'],['-i','直接修改文件'],['d','删除行'],['-n p','只打印匹配行']],
-    ex:['sed -i "s/old/new/g" f.txt        # 全文替换','sed -n "10,20p" f.txt           # 取10-20行'] },
-  { name:'awk', desc:'强大的文本处理与报表工具，按列处理数据。', syntax:'awk [选项] \'模式{动作}\' 文件',
-    opts:[['{print $1}','打印第1列'],['-F,','指定分隔符为逗号'],['NR','当前行号'],['END{}','处理完执行'],['$0','整行']],
-    ex:['awk -F: \'{print $1}\' /etc/passwd        # 打印所有用户名','awk \'{s+=$1} END{print s}\' d.txt    # 求和'] },
-  { name:'vim / nano', desc:'终端文本编辑器。vim 功能强但需学习；nano 简单易用。', syntax:'vim 文件 / nano 文件',
-    opts:[['vim i','进入插入模式'],['vim :wq','保存退出'],['vim :q!','不保存退出'],['nano Ctrl+O','保存'],['nano Ctrl+X','退出']],
-    ex:['vim config.conf        # 编辑文件','nano notes.txt         # 简易编辑'] },
-  { name:'chmod 数字法', desc:'权限数字由 r=4、w=2、x=1 相加。三位分别对应 所有者/组/其他。', syntax:'chmod ABC 文件',
-    opts:[['7=4+2+1','读+写+执行 (rwx)'],['6=4+2','读+写 (rw-)'],['5=4+1','读+执行 (r-x)'],['4','只读 (r--)'],['0','无权限 (---)']],
-    ex:['chmod 644 file        # rw-r--r--','chmod 600 key.pem     # 仅所有者可读写'] },
-  { name:'useradd / passwd', desc:'创建用户与设置密码。', syntax:'useradd 用户名 / passwd 用户名',
-    opts:[['-m','创建家目录'],['-s','指定登录 shell'],['-G','附加组'],['passwd -l','锁定账户'],['passwd -d','清空密码']],
-    ex:['useradd -m -s /bin/bash tom        # 建用户','passwd tom                        # 设密码'] },
-  { name:'sudo / su', desc:'以更高权限执行命令。sudo 临时提权，su 切换用户（默认 root）。', syntax:'sudo 命令 / su [用户]',
-    opts:[['sudo -i','切换到 root 交互 shell'],['su -','切换并加载目标环境'],['sudo -u','以指定用户执行']],
-    ex:['sudo apt update        # 以 root 执行','su -                # 切到 root'] },
-  { name:'ln', desc:'创建链接。默认硬链接；-s 创建符号链接（类似快捷方式）。', syntax:'ln [选项] 源 链接名',
-    opts:[['-s','符号链接（软链接）'],['-f','强制覆盖'],['-n','不跟随已存在的链接']],
-    ex:['ln -s /data/app /opt/app        # 建软链接'] },
-  { name:'echo', desc:'输出文本或变量，常配合重定向或管道使用。', syntax:'echo [选项] 文本',
-    opts:[['-n','不换行'],['-e','解释转义符（\\n \\t）'],['$变量','输出环境变量值']],
-    ex:['echo $PATH            # 打印路径','echo "hi" > f.txt      # 写入文件'] },
-];
-
+var CMDS = [{"n":"ls","d":"列出目录内容，最常用命令之一。","s":"ls [选项] [目录...]","o":[["-l","长格式，含权限/所有者/大小/时间"],["-a","显示隐藏文件(以.开头)"],["-h","人类可读大小(K/M/G)"],["-R","递归子目录"],["-t","按修改时间排序"],["--color","彩色区分类型"]],"e":["ls -la /home      # 长格式含隐藏","ls -lh *.log      # 可读大小"]},{"n":"cd","d":"切换当前工作目录。","s":"cd [目录]","o":[["..","上级目录"],["-","上次的目录"],["~","主目录"],["/","根目录"]],"e":["cd /var/www","cd .. && cd ~"]},{"n":"pwd","d":"显示当前绝对路径。","s":"pwd [选项]","o":[["-P","解析符号链接显示物理路径"]],"e":["pwd -P"]},{"n":"echo","d":"输出文本或变量。","s":"echo [选项] 文本","o":[["-n","不换行"],["-e","解释\\n\\t转义"],["$VAR","输出环境变量"]],"e":["echo $PATH","echo -e \"a\\nb\" > f.txt"]},{"n":"printf","d":"格式化输出，比echo更精确。","s":"printf 格式 [参数...]","o":[["%s","字符串"],["%d","整数"],["%f","浮点"],["\\n","换行"]],"e":["printf \"%-10s %d\\n\" tom 18"]},{"n":"cat","d":"连接并打印文件内容。","s":"cat [选项] 文件...","o":[["-n","带行号"],["-b","行号(略空行)"],["-A","显示不可见字符"],["-s","合并空行"]],"e":["cat -n conf.yml","cat a b > c"]},{"n":"tac","d":"逆序输出文件行(cat反转)。","s":"tac 文件","o":[["-s","指定分隔符"]],"e":["tac log.txt"]},{"n":"nl","d":"给文件加行号输出。","s":"nl [选项] 文件","o":[["-b a","所有行编号"],["-w","行号宽度"]],"e":["nl -b a file.txt"]},{"n":"more","d":"分页查看，只能向下。","s":"more 文件","o":[["空格","下翻页"],["q","退出"]],"e":["more big.log"]},{"n":"less","d":"分页查看，可上下搜索(功能更强)。","s":"less 文件","o":[["空格/b","下/上翻页"],["/词","向下搜"],["?词","向上搜"],["G","到末尾"],["q","退出"]],"e":["less /var/log/syslog"]},{"n":"head","d":"显示文件开头。","s":"head [选项] 文件","o":[["-n N","前N行"],["-c N","前N字节"]],"e":["head -n 20 f.log"]},{"n":"tail","d":"显示文件末尾，常看日志。","s":"tail [选项] 文件","o":[["-n N","后N行"],["-f","实时跟踪"],["-F","跟踪且重建续看"]],"e":["tail -f /var/log/nginx/access.log"]},{"n":"grep","d":"强大的文本搜索(正则)。","s":"grep [选项] 模式 文件","o":[["-i","忽略大小写"],["-r","递归目录"],["-n","行号"],["-v","反向匹配"],["-w","整词"],["-c","计数"],["-E","扩展正则"]],"e":["grep -rn \"error\" /var/log","grep -i fail app.log|wc -l"]},{"n":"egrep","d":"grep -E，扩展正则。","s":"egrep 模式 文件","o":[["等同","grep -E"]],"e":["egrep \"cat|dog\" f.txt"]},{"n":"fgrep","d":"grep -F，固定字符串(不解释正则)。","s":"fgrep 字符串 文件","o":[["等同","grep -F"]],"e":["fgrep \"a.b\" f.txt"]},{"n":"sed","d":"流编辑器，替换/删除神器。","s":"sed [选项] 脚本 文件","o":[["s/a/b/","替换首个"],["s/a/b/g","全局替换"],["-i","直接改文件"],["d","删行"],["-n p","只打印匹配"],["-e","多条命令"]],"e":["sed -i 's/old/new/g' f.txt","sed -n '10,20p' f.txt"]},{"n":"awk","d":"文本处理与报表语言，按列处理。","s":"awk [选项] '模式{动作}' 文件","o":[["{print $1}","第1列"],["-F,","指定分隔符"],["NR","当前行号"],["END{}","收尾执行"],["$0","整行"],["-f","脚本文件"]],"e":["awk -F: '{print $1}' /etc/passwd","awk '{s+=$1}END{print s}' d.txt"]},{"n":"cut","d":"按列/字符截取文本。","s":"cut [选项] 文件","o":[["-d","分隔符"],["-f","取第几列"],["-c","取字符范围"]],"e":["cut -d: -f1 /etc/passwd","cut -c1-10 f.txt"]},{"n":"sort","d":"对文本排序。","s":"sort [选项] 文件","o":[["-n","数值排序"],["-r","逆序"],["-k","按列"],["-u","去重"],["-t","分隔符"],["-h","人类可读大小"]],"e":["sort -n -k2 data.txt","sort -u names.txt"]},{"n":"uniq","d":"报告/删除重复行(需先排序)。","s":"uniq [选项] 文件","o":[["-c","计数"],["-d","仅重复行"],["-u","仅唯一行"]],"e":["sort f.txt|uniq -c"]},{"n":"wc","d":"统计行/词/字节数。","s":"wc [选项] 文件","o":[["-l","行数"],["-w","词数"],["-c","字节"],["-m","字符数"]],"e":["wc -l access.log","wc -w essay.txt"]},{"n":"tr","d":"字符转换/删除。","s":"tr [选项] 集合1 集合2","o":[["-d","删除"],["-s","压缩重复"],["-t","截断"],["a-z A-Z","转大写"]],"e":["echo hi|tr a-z A-Z","tr -d '\r' \u003cf.txt"]},{"n":"comm","d":"比较两个已排序文件。","s":"comm 文件1 文件2","o":[["-1","不显示独有1"],["-2","不显示独有2"],["-3","不显示共有"]],"e":["comm a.txt b.txt"]},{"n":"diff","d":"逐行比较文件差异。","s":"diff [选项] 文件1 文件2","o":[["-u","合并格式"],["-r","递归目录"],["-y","并排"]],"e":["diff -u a.txt b.txt"]},{"n":"patch","d":"根据diff补丁修改文件。","s":"patch [选项] 文件","o":[["-p1","去层级"],["-i","补丁文件"],["-R","反向"]],"e":["patch -p1 \u003c fix.patch"]},{"n":"cmp","d":"逐字节比较两文件。","s":"cmp 文件1 文件2","o":[["-l","列出差异"],["-s","静默"]],"e":["cmp a.iso b.iso"]},{"n":"join","d":"按字段连接两文件。","s":"join [选项] 文件1 文件2","o":[["-t","分隔符"],["-1","第1文件列"],["-2","第2文件列"]],"e":["join -t: -1 1 -2 1 a b"]},{"n":"paste","d":"并排合并文件行。","s":"paste [选项] 文件...","o":[["-d","分隔符"],["-s","串行"]],"e":["paste a.txt b.txt"]},{"n":"split","d":"分割大文件。","s":"split [选项] 文件 [前缀]","o":[["-l N","按行"],["-b N","按大小"],["-d","数字后缀"]],"e":["split -b 100M big.iso part_"]},{"n":"tee","d":"输出到屏幕同时写入文件。","s":"tee [选项] 文件","o":[["-a","追加"],["-a","不覆盖"]],"e":["make 2>&1 | tee build.log"]},{"n":"fold","d":"按宽度折行。","s":"fold [选项] 文件","o":[["-w N","每行N字符"],["-s","单词边界"]],"e":["fold -w 80 long.txt"]},{"n":"fmt","d":"简单段落格式化。","s":"fmt [选项] 文件","o":[["-w","宽度"],["-u","统一空格"]],"e":["fmt -w 60 readme.txt"]},{"n":"rev","d":"反转每行字符顺序。","s":"rev 文件","o":[["-"],[""]],"e":["rev f.txt"]},{"n":"strings","d":"从二进制提取可打印字符串。","s":"strings [选项] 文件","o":[["-n","最小长度"],["-a","全文件"]],"e":["strings app|grep version"]},{"n":"base64","d":"Base64 编码/解码。","s":"base64 [选项] 文件","o":[["-d","解码"],["-w","换行宽度"],["-i","忽略非base64"]],"e":["base64 img.png > i.txt","base64 -d i.txt > out.png"]},{"n":"xxd","d":"十六进制转储。","s":"xxd [选项] 文件","o":[["-r","还原"],["-p","纯十六进制"],["-l","长度"]],"e":["xxd file.bin|head","xxd -r -p hex.txt > bin"]},{"n":"od","d":"八进制/十六进制查看。","s":"od [选项] 文件","o":[["-A x","地址十六进制"],["-t x1","十六进制字节"],["-c","字符"]],"e":["od -A x -t x1z file"]},{"n":"file","d":"识别文件类型。","s":"file [选项] 文件","o":[["-i","MIME类型"],["-b","省略文件名"],["-L","跟随链接"]],"e":["file unknown.bin"]},{"n":"stat","d":"显示文件详细属性。","s":"stat [选项] 文件","o":[["-c","自定义格式"],["-f","文件系统信息"],["-L","跟随链接"]],"e":["stat -c '%s %n' f.txt"]},{"n":"find","d":"目录树中查找文件。","s":"find 路径 [条件] [动作]","o":[["-name","按名(通配)"],["-type f/d","文件/目录"],["-size","大小如+10M"],["-mtime","天数"],["-exec","执行"],["-user","所有者"],["-perm","权限"]],"e":["find . -name \"*.tmp\" -delete","find / -size +100M"]},{"n":"locate","d":"基于索引库快速查找(需updatedb)。","s":"locate [选项] 模式","o":[["-i","忽略大小写"],["-c","计数"],["-r","正则"]],"e":["locate nginx.conf"]},{"n":"updatedb","d":"更新locate索引库。","s":"updatedb","o":[["需","root权限"]],"e":["sudo updatedb"]},{"n":"which","d":"显示命令的绝对路径。","s":"which 命令","o":[["-a","全部匹配"]],"e":["which python3"]},{"n":"whereis","d":"查找命令/源码/手册位置。","s":"whereis 命令","o":[["-b","仅二进制"],["-m","仅手册"]],"e":["whereis gcc"]},{"n":"type","d":"显示命令类型(内建/别名/路径)。","s":"type 命令","o":[["-a","全部"],["-t","仅类型"]],"e":["type cd","type ls"]},{"n":"ln","d":"创建链接(默认硬链接，-s软链接)。","s":"ln [选项] 源 链接","o":[["-s","符号链接"],["-f","强覆"],["-n","不跟随"]],"e":["ln -s /data/app /opt/app"]},{"n":"readlink","d":"解析符号链接指向。","s":"readlink [选项] 链接","o":[["-f","完整路径"],["-e","存在才输出"]],"e":["readlink -f /opt/app"]},{"n":"realpath","d":"返回规范绝对路径。","s":"realpath [选项] 路径","o":[["-s","不解析链接"],["-m","即使不存在"]],"e":["realpath ./a/../b"]},{"n":"basename","d":"取路径文件名部分。","s":"basename 路径 [后缀]","o":[["去除","指定后缀"]],"e":["basename /a/b/c.txt .txt"]},{"n":"dirname","d":"取路径目录部分。","s":"dirname 路径","o":[[""],[""]],"e":["dirname /a/b/c.txt"]},{"n":"cp","d":"复制文件或目录。","s":"cp [选项] 源 目标","o":[["-r","递归目录"],["-i","询问"],["-p","保留属性"],["-a","归档"],["-v","详情"]],"e":["cp -r dir1 dir2","cp -a f /backup/"]},{"n":"mv","d":"移动/重命名。","s":"mv [选项] 源 目标","o":[["-i","询问"],["-f","强制"],["-u","更新才移"]],"e":["mv a.txt b.txt","mv f /tmp/"]},{"n":"rm","d":"删除文件/目录(不可恢复)。","s":"rm [选项] 文件...","o":[["-r","递归"],["-f","强制"],["-i","询问"],["-v","详情"]],"e":["rm -rf old/   # 慎用","rm -i *.tmp"]},{"n":"mkdir","d":"创建目录。","s":"mkdir [选项] 目录...","o":[["-p","多级"],["-m","权限"]],"e":["mkdir -p a/b/c"]},{"n":"rmdir","d":"删除空目录。","s":"rmdir [选项] 目录","o":[["-p","连带空父"],["-v","详情"]],"e":["rmdir -p a/b/c"]},{"n":"touch","d":"改时间戳或建空文件。","s":"touch [选项] 文件","o":[["-a","访问时间"],["-m","修改时间"],["-d","指定时间"],["-c","不新建"]],"e":["touch new.txt","touch -d yesterday f.txt"]},{"n":"chmod","d":"修改权限(数字/符号法)。","s":"chmod [选项] 模式 文件","o":[["u/g/o/a","用户/组/其他/全部"],["+/-/=","加/减/设"],["r/w/x","读/写/执行"],["755","rwxr-xr-x"],["-R","递归"]],"e":["chmod 755 run.sh","chmod u+x run.sh"]},{"n":"chown","d":"修改所有者与组(需root)。","s":"chown [选项] 用户:组 文件","o":[["-R","递归"],[":组","只改组"]],"e":["chown -R www:www /var/www"]},{"n":"chgrp","d":"修改所属组。","s":"chgrp [选项] 组 文件","o":[["-R","递归"]],"e":["chgrp staff f.txt"]},{"n":"umask","d":"设置新建文件默认权限掩码。","s":"umask [模式]","o":[["-S","符号显示"]],"e":["umask 022"]},{"n":"sudo","d":"以其他身份(默认root)执行。","s":"sudo [选项] 命令","o":[["-i","root交互shell"],["-u","指定用户"],["-l","可执行的命令"]],"e":["sudo apt update","sudo -u tom ls"]},{"n":"su","d":"切换用户。","s":"su [选项] [用户]","o":[["-","加载环境"],["-c","执行命令"]],"e":["su -","su -c \"whoami\" tom"]},{"n":"passwd","d":"修改用户密码。","s":"passwd [用户]","o":[["-l","锁定"],["-u","解锁"],["-d","清空"],["-e","下次强制改"]],"e":["passwd tom"]},{"n":"useradd","d":"新建用户。","s":"useradd [选项] 用户","o":[["-m","建家目录"],["-s","登录shell"],["-G","附加组"],["-u","UID"]],"e":["useradd -m -s /bin/bash tom"]},{"n":"userdel","d":"删除用户。","s":"userdel [选项] 用户","o":[["-r","删家目录"],["-f","强制"]],"e":["userdel -r tom"]},{"n":"usermod","d":"修改用户属性。","s":"usermod [选项] 用户","o":[["-aG","追加组"],["-s","改shell"],["-L","锁定"],["-d","改家目录"]],"e":["usermod -aG sudo tom"]},{"n":"groupadd","d":"新建用户组。","s":"groupadd [选项] 组","o":[["-g","GID"]],"e":["groupadd dev"]},{"n":"groupdel","d":"删除组。","s":"groupdel 组","o":[[""],[""]],"e":["groupdel dev"]},{"n":"id","d":"显示用户/组ID。","s":"id [用户]","o":[["-u","仅UID"],["-g","仅GID"],["-n","名称"]],"e":["id tom"]},{"n":"whoami","d":"显示当前用户名。","s":"whoami","o":[[""],[""]],"e":["whoami"]},{"n":"ps","d":"进程快照。","s":"ps [选项]","o":[["aux","全部详细"],["-ef","全格式"],["-u","某用户"],["-p","指定PID"]],"e":["ps aux|grep nginx"]},{"n":"top","d":"实时进程/资源监控。","s":"top","o":[["P","CPU排序"],["M","内存"],["k","杀进程"],["1","多核"],["q","退出"]],"e":["top -p 1234"]},{"n":"htop","d":"增强版top(需安装)。","s":"htop","o":[["F3","搜索"],["F9","杀"],["F5","树"]],"e":["htop"]},{"n":"kill","d":"向进程发信号。","s":"kill [信号] PID","o":[["-9","强杀"],["-15","正常(默认)"],["-1","重载"],["-l","列信号"]],"e":["kill -9 1234","kill -HUP 5678"]},{"n":"pkill","d":"按名称杀进程。","s":"pkill [选项] 模式","o":[["-f","匹配整命令行"],["-u","用户"],["-9","强杀"]],"e":["pkill -f node"]},{"n":"killall","d":"按进程名杀全部。","s":"killall [选项] 名","o":[["-i","询问"],["-9","强杀"]],"e":["killall chrome"]},{"n":"jobs","d":"显示后台任务。","s":"jobs [选项]","o":[["-l","含PID"],["-r","运行"],["-s","停止"]],"e":["jobs -l"]},{"n":"fg","d":"后台任务调到前台。","s":"fg [%任务号]","o":[["%1","任务1"]],"e":["fg %1"]},{"n":"bg","d":"后台任务继续运行。","s":"bg [%任务号]","o":[[""],[""]],"e":["bg %1"]},{"n":"nohup","d":"退出终端仍运行。","s":"nohup 命令 [>log] &","o":[["&","后台"]],"e":["nohup python app.py > app.log 2>&1 &"]},{"n":"disown","d":"从shell任务表移除(防HUP)。","s":"disown [%任务]","o":[["-a","全部"],["-h","不收信号"]],"e":["disown -a"]},{"n":"nice","d":"以指定优先级启动。","s":"nice [选项] 命令","o":[["-n","优先级(-20~19)"]],"e":["nice -n 10 tar cvf ..."]},{"n":"renice","d":"修改运行中进程优先级。","s":"renice 优先级 [-p PID]","o":[["-p","PID"],["-u","用户"]],"e":["renice 5 -p 1234"]},{"n":"uptime","d":"系统运行时间与负载。","s":"uptime","o":[["-p","简洁"]],"e":["uptime"]},{"n":"w","d":"谁在线及在做什么。","s":"w [用户]","o":[["-h","不显头"]],"e":["w"]},{"n":"who","d":"显示登录用户。","s":"who [选项]","o":[["-a","全部"],["-b","启动时间"]],"e":["who"]},{"n":"last","d":"最近登录记录。","s":"last [选项]","o":[["-n N","最近N条"],["-a","主机尾列"]],"e":["last -n 20"]},{"n":"free","d":"内存与交换区使用。","s":"free [选项]","o":[["-h","可读"],["-m","MB"],["-s N","每隔N秒"]],"e":["free -h"]},{"n":"vmstat","d":"虚拟内存/系统状态。","s":"vmstat [间隔] [次数]","o":[["-s","内存汇总"],["-d","磁盘"]],"e":["vmstat 1 5"]},{"n":"iostat","d":"CPU与磁盘I/O统计。","s":"iostat [选项]","o":[["-x","详情"],["-d","磁盘"]],"e":["iostat -x 1"]},{"n":"sar","d":"系统活动历史报告。","s":"sar [选项] [间隔] [次数]","o":[["-u","CPU"],["-r","内存"],["-n DEV","网络"]],"e":["sar -u 1 3"]},{"n":"dmesg","d":"内核环形缓冲区消息。","s":"dmesg [选项]","o":[["-T","可读时间"],["-l err","仅错误"],["-H","分页"]],"e":["dmesg -T|grep usb"]},{"n":"uname","d":"系统内核信息。","s":"uname [选项]","o":[["-a","全部"],["-r","内核版本"],["-m","架构"]],"e":["uname -a"]},{"n":"lscpu","d":"CPU架构信息。","s":"lscpu","o":[["-e","可扩展列"]],"e":["lscpu"]},{"n":"lsblk","d":"列出块设备。","s":"lsblk [选项]","o":[["-f","含文件系统"],["-a","全部"]],"e":["lsblk -f"]},{"n":"lsusb","d":"列出USB设备。","s":"lsusb [选项]","o":[["-v","详情"]],"e":["lsusb"]},{"n":"lspci","d":"列出PCI设备。","s":"lspci [选项]","o":[["-nn","含ID"],["-k","驱动"]],"e":["lspci -nn"]},{"n":"df","d":"磁盘分区空间。","s":"df [选项]","o":[["-h","可读"],["-T","文件系统类型"],["-i","inode"]],"e":["df -h"]},{"n":"du","d":"目录/文件占用量。","s":"du [选项] [路径]","o":[["-h","可读"],["-s","总计"],["--max-depth=N","深度"]],"e":["du -sh /var/*","du -h --max-depth=1 ."]},{"n":"fdisk","d":"磁盘分区表操作(交互)。","s":"fdisk [选项] 设备","o":[["-l","列出分区"],["交互","n新建 d删 w写"]],"e":["sudo fdisk -l","sudo fdisk /dev/sdb"]},{"n":"parted","d":"分区工具(GPT支持好)。","s":"parted [设备] [命令]","o":[["-l","列出"],["mklabel","建表"],["mkpart","建分区"]],"e":["sudo parted -l"]},{"n":"mkfs","d":"格式化文件系统。","s":"mkfs [选项] 设备","o":[["-t","类型(ext4/xfs)"],[".ext4","快捷"]],"e":["sudo mkfs.ext4 /dev/sdb1"]},{"n":"mount","d":"挂载文件系统。","s":"mount [选项] 设备 挂载点","o":[["-t","类型"],["-o","选项"],["-a","挂fstab"]],"e":["sudo mount /dev/sdb1 /mnt/usb"]},{"n":"umount","d":"卸载文件系统。","s":"umount 设备|挂载点","o":[["-l","懒卸载"],["-f","强制"]],"e":["sudo umount /mnt/usb"]},{"n":"dd","d":"按块复制/转换(危险)。","s":"dd if=源 of=目标 [选项]","o":[["bs=","块大小"],["count=","块数"],["status=progress","进度"]],"e":["dd if=/dev/sda of=img.iso bs=4M","dd if=/dev/zero of=test bs=1M count=100"]},{"n":"blkid","d":"显示块设备UUID/类型。","s":"blkid [设备]","o":[["-s","取字段"],["-o","输出格式"]],"e":["blkid"]},{"n":"ip","d":"现代网络配置(取代ifconfig)。","s":"ip [对象] 动作","o":[["addr","IP地址"],["link","网卡"],["route","路由"],["-s","统计"]],"e":["ip addr show","ip route show"]},{"n":"ifconfig","d":"传统网络配置(旧)。","s":"ifconfig [接口] [选项]","o":[["up/down","启停"],["inet","设IP"]],"e":["ifconfig eth0"]},{"n":"ping","d":"测试连通性与延迟。","s":"ping [选项] 主机","o":[["-c N","次数"],["-i","间隔"],["-s","包大小"]],"e":["ping -c 4 8.8.8.8"]},{"n":"traceroute","d":"追踪路由路径。","s":"traceroute [选项] 主机","o":[["-I","ICMP"],["-T","TCP"],["-m","最大跳"]],"e":["traceroute google.com"]},{"n":"mtr","d":"ping+traceroute结合。","s":"mtr [选项] 主机","o":[["-n","不解析"],["-r","报告"]],"e":["mtr -r 8.8.8.8"]},{"n":"netstat","d":"网络连接/端口(旧，用ss)。","s":"netstat [选项]","o":[["-tlnp","监听TCP"],["-an","全部"],["-r","路由"]],"e":["netstat -tlnp"]},{"n":"ss","d":"查看套接字(更快)。","s":"ss [选项]","o":[["-t","TCP"],["-u","UDP"],["-l","监听"],["-p","进程"],["-n","不解析"]],"e":["ss -tlnp","ss -an|grep :80"]},{"n":"curl","d":"网络传输与接口调试。","s":"curl [选项] URL","o":[["-O","原名保存"],["-o","指定名"],["-I","响应头"],["-X","方法"],["-d","POST数据"],["-H","请求头"],["-s","静默"]],"e":["curl -I https://x.com","curl -X POST -d a=1 api/x"]},{"n":"wget","d":"命令行下载。","s":"wget [选项] URL","o":[["-c","续传"],["-O","保存名"],["-r","递归"],["--limit-rate","限速"]],"e":["wget -c https://x/big.iso"]},{"n":"ssh","d":"安全远程登录。","s":"ssh [选项] 用户@主机","o":[["-p","端口"],["-i","私钥"],["-X","X转发"],["命令","远程执行"]],"e":["ssh root@1.2.3.4","ssh -p 2222 u@h \"uptime\""]},{"n":"scp","d":"基于SSH安全拷贝。","s":"scp [选项] 源 目标","o":[["-r","递归"],["-P","端口"],["-i","私钥"]],"e":["scp f.txt u@h:/tmp/","scp u@h:/etc/x ."]},{"n":"rsync","d":"增量同步(只传差异)。","s":"rsync [选项] 源 目标","o":[["-a","归档"],["-v","详情"],["-z","压缩"],["--delete","删多余"],["-e ssh","经ssh"]],"e":["rsync -avz ./site/ u@h:/v/www/"]},{"n":"telnet","d":"远程登录/端口测试(明文)。","s":"telnet 主机 端口","o":[["端口","测试连通"]],"e":["telnet smtp.x 25"]},{"n":"nc","d":"网络瑞士军刀。","s":"nc [选项] 主机 端口","o":[["-l","监听"],["-v","详情"],["-z","扫描"],["-u","UDP"]],"e":["nc -l 1234","nc -zv host 80"]},{"n":"nmap","d":"网络扫描与探测。","s":"nmap [选项] 目标","o":[["-sV","版本"],["-p","端口"],["-A","综合"],["-O","系统"]],"e":["nmap -A 192.168.1.1"]},{"n":"dig","d":"DNS查询(详细)。","s":"dig [选项] 域名","o":[["+short","简洁"],["@DNS","指定服务器"],["-x","反查"]],"e":["dig +short example.com","dig @8.8.8.8 example.com"]},{"n":"host","d":"简易DNS查询。","s":"host [选项] 域名","o":[["-t","类型"],["-a","全部"]],"e":["host example.com"]},{"n":"nslookup","d":"交互式DNS查询。","s":"nslookup 域名 [服务器]","o":[["set type=","查类型"]],"e":["nslookup example.com"]},{"n":"whois","d":"域名/IP注册信息。","s":"whois 查询","o":[[""],[""]],"e":["whois example.com"]},{"n":"iptables","d":"IPv4包过滤防火墙。","s":"iptables [选项] 链 规则","o":[["-A","追加"],["-L","列出"],["-F","清空"],["-t nat","NAT表"]],"e":["sudo iptables -L -n -v","sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT"]},{"n":"ufw","d":"iptables简化前端。","s":"ufw [命令]","o":[["enable","启用"],["allow","允许"],["deny","拒绝"],["status","状态"],["delete","删除"]],"e":["sudo ufw allow 80","sudo ufw enable"]},{"n":"firewall-cmd","d":"firewalld管理。","s":"firewall-cmd [选项]","o":[["--add-port","开放"],["--reload","重载"],["--list-all","查看"],["--permanent","永久"]],"e":["sudo firewall-cmd --add-port=80/tcp --permanent"]},{"n":"systemctl","d":"systemd服务管理。","s":"systemctl [动作] 服务","o":[["start","启动"],["stop","停止"],["restart","重启"],["status","状态"],["enable","开机自启"],["disable","取消"],["reload","重载"],["is-active","是否运行"]],"e":["sudo systemctl restart nginx","systemctl status docker"]},{"n":"service","d":"SysV风格服务脚本。","s":"service 服务 [动作]","o":[["start","启动"],["restart","重启"],["status","状态"]],"e":["sudo service ssh restart"]},{"n":"journalctl","d":"查看systemd日志。","s":"journalctl [选项]","o":[["-u","某服务"],["-f","实时"],["--since","起始"],["-p err","错误级"],["-n N","最近N"]],"e":["journalctl -u nginx -f"]},{"n":"timedatectl","d":"时间与时区设置。","s":"timedatectl [命令]","o":[["status","状态"],["set-timezone","设时区"],["list-timezones","列表"]],"e":["timedatectl set-timezone Asia/Shanghai"]},{"n":"hostnamectl","d":"设置主机名。","s":"hostnamectl [命令]","o":[["set-hostname","设名"],["status","状态"]],"e":["sudo hostnamectl set-hostname srv1"]},{"n":"env","d":"显示/清除环境后执行。","s":"env [选项] [命令]","o":[["-i","清空环境"],["名称=值","设置"]],"e":["env","env DEBUG=1 node app.js"]},{"n":"printenv","d":"打印环境变量。","s":"printenv [变量]","o":[[""],[""]],"e":["printenv PATH"]},{"n":"export","d":"导出环境变量(子进程可见)。","s":"export [变量=值]","o":[["-p","列出"]],"e":["export API_KEY=abc"]},{"n":"unset","d":"删除变量/函数。","s":"unset 变量","o":[["-f","函数"]],"e":["unset API_KEY"]},{"n":"alias","d":"定义命令别名。","s":"alias [名='命令']","o":[[""],[""]],"e":["alias ll='ls -la'","alias"]},{"n":"unalias","d":"取消别名。","s":"unalias 名","o":[["-a","全部"]],"e":["unalias ll"]},{"n":"history","d":"显示命令历史。","s":"history [选项]","o":[["-c","清空"],["数字","最近N条"]],"e":["history | grep ssh"]},{"n":"source","d":"在当前shell执行脚本。","s":"source 文件","o":[[".","等价."]],"e":["source ~/.bashrc"]},{"n":"set","d":"设置shell选项/位置参数。","s":"set [选项]","o":[["-x","跟踪"],["-e","出错退出"],["-u","未定义报错"]],"e":["set -euxo pipefail"]},{"n":"shopt","d":"设置bash可选行为。","s":"shopt [选项]","o":[["-s","开启"],["-u","关闭"],["-p","列出"]],"e":["shopt -s globstar"]},{"n":"trap","d":"捕获信号执行清理。","s":"trap 命令 信号","o":[["EXIT","退出"],["ERR","错误"]],"e":["trap 'rm -f tmp' EXIT"]},{"n":"date","d":"显示/设置日期。","s":"date [选项] [格式]","o":[["+\"%F %T\"","格式化"],["-d","指定时间"],["-s","设置(需root)"]],"e":["date \"+%Y-%m-%d %H:%M:%S\"","date -d \"next monday\""]},{"n":"cal","d":"显示日历。","s":"cal [选项] [月 年]","o":[["-y","全年"],["-m","周一开头"]],"e":["cal -y"]},{"n":"sleep","d":"暂停指定时间。","s":"sleep 时间","o":[["s/m/h/d","秒/分/时/天"]],"e":["sleep 5 && echo done"]},{"n":"time","d":"统计命令耗时。","s":"time 命令","o":[["-v","详细"]],"e":["time tar czf a.tgz dir"]},{"n":"timeout","d":"限时运行命令。","s":"timeout 时间 命令","o":[["-k","超时杀"],["-s","信号"]],"e":["timeout 10 ping x"]},{"n":"watch","d":"周期性执行并全屏显示。","s":"watch [选项] 命令","o":[["-n","间隔秒"],["-d","高亮差异"]],"e":["watch -n 2 \"df -h\""]},{"n":"xargs","d":"将标准输入转为命令参数。","s":"xargs [选项] [命令]","o":[["-n","每批数"],["-I{}","占位"],["-0","null分隔"],["-P","并行"]],"e":["find . -name \"*.log\"|xargs rm","ls|xargs -I{} mv {} {}.bak"]},{"n":"lsof","d":"列出打开的文件/端口。","s":"lsof [选项]","o":[["-i","网络"],["-p","进程"],["-u","用户"],["-i :端口","占端口"]],"e":["lsof -i :80","lsof -p 1234"]},{"n":"strace","d":"跟踪系统调用(调试)。","s":"strace [选项] 命令","o":[["-f","跟踪子"],["-e","过滤"],["-o","输出"]],"e":["strace -f -e trace=network curl x"]},{"n":"tcpdump","d":"抓包分析(需root)。","s":"tcpdump [选项] [表达式]","o":[["-i","接口"],["-n","不解析"],["-w","存文件"],["port","过滤"]],"e":["sudo tcpdump -i eth0 port 80 -n"]},{"n":"crontab","d":"管理定时任务。","s":"crontab [选项]","o":[["-e","编辑"],["-l","列出"],["-r","删除"]],"e":["0 2 * * * /backup.sh   # 每天2点"]},{"n":"at","d":"一次性定时任务。","s":"at 时间","o":[["-f","脚本"],["-l","列出"],["-c","查看"]],"e":["echo \"shutdown\"|at 23:00"]},{"n":"anacron","d":"非7x24机器的周期任务。","s":"anacron [选项]","o":[["-n","立即"],["-u","更新"]],"e":["sudo anacron -n"]},{"n":"tar","d":"打包/解包归档。","s":"tar [选项] 文件","o":[["-c","创建"],["-x","解包"],["-z","gzip"],["-j","bzip2"],["-J","xz"],["-v","详情"],["-f","文件"],["-C","目标目录"]],"e":["tar -czvf b.tgz dir/","tar -xzvf b.tgz -C /tmp"]},{"n":"gzip","d":"GNU压缩(.gz)。","s":"gzip [选项] 文件","o":[["-d","解压"],["-k","保留原"],["-9","最压"],["-r","递归"]],"e":["gzip -k f.txt","gzip -d f.txt.gz"]},{"n":"gunzip","d":"解压.gz(同gzip -d)。","s":"gunzip 文件","o":[["-k","保留"]],"e":["gunzip f.txt.gz"]},{"n":"bzip2","d":"高压缩率(.bz2)。","s":"bzip2 [选项] 文件","o":[["-d","解压"],["-k","保留"],["-9","最压"]],"e":["bzip2 -k data.txt"]},{"n":"xz","d":"LZMA压缩(.xz)。","s":"xz [选项] 文件","o":[["-d","解压"],["-k","保留"],["-9","最压"]],"e":["xz -k big.txt"]},{"n":"zip","d":"跨平台压缩(.zip)。","s":"zip [选项] 包 文件","o":[["-r","递归"],["-q","静默"],["-e","加密"]],"e":["zip -r site.zip ./site"]},{"n":"unzip","d":"解压.zip。","s":"unzip [选项] 包","o":[["-l","列表"],["-d","目标"],["-o","覆盖"]],"e":["unzip site.zip -d /tmp"]},{"n":"7z","d":"7-Zip高压缩。","s":"7z [动作] 包 文件","o":[["a","添加"],["x","解压"],["l","列表"],["-p","密码"]],"e":["7z a arc.7z dir/","7z x arc.7z -o/out"]},{"n":"zcat","d":"直接看.gz内容。","s":"zcat 文件.gz","o":[[""],[""]],"e":["zcat log.gz|grep err"]},{"n":"apt","d":"Debian/Ubuntu包管理。","s":"apt [选项] 子命令","o":[["update","刷索引"],["upgrade","升级"],["install","安装"],["remove","卸载"],["purge","删配置"],["search","搜"]],"e":["sudo apt update && sudo apt install nginx"]},{"n":"apt-get","d":"底层apt(脚本常用)。","s":"apt-get [选项] 子命令","o":[["update","刷索引"],["install","安装"],["dist-upgrade","升级发行"]],"e":["sudo apt-get install -y curl"]},{"n":"dpkg","d":"Debian底层deb操作。","s":"dpkg [选项] 包.deb","o":[["-i","安装"],["-r","移除"],["-l","已装"],["-L","文件"],["-s","状态"]],"e":["sudo dpkg -i pkg.deb"]},{"n":"yum","d":"RHEL旧包管理。","s":"yum [子命令] 包","o":[["install","安装"],["remove","卸"],["update","升级"],["search","搜"]],"e":["sudo yum install vim"]},{"n":"dnf","d":"RHEL新包管理(替yum)。","s":"dnf [子命令] 包","o":[["install","安装"],["remove","卸"],["update","升级"],["list installed","已装"]],"e":["sudo dnf install vim"]},{"n":"rpm","d":"RPM底层包操作。","s":"rpm [选项] 包","o":[["-i","安装"],["-e","卸载"],["-qa","已装"],["-ql","文件"],["-U","升级"]],"e":["rpm -qa|grep nginx"]},{"n":"pacman","d":"Arch包管理。","s":"pacman [选项] 包","o":[["-S","安装"],["-R","卸"],["-Syu","升级系统"],["-Qs","搜已装"]],"e":["sudo pacman -Syu"]},{"n":"zypper","d":"openSUSE包管理。","s":"zypper [子命令] 包","o":[["install","安装"],["update","升级"],["search","搜"]],"e":["sudo zypper install vim"]},{"n":"snap","d":"通用打包格式。","s":"snap [命令] 包","o":[["install","安装"],["remove","卸"],["list","已装"],["refresh","更新"]],"e":["sudo snap install code"]},{"n":"flatpak","d":"沙箱应用分发。","s":"flatpak [命令] 包","o":[["install","安装"],["uninstall","卸"],["list","已装"],["update","更新"]],"e":["flatpak install app"]},{"n":"git","d":"分布式版本控制。","s":"git [子命令]","o":[["clone","克隆"],["add","暂存"],["commit","提交"],["push","推送"],["pull","拉取"],["status","状态"],["log","历史"],["branch","分支"],["checkout","切换"],["merge","合并"]],"e":["git clone https://x/r.git","git add -A && git commit -m \"x\" && git push"]},{"n":"vim","d":"强大的终端编辑器。","s":"vim [选项] 文件","o":[["i","插入"],["ESC","命令"],[":wq","保存退出"],[":q!","强退"],["/词","搜索"],["u","撤销"]],"e":["vim conf.yml"]},{"n":"nano","d":"简易终端编辑器。","s":"nano [选项] 文件","o":[["Ctrl+O","保存"],["Ctrl+X","退出"],["Ctrl+W","搜索"]],"e":["nano notes.txt"]},{"n":"emacs","d":"可扩展编辑器/环境。","s":"emacs [选项] 文件","o":[["C-x C-s","保存"],["C-x C-c","退出"],["C-s","搜索"]],"e":["emacs todo.org"]},{"n":"bc","d":"命令行计算器。","s":"bc [选项]","o":[["-l","数学库"],["-q","安静"]],"e":["echo \"scale=2;10/3\"|bc"]},{"n":"expr","d":"整数/字符串表达式。","s":"expr 表达式","o":[["+ - * /","运算"],["length","长度"],["substr","子串"]],"e":["expr 10 + 5","expr length \"hi\""]},{"n":"test","d":"条件判断(常配合if)。","s":"test 表达式","o":[["-f","是文件"],["-d","是目录"],["-z","空串"],["-eq","等于"],["-gt","大于"]],"e":["test -f f.txt && echo yes"]},{"n":"clear","d":"清屏。","s":"clear","o":[["-x","保留滚动"]],"e":["clear"]},{"n":"yes","d":"持续输出指定字符串。","s":"yes [字符串]","o":[["配合","管道"]],"e":["yes | rm -i *.txt"]},{"n":"seq","d":"输出数字序列。","s":"seq [选项] 首 增 末","o":[["-s","分隔符"],["-w","等宽"]],"e":["seq 1 5","seq -s, 1 3 10"]},{"n":"xclip/xsel","d":"剪贴板读写。","s":"xclip [选项]","o":[["-sel c","剪贴板"],["-o","输出"]],"e":["cat f.txt|xclip -sel c"]}];
 function renderList(){
-  var q = document.getElementById('q').value.trim().toLowerCase();
-  var box = document.getElementById('chips'); box.innerHTML='';
-  var matched = CMDS.filter(function(c){ return !q || c.name.toLowerCase().indexOf(q)>-1 || c.desc.toLowerCase().indexOf(q)>-1; });
-  if(!matched.length){ box.innerHTML='<span class="empty">未找到相关命令</span>'; return; }
-  matched.forEach(function(c){
-    var b=document.createElement('button'); b.className='chip'; b.textContent=c.name;
-    b.onclick=function(){ showDetail(c.name); };
-    box.appendChild(b);
-  });
+  var q = document.getElementById("q").value.trim().toLowerCase();
+  var box = document.getElementById("chips"); box.innerHTML="";
+  var m = CMDS.filter(function(c){ return !q || c.n.toLowerCase().indexOf(q)>-1 || c.d.toLowerCase().indexOf(q)>-1; });
+  if(!m.length){ box.innerHTML='<span class="empty">未找到相关命令</span>'; return; }
+  m.forEach(function(c){ var b=document.createElement("button"); b.className="chip"; b.textContent=c.n; b.onclick=function(){ showDetail(c.n); }; box.appendChild(b); });
 }
 function showDetail(name){
-  var c = CMDS.filter(function(x){return x.name===name;})[0]; if(!c) return;
-  var h = '<h3>'+c.name+'</h3><div class="desc">'+c.desc+'</div>';
-  h += '<h4>基本语法</h4><pre>'+c.syntax+'</pre>';
-  h += '<h4>常用选项</h4><table><tr><th>选项</th><th>说明</th></tr>';
-  c.opts.forEach(function(o){ h += '<tr><td><code>'+o[0]+'</code></td><td>'+o[1]+'</td></tr>'; });
-  h += '</table><h4>常见示例</h4>';
-  c.ex.forEach(function(e){ h += '<pre>'+e+'</pre>'; });
-  var d=document.getElementById('detail'); d.innerHTML=h; d.classList.add('show');
-  document.getElementById('empty').style.display='none';
+  var c = CMDS.filter(function(x){return x.n===name;})[0]; if(!c) return;
+  var h = "<h3>"+c.n+"</h3><div class=\"desc\">"+c.d+"</div>";
+  h += "<h4>基本语法</h4><pre>"+c.s+"</pre>";
+  h += "<h4>常用选项</h4><table><tr><th>选项</th><th>说明</th></tr>";
+  c.o.forEach(function(x){ if(x[0]) h += "<tr><td><code>"+x[0]+"</code></td><td>"+x[1]+"</td></tr>"; });
+  h += "</table><h4>常见示例</h4>";
+  c.e.forEach(function(e){ h += "<pre>"+e+"</pre>"; });
+  var d=document.getElementById("detail"); d.innerHTML=h; d.classList.add("show");
+  document.getElementById("empty").style.display="none";
 }
 renderList();
 </script>
-
 <button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:#2563eb;color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
 <script>function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}</script>
 <!--SITE-LINKS-->
 <div style="margin-top:28px;padding:14px 0;text-align:center;font-size:0.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;">🔗 项目: <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub 仓库</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">GitHub Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener" style="color:#2563eb;text-decoration:none;">gjx.z321.cc.cd</a></div>
-
 </body>
 </html>
