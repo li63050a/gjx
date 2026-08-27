@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
-<title>OpenCode 配置修改器 · 超能工具箱</title>
+<title>OpenCode 配置编辑器 · 超能工具箱</title>
 <script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
 <link rel="stylesheet" href="../../common.css">
 </head>
@@ -12,16 +12,54 @@
 <div class="container">
 <a class="brand" href="../../index.html">🧰 超能工具箱</a>
 <a class="back" href="../../index.html">← 返回主页</a>
-<h2>⚙️ OpenCode 配置修改器</h2>
-<p class="msg">以下为第三方在线工具（GitHub Pages 静态版）。如无法加载，请<a href="https://cedarxuesong.github.io/Opencode-config-editor/" target="_blank" rel="noopener">在新标签打开 ↗</a>。</p>
-<div class="row"><a class="btn" href="https://cedarxuesong.github.io/Opencode-config-editor/" target="_blank" rel="noopener">在新标签打开原站 ↗</a></div>
-<div id="out">
-<iframe src="https://cedarxuesong.github.io/Opencode-config-editor/" title="OpenCode 配置修改器" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:12px;background:#fff"></iframe>
+<h2>⚙️ OpenCode 配置编辑器</h2>
+<p class="msg">可直接在下方编辑 <code>opencode.json</code>，支持导入 / 格式化 / 压缩 / 下载。支持带 <code>//</code> 与 <code>/* */</code> 注释的 JSONC。参考原站：<a href="https://cedarxuesong.github.io/Opencode-config-editor/" target="_blank" rel="noopener">cedarxuesong ↗</a></p>
+<div class="row">
+  <button class="btn" onclick="format()">格式化</button>
+  <button class="btn" onclick="minify()">压缩</button>
+  <button class="btn" onclick="validate()">校验</button>
+  <button class="btn gray" onclick="copy()">复制</button>
+  <button class="btn gray" onclick="download()">下载</button>
+  <label class="btn gray" style="display:inline-block">导入<input type="file" id="file" accept=".json,.jsonc,.txt" onchange="importFile()" style="display:none"></label>
 </div>
+<div class="row"><textarea id="inp" rows="18" spellcheck="false" placeholder='{\n  "model": "anthropic/claude",\n  "provider": { "anthropic": { "options": { "apiKey": "sk-..." } } }\n}'></textarea></div>
+<div id="out"></div>
 </div>
 <button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
-<script>function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}
-if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}</script>
+<script>
+function stripHtml(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+// tolerant JSONC parser: remove // and /* */ comments, then JSON.parse
+function parseJsonc(t){
+  var s=t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:])\/\/.*$/g,function(m,p){return p;});
+  return JSON.parse(s);
+}
+function getVal(){return document.getElementById('inp').value;}
+function setVal(v){document.getElementById('inp').value=v;}
+function show(msg,ok){document.getElementById('out').innerHTML='<div class="ans"><pre>'+(ok===false?'⚠️ ':'')+stripHtml(msg)+'</pre></div>';}
+function format(){
+  try{var o=parseJsonc(getVal());setVal(JSON.stringify(o,null,2));show('已格式化（注释已移除）。',true);}
+  catch(e){show('格式化失败：'+e.message,false);}
+}
+function minify(){
+  try{var o=parseJsonc(getVal());setVal(JSON.stringify(o));show('已压缩。',true);}
+  catch(e){show('压缩失败：'+e.message,false);}
+}
+function validate(){
+  try{var o=parseJsonc(getVal());show('JSON 合法 ✅ 顶层字段：'+Object.keys(o).join(', '),true);}
+  catch(e){show('校验失败：'+e.message,false);}
+}
+function copy(){navigator.clipboard.writeText(getVal());show('已复制到剪贴板。',true);}
+function download(){
+  try{var o=parseJsonc(getVal());var blob=new Blob([JSON.stringify(o,null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='opencode.json';a.click();URL.revokeObjectURL(a.href);show('已下载 opencode.json。',true);}
+  catch(e){show('下载失败：'+e.message,false);}
+}
+function importFile(){
+  var f=document.getElementById('file').files[0];if(!f)return;
+  var r=new FileReader();r.onload=function(){setVal(r.result);show('已导入 '+f.name+'，点击「格式化」可美化。',true);};r.readAsText(f);
+}
+function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}
+if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}
+</script>
 <footer class="site-foot">
 <div>🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></div>
 <div>💬 QQ 1026939741 · 📺 B站 小帅5656 · ✉️ li63050@qq.com</div>

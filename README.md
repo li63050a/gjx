@@ -236,7 +236,7 @@ my-toolbox/
 | 📋 | ASCII 表 | 0-127 ASCII |
 | 🔣 | 字符码点查询 | 字符转 U+ |
 | 💎 | JS 代码美化 | 简单 JS 格式化 |
-| ⚙️ | OpenCode 配置修改器 | 嵌入第三方配置编辑器 |
+| ⚙️ | OpenCode 配置编辑器 | 本地直接编辑/导入/导出 opencode.json（支持 JSONC） |
 
 ## 🛠 扩展新工具
 
