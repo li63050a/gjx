@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<title>绝对值与取整 · 超能工具箱</title>
+<script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+<link rel="stylesheet" href="../common.css">
+</head>
+<body>
+<div class="container">
+<a class="brand" href="../../index.html">🧰 超能工具箱</a>
+<a class="back" href="../../index.html">← 返回主页</a>
+<h2>➿ 绝对值与取整</h2>
+<div class="row"><input id="a" placeholder="数值 A（分数用 a/b）"></div><div class="row"><input id="b" placeholder="数值 B（分数用 c/d）"></div><div class="row"><button class="btn" onclick="go()">计算</button></div>
+<div id="out"></div>
+</div>
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}
+if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}
+var OP='absround';
+function frac(s){var m=/^[ \t]*(-?[0-9]+)[ \t]*\/[ \t]*([0-9]+)[ \t]*$/.exec(s);if(!m)return null;var n=+m[1],d=+m[2];if(d===0)return null;var g=Math.abs(n);while(d){var t=d;d=g%d;g=t;}return [n/g,d/g];}
+function gcd0(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=b;b=a%b;a=t;}return a||1;}
+function fact(n){var f=1;for(var i=2;i<=n;i++)f*=i;return f;}
+function go(){
+ var A=document.getElementById('a').value,B=document.getElementById('b').value,r='';
+ var x=parseFloat(A),y=parseFloat(B);
+ try{
+ if(OP==='gcd'){var a=Math.abs(Math.round(x)),b=Math.abs(Math.round(y));while(b){var t=b;b=a%b;a=t;}r='GCD = '+a;}
+ else if(OP==='lcm'){var m=Math.abs(Math.round(x)),n=Math.abs(Math.round(y));r='LCM = '+(m*n/(m===0||n===0?1:gcd0(m,n)));}
+ else if(OP==='factorial'){var f=1;for(var i=2;i<=Math.round(x);i++)f*=i;r=Math.round(x)+'! = '+f;}
+ else if(OP==='fib'){var nn=Math.round(x),a=0,b=1,s=[0];for(var i=1;i<nn;i++){var c=a+b;a=b;b=c;s.push(a);}r='斐波那契前 '+nn+' 项: '+s.join(', ');}
+ else if(OP==='perm'){r='P('+x+','+y+') = '+fact(Math.round(x))/fact(Math.round(x)-Math.round(y));}
+ else if(OP==='comb'){r='C('+x+','+y+') = '+fact(Math.round(x))/(fact(Math.round(y))*fact(Math.round(x)-Math.round(y)));}
+ else if(OP==='sqrt'){r='√'+x+' = '+Math.sqrt(x);}
+ else if(OP==='power'){r=x+'^'+y+' = '+Math.pow(x,y);}
+ else if(OP==='ln'){r='ln('+x+') = '+Math.log(x);}
+ else if(OP==='log10'){r='log('+x+') = '+Math.log10(x);}
+ else if(OP==='fracAdd'||OP==='fracSub'||OP==='fracMul'||OP==='fracDiv'){var f1=frac(A),f2=frac(B);if(!f1||!f2){r='格式错误，请用 a/b';}else{var N,D;if(OP==='fracAdd'){N=f1[0]*f2[1]+f2[0]*f1[1];D=f1[1]*f2[1];}else if(OP==='fracSub'){N=f1[0]*f2[1]-f2[0]*f1[1];D=f1[1]*f2[1];}else if(OP==='fracMul'){N=f1[0]*f2[0];D=f1[1]*f2[1];}else{N=f1[0]*f2[1];D=f1[1]*f2[0];}var g=Math.abs(N);while(D){var t=D;D=g%D;g=t;}r='结果 = '+(N/g)+'/'+(f1[1]*f2[1]/g);}}
+ else if(OP==='roi'){r='ROI = '+(((y-x)/x)*100).toFixed(2)+'%（投入 '+x+' 现值 '+y+'）';}
+ else if(OP==='mortgageP'){var P=Math.round(x),months=Math.round(y),monthP=Math.round(P/months),total=0;for(var i=1;i<=months;i++){var interest=Math.round((P-monthP*(i-1))*0.00485);total+=monthP+interest;}r='每月本金 '+monthP+'，首月利息约 '+Math.round(P*0.00485)+'，总还款约 '+total;}
+ else if(OP==='deposit'){r='本息 = '+(x*Math.pow(1+y/100/12,Math.round(B||12))).toFixed(2)+'（本金 '+x+' 年利率 '+y+'% 月 '+Math.round(B||12)+'）';}
+ else if(OP==='calories'){r='估算消耗 ≈ '+Math.round(x*0.05*Math.round(B||30))+' kcal（体重 '+x+'kg 活动 '+Math.round(B||30)+' 分钟）';}
+ else if(OP==='wpm'){r='WPM = '+Math.round(x/Math.max(1,B/60)/5)+'（字数 '+x+' 用时 '+Math.round(B||60)+' 秒）';}
+ else if(OP==='randRange'){var step=parseFloat(B)||1;r=Math.floor(Math.random()*Math.floor((x)/step)+1)*step;}
+ else if(OP==='deg2rad'){r=x+'° = '+(x*Math.PI/180).toFixed(6)+' rad';}
+ else if(OP==='rad2deg'){r=x+' rad = '+(x*180/Math.PI).toFixed(6)+'°';}
+ else if(OP==='pi'){r='π = '+Math.PI;}
+ else if(OP==='golden'){r='φ = '+((1+Math.sqrt(5))/2);}
+ else if(OP==='absround'){r='绝对值 '+Math.abs(x)+'；四舍五入 '+Math.round(x)+'；向上 '+Math.ceil(x)+'；向下 '+Math.floor(x);}
+ document.getElementById('out').innerHTML='<div class="ans"><pre>'+esc(r)+'</pre></div>';
+ }catch(e){document.getElementById('out').innerHTML='<p class="msg">计算失败：'+esc(e)+'</p>';}
+}
+</script>
+<footer class="site-foot">
+<div>🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></div>
+<div>💬 QQ 1026939741 · 📺 B站 小帅5656 · ✉️ li63050@qq.com</div>
+</footer>
+</body>
+</html>

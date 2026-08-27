@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<title>Markdown → HTML · 超能工具箱</title>
+<script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+<link rel="stylesheet" href="../common.css">
+</head>
+<body>
+<div class="container">
+<a class="brand" href="../../index.html">🧰 超能工具箱</a>
+<a class="back" href="../../index.html">← 返回主页</a>
+<h2>📝 Markdown → HTML</h2>
+<div class="row"><textarea id="inp" rows="6" placeholder="输入内容"></textarea></div><div class="row"><button class="btn" onclick="go()">转换</button></div>
+<div id="out"></div>
+</div>
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}
+if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}
+var OP='md2html';
+var BK=String.fromCharCode(96);
+function md2html(s){return s.replace(/^### (.*)$/gim,'<h3>$1</h3>').replace(/^## (.*)$/gim,'<h2>$1</h2>').replace(/^# (.*)$/gim,'<h1>$1</h1>').replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\*(.+?)\*/g,'<i>$1</i>').replace(new RegExp(BK+'([^'+BK+']+)'+BK,'g'),'<code>$1</code>').replace(/^\s*[-*] (.*)$/gim,'<li>$1</li>').replace(/\n/g,'<br>');}
+function html2md(s){return s.replace(/<h1>(.*?)<\/h1>/g,'# $1').replace(/<h2>(.*?)<\/h2>/g,'## $1').replace(/<h3>(.*?)<\/h3>/g,'### $1').replace(/<b>(.*?)<\/b>/g,'**$1**').replace(/<i>(.*?)<\/i>/g,'*$1*').replace(/<code>(.*?)<\/code>/g,BK+'$1'+BK).replace(/<li>(.*?)<\/li>/g,'- $1').replace(/<br>/g,'\n');}
+function go(){var t=document.getElementById('inp').value;var r=OP==='md2html'?md2html(t):html2md(t);document.getElementById('out').innerHTML='<div class="ans"><pre>'+esc(r)+'</pre></div>';}
+</script>
+<footer class="site-foot">
+<div>🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></div>
+<div>💬 QQ 1026939741 · 📺 B站 小帅5656 · ✉️ li63050@qq.com</div>
+</footer>
+</body>
+</html>

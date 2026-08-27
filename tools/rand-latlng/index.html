@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<title>随机经纬度 · 超能工具箱</title>
+<script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+<link rel="stylesheet" href="../common.css">
+</head>
+<body>
+<div class="container">
+<a class="brand" href="../../index.html">🧰 超能工具箱</a>
+<a class="back" href="../../index.html">← 返回主页</a>
+<h2>🗺️ 随机经纬度</h2>
+<div class="row"><button class="btn" onclick="go()">生成</button><button class="btn gray" onclick="copy()">复制</button></div>
+<div id="out"></div>
+</div>
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}
+if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}
+var OP='latlng';
+function go(){
+ var p=document.getElementById('p1')?document.getElementById('p1').value:'';
+ var r='';
+ if(OP==='mac'){var a=[];for(var i=0;i<6;i++)a.push(rhex(2).toUpperCase());r=a.join(':');}
+ else if(OP==='ipv4'){r=rint(1,254)+'.'+rint(0,255)+'.'+rint(0,255)+'.'+rint(1,254);}
+ else if(OP==='ipv6'){var g=[];for(var i=0;i<8;i++)g.push(rhex(4));r=g.join(':');}
+ else if(OP==='port'){r=String(rint(1,65535));}
+ else if(OP==='ua'){r=pick(POOL.ua);}
+ else if(OP==='latlng'){r=(Math.random()*180-90).toFixed(6)+', '+(Math.random()*360-180).toFixed(6);}
+ else if(OP==='hex'){var n=parseInt(p)||32;r=rhex(n);}
+ else if(OP==='color'){r='#'+rhex(6);}
+ else if(OP==='colorRgb'){r='rgb('+rint(0,255)+','+rint(0,255)+','+rint(0,255)+')';}
+ else if(OP==='date'){var y=rint(1970,2030),m=rint(1,12),d=rint(1,28);r=y+'-'+('0'+m).slice(-2)+'-'+('0'+d).slice(-2);}
+ else if(OP==='time'){r=('0'+rint(0,23)).slice(-2)+':'+('0'+rint(0,59)).slice(-2)+':'+('0'+rint(0,59)).slice(-2);}
+ else if(OP==='weekday'){r=pick(['星期一','星期二','星期三','星期四','星期五','星期六','星期日']);}
+ else if(OP==='month'){r=rint(1,12)+'月';}
+ else if(OP==='cnname'){r=pick(POOL.surname.split(''))+pick(POOL.given.split(''));}
+ else if(OP==='enname'){r=pick(POOL.first)+' '+pick(POOL.last);}
+ else if(OP==='address'){r=pick(POOL.province)+'省'+pick(POOL.city)+pick(POOL.street)+' '+rint(1,999)+'号';}
+ else if(OP==='emoji'){r=pick(POOL.emoji);}
+ else if(OP==='sentence'){r='今天'+pick(['天气真好','代码一次跑通','吃了好吃的','学到新东西','遇见有趣的人'])+'，'+pick(['心情不错','效率很高','想分享一下','值得记录'])+'。';}
+ else if(OP==='poem'){r=pick(POOL.poem);}
+ else if(OP==='joke'){r=pick(POOL.joke);}
+ else if(OP==='float'){var mx=parseFloat(p)||100;r=(Math.random()*mx).toFixed(4);}
+ else if(OP==='bool'){r=Math.random()<0.5?'true':'false';}
+ document.getElementById('out').innerHTML='<div class="ans"><pre>'+esc(r)+'</pre></div>';
+}
+function copy(){var e=document.querySelector('#out pre');if(e)navigator.clipboard.writeText(e.textContent);}
+</script>
+<footer class="site-foot">
+<div>🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></div>
+<div>💬 QQ 1026939741 · 📺 B站 小帅5656 · ✉️ li63050@qq.com</div>
+</footer>
+</body>
+</html>

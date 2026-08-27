@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<title>倒计时到日期 · 超能工具箱</title>
+<script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+<link rel="stylesheet" href="../common.css">
+</head>
+<body>
+<div class="container">
+<a class="brand" href="../../index.html">🧰 超能工具箱</a>
+<a class="back" href="../../index.html">← 返回主页</a>
+<h2>⏳ 倒计时到日期</h2>
+<div class="row"><input id="a" placeholder="如 1995-05-20 或目标日期"></div><div class="row"><input id="b" placeholder="结束日期（工作日用）"></div><div class="row"><button class="btn" onclick="go()">计算</button></div>
+<div id="out"></div>
+</div>
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}
+if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}
+var OP='countdown';
+var ZO=[['摩羯',1,1],['水瓶',1,20],['双鱼',2,19],['白羊',3,21],['金牛',4,20],['双子',5,21],['巨蟹',6,22],['狮子',7,23],['处女',8,23],['天秤',9,23],['天蝎',10,24],['射手',11,23],['摩羯',12,22]];
+function go(){
+ var A=document.getElementById('a').value,B=document.getElementById('b').value,r='';
+ if(OP==='zodiac'){var m=parseInt(A.substr(5,2)),d=parseInt(A.substr(8,2));for(var i=0;i<ZO.length-1;i++){if((m>ZO[i][1]||(m===ZO[i][1]&&d>=ZO[i][2]))&&(m<ZO[i+1][1]||(m===ZO[i+1][1]&&d<ZO[i+1][2]))){r=ZO[i][0]+'座';break;}}if(!r)r=ZO[ZO.length-1][0]+'座';}
+ else if(OP==='workdays'){var s=new Date(A),e=new Date(B),c=0;if(!isNaN(s)&&!isNaN(e)){for(var t=s;t<=e;t.setDate(t.getDate()+1)){var w=t.getDay();if(w!==0&&w!==6)c++;}r='工作日（周一至周五）共 '+c+' 天';}}
+ else if(OP==='countdown'){var tg=new Date(B);if(isNaN(tg)){r='请填目标日期';}else{var ms=tg-new Date();r='距 '+B+' 还有 '+Math.floor(ms/86400000)+' 天 '+Math.floor(ms%86400000/3600000)+' 小时';}}
+ else if(OP==='unixMs'){r=String(Date.now());}
+ else if(OP==='nowTs'){r=String(Math.floor(Date.now()/1000));}
+ document.getElementById('out').innerHTML='<div class="ans"><pre>'+esc(r)+'</pre></div>';
+}
+</script>
+<footer class="site-foot">
+<div>🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></div>
+<div>💬 QQ 1026939741 · 📺 B站 小帅5656 · ✉️ li63050@qq.com</div>
+</footer>
+</body>
+</html>

@@ -58,23 +58,199 @@
     <div class="brand"><img class="logo" src="favicon.svg" alt="logo"> 超能工具箱</div>
     <button class="theme" onclick="toggleTheme()" id="themeBtn" aria-label="主题">🌙</button>
 </header>
-<div class="drawer" id="drawer"><div class="drawer-title">全部工具 (141)</div><input class="drawer-search" id="drawerSearch" placeholder="搜索工具..." oninput="filterCards(this.value)"><button class="dl-toggle" id="dlToggle" onclick="toggleAllGroups()">收起全部</button><div id="drawerList"><div class="dl-group"><div class="dl-h" onclick="toggleGroup(this)">单位换算 <span class="tg">▾</span></div><div class="dl-links"><a class="dl" href="tools/bit-converter/index.html" data-name="比特换算" data-cat="单位换算">🔢 比特换算</a><a class="dl" href="tools/inductance-converter/index.html" data-name="电感换算" data-cat="单位换算">🌀 电感换算</a><a class="dl" href="tools/electric-charge-converter/index.html" data-name="电荷换算" data-cat="单位换算">⚡ 电荷换算</a><a class="dl" href="tools/electric-current-converter/index.html" data-name="电流换算" data-cat="单位换算">🔋 电流换算</a><a class="dl" href="tools/capacitance-converter/index.html" data-name="电容换算" data-cat="单位换算">🧲 电容换算</a><a class="dl" href="tools/voltage-converter/index.html" data-name="电压换算" data-cat="单位换算">🔋 电压换算</a><a class="dl" href="tools/resistance-converter/index.html" data-name="电阻换算" data-cat="单位换算">🧱 电阻换算</a><a class="dl" href="tools/radioactivity-converter/index.html" data-name="放射性" data-cat="单位换算">☢️ 放射性</a><a class="dl" href="tools/power-converter/index.html" data-name="功率换算" data-cat="单位换算">🔌 功率换算</a><a class="dl" href="tools/acceleration-converter/index.html" data-name="加速度换算" data-cat="单位换算">🚀 加速度换算</a><a class="dl" href="tools/angle-converter/index.html" data-name="角度换算" data-cat="单位换算">📐 角度换算</a><a class="dl" href="tools/force-converter/index.html" data-name="力换算" data-cat="单位换算">💪 力换算</a><a class="dl" href="tools/volume-flow-converter/index.html" data-name="流量换算" data-cat="单位换算">💧 流量换算</a><a class="dl" href="tools/density-converter/index.html" data-name="密度换算" data-cat="单位换算">🪨 密度换算</a><a class="dl" href="tools/area-converter/index.html" data-name="面积换算" data-cat="单位换算">🟦 面积换算</a><a class="dl" href="tools/energy-converter/index.html" data-name="能量换算" data-cat="单位换算">⚡ 能量换算</a><a class="dl" href="tools/torque-converter/index.html" data-name="扭矩换算" data-cat="单位换算">🔧 扭矩换算</a><a class="dl" href="tools/pace-converter/index.html" data-name="配速换算" data-cat="单位换算">🏃 配速换算</a><a class="dl" href="tools/cooking-converter/index.html" data-name="烹饪换算" data-cat="单位换算">🍳 烹饪换算</a><a class="dl" href="tools/frequency-converter/index.html" data-name="频率换算" data-cat="单位换算">📶 频率换算</a><a class="dl" href="tools/screen-size-converter/index.html" data-name="屏幕尺寸" data-cat="单位换算">📺 屏幕尺寸</a><a class="dl" href="tools/time-converter/index.html" data-name="时间换算" data-cat="单位换算">⏰ 时间换算</a><a class="dl" href="tools/speed-converter/index.html" data-name="速度换算" data-cat="单位换算">💨 速度换算</a><a class="dl" href="tools/data-rate-converter/index.html" data-name="速率换算" data-cat="单位换算">📡 速率换算</a><a class="dl" href="tools/volume-converter/index.html" data-name="体积换算" data-cat="单位换算">🪣 体积换算</a><a class="dl" href="tools/temperature-converter/index.html" data-name="温度换算" data-cat="单位换算">🌡️ 温度换算</a><a class="dl" href="tools/pixel-converter/index.html" data-name="像素换算" data-cat="单位换算">🖥️ 像素换算</a><a class="dl" href="tools/pressure-converter/index.html" data-name="压强换算" data-cat="单位换算">🧮 压强换算</a><a class="dl" href="tools/fuel-economy/index.html" data-name="油耗换算" data-cat="单位换算">⛽ 油耗换算</a><a class="dl" href="tools/length-converter/index.html" data-name="长度换算" data-cat="单位换算">📏 长度换算</a><a class="dl" href="tools/illuminance-converter/index.html" data-name="照度换算" data-cat="单位换算">💡 照度换算</a><a class="dl" href="tools/weight-converter/index.html" data-name="重量换算" data-cat="单位换算">⚖️ 重量换算</a><a class="dl" href="tools/byte-converter/index.html" data-name="字节单位换算" data-cat="单位换算">📦 字节单位换算</a></div></div><div class="dl-group"><div class="dl-h" onclick="toggleGroup(this)">编码转换 <span class="tg">▾</span></div><div class="dl-links"><a class="dl" href="tools/base-converter/index.html" data-name="进制转换" data-cat="编码转换">🔢 进制转换</a><a class="dl" href="tools/morse-code/index.html" data-name="摩斯密码" data-cat="编码转换">📻 摩斯密码</a><a class="dl" href="tools/ascii-converter/index.html" data-name="ASCII 编解码" data-cat="编码转换">🔤 ASCII 编解码</a><a class="dl" href="tools/base64/index.html" data-name="Base64 编解码 (文字 + 图片)" data-cat="编码转换">🔐 Base64 编解码 (文字 + 图片)</a><a class="dl" href="tools/html-entity/index.html" data-name="HTML 实体编解码" data-cat="编码转换">🔣 HTML 实体编解码</a><a class="dl" href="tools/json-formatter/index.html" data-name="JSON 格式化 / 压缩" data-cat="编码转换">📋 JSON 格式化 / 压缩</a><a class="dl" href="tools/jwt-decoder/index.html" data-name="JWT 解析 (仅解码，不验证)" data-cat="编码转换">🪪 JWT 解析 (仅解码，不验证)</a><a class="dl" href="tools/md5-generator/index.html" data-name="MD5 哈希" data-cat="编码转换">🔐 MD5 哈希</a><a class="dl" href="tools/unicode-converter/index.html" data-name="Unicode 编码" data-cat="编码转换">🔡 Unicode 编码</a><a class="dl" href="tools/url-encoder/index.html" data-name="URL 编码 / 解码" data-cat="编码转换">🌐 URL 编码 / 解码</a><a class="dl" href="tools/sha-hash/index.html" data-name="SHA 哈希" data-cat="编码转换">🔒 SHA 哈希</a>
+<div class="drawer" id="drawer"><div class="drawer-title">全部工具 (232)</div><input class="drawer-search" id="drawerSearch" placeholder="搜索工具..." oninput="filterCards(this.value)"><button class="dl-toggle" id="dlToggle" onclick="toggleAllGroups()">收起全部</button><div id="drawerList"><div class="dl-group"><div class="dl-h" onclick="toggleGroup(this)">单位换算 <span class="tg">▾</span></div><div class="dl-links"><a class="dl" href="tools/bit-converter/index.html" data-name="比特换算" data-cat="单位换算">🔢 比特换算</a><a class="dl" href="tools/inductance-converter/index.html" data-name="电感换算" data-cat="单位换算">🌀 电感换算</a><a class="dl" href="tools/electric-charge-converter/index.html" data-name="电荷换算" data-cat="单位换算">⚡ 电荷换算</a><a class="dl" href="tools/electric-current-converter/index.html" data-name="电流换算" data-cat="单位换算">🔋 电流换算</a><a class="dl" href="tools/capacitance-converter/index.html" data-name="电容换算" data-cat="单位换算">🧲 电容换算</a><a class="dl" href="tools/voltage-converter/index.html" data-name="电压换算" data-cat="单位换算">🔋 电压换算</a><a class="dl" href="tools/resistance-converter/index.html" data-name="电阻换算" data-cat="单位换算">🧱 电阻换算</a><a class="dl" href="tools/radioactivity-converter/index.html" data-name="放射性" data-cat="单位换算">☢️ 放射性</a><a class="dl" href="tools/power-converter/index.html" data-name="功率换算" data-cat="单位换算">🔌 功率换算</a><a class="dl" href="tools/acceleration-converter/index.html" data-name="加速度换算" data-cat="单位换算">🚀 加速度换算</a><a class="dl" href="tools/angle-converter/index.html" data-name="角度换算" data-cat="单位换算">📐 角度换算</a><a class="dl" href="tools/force-converter/index.html" data-name="力换算" data-cat="单位换算">💪 力换算</a><a class="dl" href="tools/volume-flow-converter/index.html" data-name="流量换算" data-cat="单位换算">💧 流量换算</a><a class="dl" href="tools/density-converter/index.html" data-name="密度换算" data-cat="单位换算">🪨 密度换算</a><a class="dl" href="tools/area-converter/index.html" data-name="面积换算" data-cat="单位换算">🟦 面积换算</a><a class="dl" href="tools/energy-converter/index.html" data-name="能量换算" data-cat="单位换算">⚡ 能量换算</a><a class="dl" href="tools/torque-converter/index.html" data-name="扭矩换算" data-cat="单位换算">🔧 扭矩换算</a><a class="dl" href="tools/pace-converter/index.html" data-name="配速换算" data-cat="单位换算">🏃 配速换算</a><a class="dl" href="tools/cooking-converter/index.html" data-name="烹饪换算" data-cat="单位换算">🍳 烹饪换算</a><a class="dl" href="tools/frequency-converter/index.html" data-name="频率换算" data-cat="单位换算">📶 频率换算</a><a class="dl" href="tools/screen-size-converter/index.html" data-name="屏幕尺寸" data-cat="单位换算">📺 屏幕尺寸</a><a class="dl" href="tools/time-converter/index.html" data-name="时间换算" data-cat="单位换算">⏰ 时间换算</a><a class="dl" href="tools/speed-converter/index.html" data-name="速度换算" data-cat="单位换算">💨 速度换算</a><a class="dl" href="tools/data-rate-converter/index.html" data-name="速率换算" data-cat="单位换算">📡 速率换算</a><a class="dl" href="tools/volume-converter/index.html" data-name="体积换算" data-cat="单位换算">🪣 体积换算</a><a class="dl" href="tools/temperature-converter/index.html" data-name="温度换算" data-cat="单位换算">🌡️ 温度换算</a><a class="dl" href="tools/pixel-converter/index.html" data-name="像素换算" data-cat="单位换算">🖥️ 像素换算</a><a class="dl" href="tools/pressure-converter/index.html" data-name="压强换算" data-cat="单位换算">🧮 压强换算</a><a class="dl" href="tools/fuel-economy/index.html" data-name="油耗换算" data-cat="单位换算">⛽ 油耗换算</a><a class="dl" href="tools/length-converter/index.html" data-name="长度换算" data-cat="单位换算">📏 长度换算</a><a class="dl" href="tools/illuminance-converter/index.html" data-name="照度换算" data-cat="单位换算">💡 照度换算</a><a class="dl" href="tools/weight-converter/index.html" data-name="重量换算" data-cat="单位换算">⚖️ 重量换算</a><a class="dl" href="tools/byte-converter/index.html" data-name="字节单位换算" data-cat="单位换算">📦 字节单位换算</a></div></div><div class="dl-group"><div class="dl-h" onclick="toggleGroup(this)">编码转换 <span class="tg">▾</span></div><div class="dl-links"><a class="dl" href="tools/base-converter/index.html" data-name="进制转换" data-cat="编码转换">🔢 进制转换</a><a class="dl" href="tools/morse-code/index.html" data-name="摩斯密码" data-cat="编码转换">📻 摩斯密码</a><a class="dl" href="tools/ascii-converter/index.html" data-name="ASCII 编解码" data-cat="编码转换">🔤 ASCII 编解码</a><a class="dl" href="tools/base64/index.html" data-name="Base64 编解码 (文字 + 图片)" data-cat="编码转换">🔐 Base64 编解码 (文字 + 图片)</a><a class="dl" href="tools/html-entity/index.html" data-name="HTML 实体编解码" data-cat="编码转换">🔣 HTML 实体编解码</a><a class="dl" href="tools/json-formatter/index.html" data-name="JSON 格式化 / 压缩" data-cat="编码转换">📋 JSON 格式化 / 压缩</a><a class="dl" href="tools/jwt-decoder/index.html" data-name="JWT 解析 (仅解码，不验证)" data-cat="编码转换">🪪 JWT 解析 (仅解码，不验证)</a><a class="dl" href="tools/md5-generator/index.html" data-name="MD5 哈希" data-cat="编码转换">🔐 MD5 哈希</a><a class="dl" href="tools/unicode-converter/index.html" data-name="Unicode 编码" data-cat="编码转换">🔡 Unicode 编码</a><a class="dl" href="tools/url-encoder/index.html" data-name="URL 编码 / 解码" data-cat="编码转换">🌐 URL 编码 / 解码</a><a class="dl" href="tools/sha-hash/index.html" data-name="SHA 哈希" data-cat="编码转换">🔒 SHA 哈希</a>
+
+
+
+
+
+
+
+<a class="dl" href="tools/base32/index.html" data-name="Base32 编解码" data-cat="编码转换">🔢 Base32 编解码</a>
+<a class="dl" href="tools/base58/index.html" data-name="Base58 编解码" data-cat="编码转换">🔢 Base58 编解码</a>
+<a class="dl" href="tools/base85/index.html" data-name="Base85 编解码" data-cat="编码转换">🔢 Base85 编解码</a>
+<a class="dl" href="tools/bacon/index.html" data-name="培根密码" data-cat="编码转换">🥓 培根密码</a>
+<a class="dl" href="tools/sha256-lines/index.html" data-name="批量 SHA256（每行）" data-cat="编码转换">🔒 批量 SHA256（每行）</a>
+<a class="dl" href="tools/sha512-lines/index.html" data-name="批量 SHA512（每行）" data-cat="编码转换">🔒 批量 SHA512（每行）</a>
+<a class="dl" href="tools/crc32/index.html" data-name="CRC32 校验" data-cat="编码转换">🧮 CRC32 校验</a>
 </div></div><div class="dl-group"><div class="dl-h" onclick="toggleGroup(this)">文本处理 <span class="tg">▾</span></div><div class="dl-links"><a class="dl" href="tools/word-wrap/index.html" data-name="按宽度换行" data-cat="文本处理">📏 按宽度换行</a><a class="dl" href="tools/anagram-checker/index.html" data-name="变位词检测" data-cat="文本处理">🔤 变位词检测</a><a class="dl" href="tools/emoji-picker/index.html" data-name="表情符号速选" data-cat="文本处理">😀 表情符号速选</a><a class="dl" href="tools/find-replace/index.html" data-name="查找替换" data-cat="文本处理">🔎 查找替换</a><a class="dl" href="tools/word-frequency/index.html" data-name="词频统计" data-cat="文本处理">📈 词频统计</a><a class="dl" href="tools/text-shuffle/index.html" data-name="打乱行序" data-cat="文本处理">🔀 打乱行序</a><a class="dl" href="tools/case-converter/index.html" data-name="大小写转换" data-cat="文本处理">📝 大小写转换</a><a class="dl" href="tools/countdown-timer/index.html" data-name="倒计时" data-cat="文本处理">⏳ 倒计时</a><a class="dl" href="tools/palindrome-checker/index.html" data-name="回文检测" data-cat="文本处理">🪞 回文检测</a><a class="dl" href="tools/roman-numeral/index.html" data-name="罗马数字转换" data-cat="文本处理">🏛️ 罗马数字转换</a><a class="dl" href="tools/password-strength/index.html" data-name="密码强度检测" data-cat="文本处理">🔐 密码强度检测</a><a class="dl" href="tools/password-generator/index.html" data-name="密码生成器" data-cat="文本处理">🔑 密码生成器</a><a class="dl" href="tools/remove-accents/index.html" data-name="去重音符号" data-cat="文本处理">🧹 去重音符号</a><a class="dl" href="tools/number-to-chinese/index.html" data-name="数字转中文大写" data-cat="文本处理">💴 数字转中文大写</a><a class="dl" href="tools/random-word/index.html" data-name="随机单词" data-cat="文本处理">🔤 随机单词</a><a class="dl" href="tools/extract-links/index.html" data-name="提取链接 / 邮箱" data-cat="文本处理">🔗 提取链接 / 邮箱</a><a class="dl" href="tools/extract-numbers/index.html" data-name="提取数字" data-cat="文本处理">🔢 提取数字</a><a class="dl" href="tools/text-diff/index.html" data-name="文本对比 (行差异)" data-cat="文本处理">🔍 文本对比 (行差异)</a><a class="dl" href="tools/text-reverser/index.html" data-name="文本反转" data-cat="文本处理">🔃 文本反转</a><a class="dl" href="tools/text-cleaner/index.html" data-name="文本清洗" data-cat="文本处理">🧼 文本清洗</a><a class="dl" href="tools/pad-text/index.html" data-name="文本填充对齐" data-cat="文本处理">📐 文本填充对齐</a><a class="dl" href="tools/text-similarity/index.html" data-name="文本相似度" data-cat="文本处理">📊 文本相似度</a><a class="dl" href="tools/text-processor/index.html" data-name="文本行处理" data-cat="文本处理">📝 文本行处理</a><a class="dl" href="tools/string-repeat/index.html" data-name="文本重复" data-cat="文本处理">🔁 文本重复</a><a class="dl" href="tools/discount-calculator/index.html" data-name="折扣计算" data-cat="文本处理">🏷️ 折扣计算</a><a class="dl" href="tools/count-chars/index.html" data-name="字符统计" data-cat="文本处理">🔢 字符统计</a><a class="dl" href="tools/word-counter/index.html" data-name="字数统计" data-cat="文本处理">📊 字数统计</a><a class="dl" href="tools/lorem-generator/index.html" data-name="Lorem 占位文本" data-cat="文本处理">📝 Lorem 占位文本</a><a class="dl" href="tools/case-style/index.html" data-name="命名风格转换" data-cat="文本处理">🔤 命名风格转换</a>
 <a class="dl" href="tools/passphrase/index.html" data-name="密码短语生成" data-cat="文本处理">🎲 密码短语生成</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a class="dl" href="tools/full-to-half/index.html" data-name="全角转半角" data-cat="文本处理">🔡 全角转半角</a>
+<a class="dl" href="tools/half-to-full/index.html" data-name="半角转全角" data-cat="文本处理">🔠 半角转全角</a>
+<a class="dl" href="tools/caesar-enc/index.html" data-name="凯撒密码加密" data-cat="文本处理">🔐 凯撒密码加密</a>
+<a class="dl" href="tools/caesar-dec/index.html" data-name="凯撒密码解密" data-cat="文本处理">🔓 凯撒密码解密</a>
+<a class="dl" href="tools/rot13/index.html" data-name="ROT13 转换" data-cat="文本处理">🔄 ROT13 转换</a>
+<a class="dl" href="tools/dedup-lines/index.html" data-name="按行去重" data-cat="文本处理">🧹 按行去重</a>
+<a class="dl" href="tools/sort-lines-asc/index.html" data-name="行正序排序" data-cat="文本处理">🔼 行正序排序</a>
+<a class="dl" href="tools/sort-lines-desc/index.html" data-name="行倒序排序" data-cat="文本处理">🔽 行倒序排序</a>
+<a class="dl" href="tools/remove-empty/index.html" data-name="删除空行" data-cat="文本处理">🚮 删除空行</a>
+<a class="dl" href="tools/line-number/index.html" data-name="每行加序号" data-cat="文本处理">🔢 每行加序号</a>
+<a class="dl" href="tools/strip-html/index.html" data-name="删除 HTML 标签" data-cat="文本处理">🧼 删除 HTML 标签</a>
+<a class="dl" href="tools/escape-html/index.html" data-name="HTML 转义" data-cat="文本处理">🛡️ HTML 转义</a>
+<a class="dl" href="tools/escape-js/index.html" data-name="JS 字符串转义" data-cat="文本处理">🛡️ JS 字符串转义</a>
+<a class="dl" href="tools/extract-phone/index.html" data-name="提取手机号" data-cat="文本处理">📱 提取手机号</a>
+<a class="dl" href="tools/extract-url/index.html" data-name="提取网址" data-cat="文本处理">🌐 提取网址</a>
+<a class="dl" href="tools/extract-han/index.html" data-name="提取汉字" data-cat="文本处理">🈶 提取汉字</a>
+<a class="dl" href="tools/extract-latin/index.html" data-name="提取英文字母" data-cat="文本处理">🔤 提取英文字母</a>
+<a class="dl" href="tools/align-text/index.html" data-name="文本两端对齐" data-cat="文本处理">📏 文本两端对齐</a>
+<a class="dl" href="tools/cn-punc2en/index.html" data-name="中文标点转英文" data-cat="文本处理">🔣 中文标点转英文</a>
+<a class="dl" href="tools/trim-lines/index.html" data-name="去除每行首尾空白" data-cat="文本处理">✂️ 去除每行首尾空白</a>
+<a class="dl" href="tools/merge-lines/index.html" data-name="多行合并为一行" data-cat="文本处理">➡️ 多行合并为一行</a>
+<a class="dl" href="tools/split-lines/index.html" data-name="按标点拆分成行" data-cat="文本处理">✂️ 按标点拆分成行</a>
+<a class="dl" href="tools/dedup-space/index.html" data-name="合并连续空格" data-cat="文本处理">␣ 合并连续空格</a>
+<a class="dl" href="tools/random-line/index.html" data-name="随机抽取一行" data-cat="文本处理">🎲 随机抽取一行</a>
 </div></div><div class="dl-group"><div class="dl-h" onclick="toggleGroup(this)">数学·财务 <span class="tg">▾</span></div><div class="dl-links"><a class="dl" href="tools/percentage-calculator/index.html" data-name="百分比计算" data-cat="数学·财务">📊 百分比计算</a><a class="dl" href="tools/ratio-simplifier/index.html" data-name="比例化简" data-cat="数学·财务">⚖️ 比例化简</a><a class="dl" href="tools/unit-price-calculator/index.html" data-name="单价计算" data-cat="数学·财务">🛒 单价计算</a><a class="dl" href="tools/compound-interest/index.html" data-name="复利计算" data-cat="数学·财务">💹 复利计算</a><a class="dl" href="tools/calculator/index.html" data-name="简易计算器" data-cat="数学·财务">📐 简易计算器</a><a class="dl" href="tools/age-calculator/index.html" data-name="年龄计算器" data-cat="数学·财务">🎂 年龄计算器</a><a class="dl" href="tools/average-calculator/index.html" data-name="平均值计算" data-cat="数学·财务">📊 平均值计算</a><a class="dl" href="tools/date-calculator/index.html" data-name="日期计算器" data-cat="数学·财务">📅 日期计算器</a><a class="dl" href="tools/math-lab/index.html" data-name="数学工具箱" data-cat="数学·财务">🧮 数学工具箱</a><a class="dl" href="tools/tax-calculator/index.html" data-name="税费计算" data-cat="数学·财务">🧾 税费计算</a><a class="dl" href="tools/tip-calculator/index.html" data-name="小费分摊" data-cat="数学·财务">🍽️ 小费分摊</a><a class="dl" href="tools/loan-calculator/index.html" data-name="月供计算" data-cat="数学·财务">🏦 月供计算</a><a class="dl" href="tools/percentage-change/index.html" data-name="增长率" data-cat="数学·财务">📈 增长率</a><a class="dl" href="tools/bmi-calculator/index.html" data-name="BMI 身体质量指数" data-cat="数学·财务">⚖️ BMI 身体质量指数</a><a class="dl" href="tools/prime/index.html" data-name="质数工具" data-cat="数学·财务">🔢 质数工具</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a class="dl" href="tools/gcd/index.html" data-name="最大公约数" data-cat="数学·财务">📐 最大公约数</a>
+<a class="dl" href="tools/lcm/index.html" data-name="最小公倍数" data-cat="数学·财务">📐 最小公倍数</a>
+<a class="dl" href="tools/factorial/index.html" data-name="阶乘计算" data-cat="数学·财务">❗ 阶乘计算</a>
+<a class="dl" href="tools/fibonacci/index.html" data-name="斐波那契数列" data-cat="数学·财务">🌀 斐波那契数列</a>
+<a class="dl" href="tools/permutation/index.html" data-name="排列数" data-cat="数学·财务">🔢 排列数</a>
+<a class="dl" href="tools/combination/index.html" data-name="组合数" data-cat="数学·财务">🔢 组合数</a>
+<a class="dl" href="tools/sqrt/index.html" data-name="平方根计算" data-cat="数学·财务">√ 平方根计算</a>
+<a class="dl" href="tools/power/index.html" data-name="幂运算" data-cat="数学·财务">＾ 幂运算</a>
+<a class="dl" href="tools/ln/index.html" data-name="自然对数" data-cat="数学·财务">📈 自然对数</a>
+<a class="dl" href="tools/log10/index.html" data-name="常用对数" data-cat="数学·财务">📈 常用对数</a>
+<a class="dl" href="tools/frac-add/index.html" data-name="分数加法" data-cat="数学·财务">➕ 分数加法</a>
+<a class="dl" href="tools/frac-sub/index.html" data-name="分数减法" data-cat="数学·财务">➖ 分数减法</a>
+<a class="dl" href="tools/frac-mul/index.html" data-name="分数乘法" data-cat="数学·财务">✖️ 分数乘法</a>
+<a class="dl" href="tools/frac-div/index.html" data-name="分数除法" data-cat="数学·财务">➗ 分数除法</a>
+<a class="dl" href="tools/roi/index.html" data-name="投资回报率 ROI" data-cat="数学·财务">📊 投资回报率 ROI</a>
+<a class="dl" href="tools/mortgage-principal/index.html" data-name="等额本金房贷" data-cat="数学·财务">🏦 等额本金房贷</a>
+<a class="dl" href="tools/deposit/index.html" data-name="存款利率计算" data-cat="数学·财务">🏦 存款利率计算</a>
+<a class="dl" href="tools/calories/index.html" data-name="卡路里消耗估算" data-cat="数学·财务">🔥 卡路里消耗估算</a>
+<a class="dl" href="tools/wpm/index.html" data-name="打字速度 WPM" data-cat="数学·财务">⌨️ 打字速度 WPM</a>
+<a class="dl" href="tools/rand-range/index.html" data-name="随机整数(范围/步进)" data-cat="数学·财务">🎲 随机整数(范围/步进)</a>
+<a class="dl" href="tools/deg2rad/index.html" data-name="角度转弧度" data-cat="数学·财务">📐 角度转弧度</a>
+<a class="dl" href="tools/rad2deg/index.html" data-name="弧度转角度" data-cat="数学·财务">📐 弧度转角度</a>
+<a class="dl" href="tools/pi-digits/index.html" data-name="圆周率 π" data-cat="数学·财务">π 圆周率 π</a>
+<a class="dl" href="tools/golden/index.html" data-name="黄金分割数" data-cat="数学·财务">✨ 黄金分割数</a>
+<a class="dl" href="tools/abs-round/index.html" data-name="绝对值与取整" data-cat="数学·财务">➿ 绝对值与取整</a>
 </div></div><div class="dl-group"><div class="dl-h" onclick="toggleGroup(this)">时间与日期 <span class="tg">▾</span></div><div class="dl-links"><a class="dl" href="tools/pomodoro/index.html" data-name="番茄钟" data-cat="时间与日期">🍅 番茄钟</a><a class="dl" href="tools/stopwatch/index.html" data-name="秒表" data-cat="时间与日期">⏱️ 秒表</a><a class="dl" href="tools/weekday-finder/index.html" data-name="日期→星期" data-cat="时间与日期">📅 日期→星期</a><a class="dl" href="tools/date-add/index.html" data-name="日期加减" data-cat="时间与日期">📅 日期加减</a><a class="dl" href="tools/leap-year/index.html" data-name="闰年判断" data-cat="时间与日期">🗓️ 闰年判断</a><a class="dl" href="tools/timestamp/index.html" data-name="时间戳转换" data-cat="时间与日期">⏰ 时间戳转换</a><a class="dl" href="tools/world-clock/index.html" data-name="世界时钟" data-cat="时间与日期">🌍 世界时钟</a><a class="dl" href="tools/calendar-generator/index.html" data-name="月历生成" data-cat="时间与日期">📆 月历生成</a><a class="dl" href="tools/timezone/index.html" data-name="时区转换" data-cat="时间与日期">🌐 时区转换</a>
 <a class="dl" href="tools/date-diff/index.html" data-name="日期差计算" data-cat="时间与日期">📅 日期差计算</a>
+
+
+
+
+
+
+
+
+
+<a class="dl" href="tools/rand-date/index.html" data-name="随机日期" data-cat="时间与日期">📅 随机日期</a>
+<a class="dl" href="tools/rand-time/index.html" data-name="随机时间" data-cat="时间与日期">⏰ 随机时间</a>
+<a class="dl" href="tools/rand-weekday/index.html" data-name="随机星期" data-cat="时间与日期">📆 随机星期</a>
+<a class="dl" href="tools/rand-month/index.html" data-name="随机月份" data-cat="时间与日期">📆 随机月份</a>
+<a class="dl" href="tools/zodiac/index.html" data-name="星座查询" data-cat="时间与日期">♈ 星座查询</a>
+<a class="dl" href="tools/workdays/index.html" data-name="工作日天数" data-cat="时间与日期">💼 工作日天数</a>
+<a class="dl" href="tools/countdown/index.html" data-name="倒计时到日期" data-cat="时间与日期">⏳ 倒计时到日期</a>
+<a class="dl" href="tools/unix-ms/index.html" data-name="Unix 毫秒时间戳" data-cat="时间与日期">⏱️ Unix 毫秒时间戳</a>
+<a class="dl" href="tools/now-ts/index.html" data-name="当前时间戳" data-cat="时间与日期">⏱️ 当前时间戳</a>
 </div></div><div class="dl-group"><div class="dl-h" onclick="toggleGroup(this)">开发工具 <span class="tg">▾</span></div><div class="dl-links"><a class="dl" href="tools/port-numbers/index.html" data-name="端口速查" data-cat="开发工具">🔌 端口速查</a><a class="dl" href="tools/gradient-generator/index.html" data-name="渐变生成" data-cat="开发工具">🌈 渐变生成</a><a class="dl" href="tools/color-palette/index.html" data-name="随机调色板" data-cat="开发工具">🎨 随机调色板</a><a class="dl" href="tools/contrast-checker/index.html" data-name="颜色对比度 (WCAG)" data-cat="开发工具">🎭 颜色对比度 (WCAG)</a><a class="dl" href="tools/color-picker/index.html" data-name="颜色选择器" data-cat="开发工具">🎨 颜色选择器</a><a class="dl" href="tools/username-generator/index.html" data-name="用户名生成" data-cat="开发工具">👤 用户名生成</a><a class="dl" href="tools/regex-tester/index.html" data-name="正则表达式测试" data-cat="开发工具">🧪 正则表达式测试</a><a class="dl" href="tools/cron-explainer/index.html" data-name="Cron 表达式解析" data-cat="开发工具">⏲️ Cron 表达式解析</a><a class="dl" href="tools/css-minifier/index.html" data-name="CSS 压缩" data-cat="开发工具">🗜️ CSS 压缩</a><a class="dl" href="tools/csv-markdown/index.html" data-name="CSV ⇄ Markdown 表格" data-cat="开发工具">📊 CSV ⇄ Markdown 表格</a><a class="dl" href="tools/color-converter/index.html" data-name="HEX ↔ RGB ↔ HSL" data-cat="开发工具">🎨 HEX ↔ RGB ↔ HSL</a><a class="dl" href="tools/html-minifier/index.html" data-name="HTML 压缩" data-cat="开发工具">🗜️ HTML 压缩</a><a class="dl" href="tools/json-csv/index.html" data-name="JSON ⇄ CSV" data-cat="开发工具">🔁 JSON ⇄ CSV</a><a class="dl" href="tools/json-validator/index.html" data-name="JSON 校验" data-cat="开发工具">✅ JSON 校验</a><a class="dl" href="tools/markdown-preview/index.html" data-name="Markdown 预览" data-cat="开发工具">📄 Markdown 预览</a><a class="dl" href="tools/mime-types/index.html" data-name="MIME 速查" data-cat="开发工具">📄 MIME 速查</a><a class="dl" href="tools/sql-formatter/index.html" data-name="SQL 格式化" data-cat="开发工具">🗄️ SQL 格式化</a><a class="dl" href="tools/slug-generator/index.html" data-name="URL Slug 生成" data-cat="开发工具">🔗 URL Slug 生成</a><a class="dl" href="tools/user-agent-parser/index.html" data-name="User-Agent 解析" data-cat="开发工具">🕵️ User-Agent 解析</a><a class="dl" href="tools/uuid-generator/index.html" data-name="UUID 生成器 (v4)" data-cat="开发工具">🆔 UUID 生成器 (v4)</a><a class="dl" href="tools/hmac/index.html" data-name="HMAC 生成" data-cat="开发工具">🔑 HMAC 生成</a>
 <a class="dl" href="tools/file-hash/index.html" data-name="文件哈希校验" data-cat="开发工具">📄 文件哈希校验</a>
+
+
+
+
+
+
+
+
+<a class="dl" href="tools/rand-hex/index.html" data-name="随机十六进制串" data-cat="开发工具">🔡 随机十六进制串</a>
+<a class="dl" href="tools/rand-color/index.html" data-name="随机颜色 HEX" data-cat="开发工具">🎨 随机颜色 HEX</a>
+<a class="dl" href="tools/rand-color-rgb/index.html" data-name="随机 RGB 颜色" data-cat="开发工具">🎨 随机 RGB 颜色</a>
+<a class="dl" href="tools/md-to-html/index.html" data-name="Markdown → HTML" data-cat="开发工具">📝 Markdown → HTML</a>
+<a class="dl" href="tools/html-to-md/index.html" data-name="HTML → Markdown" data-cat="开发工具">📝 HTML → Markdown</a>
+<a class="dl" href="tools/ascii-table/index.html" data-name="ASCII 表" data-cat="开发工具">📋 ASCII 表</a>
+<a class="dl" href="tools/char-code/index.html" data-name="字符码点查询" data-cat="开发工具">🔣 字符码点查询</a>
+<a class="dl" href="tools/js-beautify/index.html" data-name="JS 代码美化" data-cat="开发工具">💎 JS 代码美化</a>
 </div></div><div class="dl-group"><div class="dl-h" onclick="toggleGroup(this)">系统命令 <span class="tg">▾</span></div><div class="dl-links"><a class="dl" href="tools/linux-commands/index.html" data-name="Linux 命令速查（详解版 · 共 187 条）" data-cat="系统命令">🐧 Linux 命令速查（详解版 · 共 187 条）</a></div></div><div class="dl-group"><div class="dl-h" onclick="toggleGroup(this)">网络工具 <span class="tg">▾</span></div><div class="dl-links"><a class="dl" href="tools/http-status/index.html" data-name="HTTP 状态码速查" data-cat="网络工具">🌐 HTTP 状态码速查</a><a class="dl" href="tools/url-parser/index.html" data-name="URL 解析" data-cat="网络工具">🌐 URL 解析</a><a class="dl" href="tools/dns/index.html" data-name="DNS 解析" data-cat="网络工具">🌐 DNS 解析</a><a class="dl" href="tools/my-ip/index.html" data-name="公网 IP 查询" data-cat="网络工具">📡 公网 IP 查询</a>
 <a class="dl" href="tools/subnet/index.html" data-name="子网 / CIDR 计算器" data-cat="网络工具">🕸️ 子网 / CIDR 计算器</a>
+
+
+
+
+
+
+<a class="dl" href="tools/rand-mac/index.html" data-name="随机 MAC 地址" data-cat="网络工具">🖧 随机 MAC 地址</a>
+<a class="dl" href="tools/rand-ipv4/index.html" data-name="随机 IPv4" data-cat="网络工具">🌐 随机 IPv4</a>
+<a class="dl" href="tools/rand-ipv6/index.html" data-name="随机 IPv6" data-cat="网络工具">🌐 随机 IPv6</a>
+<a class="dl" href="tools/rand-port/index.html" data-name="随机端口号" data-cat="网络工具">🔌 随机端口号</a>
+<a class="dl" href="tools/rand-ua/index.html" data-name="随机 User-Agent" data-cat="网络工具">🕵️ 随机 User-Agent</a>
+<a class="dl" href="tools/rand-latlng/index.html" data-name="随机经纬度" data-cat="网络工具">🗺️ 随机经纬度</a>
 </div></div><div class="dl-group"><div class="dl-h" onclick="toggleGroup(this)">趣味娱乐 <span class="tg">▾</span></div><div class="dl-links"><a class="dl" href="tools/lottery-generator/index.html" data-name="彩票号码生成" data-cat="趣味娱乐">🎰 彩票号码生成</a><a class="dl" href="tools/magic-8-ball/index.html" data-name="魔法8号球" data-cat="趣味娱乐">🎱 魔法8号球</a><a class="dl" href="tools/coin-flip/index.html" data-name="抛硬币" data-cat="趣味娱乐">🪙 抛硬币</a><a class="dl" href="tools/rock-paper-scissors/index.html" data-name="石头剪刀布" data-cat="趣味娱乐">✊ 石头剪刀布</a><a class="dl" href="tools/random-picker/index.html" data-name="随机抽签" data-cat="趣味娱乐">🎯 随机抽签</a><a class="dl" href="tools/credit-card-generator/index.html" data-name="随机卡号" data-cat="趣味娱乐">💳 随机卡号</a><a class="dl" href="tools/random-generator/index.html" data-name="随机数生成器" data-cat="趣味娱乐">🎲 随机数生成器</a><a class="dl" href="tools/fake-data/index.html" data-name="随机信息" data-cat="趣味娱乐">🧪 随机信息</a><a class="dl" href="tools/dice-roller/index.html" data-name="骰子投掷" data-cat="趣味娱乐">🎲 骰子投掷</a><a class="dl" href="tools/tts/index.html" data-name="文本转语音" data-cat="趣味娱乐">🔊 文本转语音</a>
+
+
+
+
+
+
+
+
+
+<a class="dl" href="tools/rand-cn-name/index.html" data-name="随机中文姓名" data-cat="趣味娱乐">🧑 随机中文姓名</a>
+<a class="dl" href="tools/rand-en-name/index.html" data-name="随机英文姓名" data-cat="趣味娱乐">🧑 随机英文姓名</a>
+<a class="dl" href="tools/rand-address/index.html" data-name="随机中国地址" data-cat="趣味娱乐">🏠 随机中国地址</a>
+<a class="dl" href="tools/rand-emoji/index.html" data-name="随机 Emoji" data-cat="趣味娱乐">😀 随机 Emoji</a>
+<a class="dl" href="tools/rand-sentence/index.html" data-name="随机中文句子" data-cat="趣味娱乐">💬 随机中文句子</a>
+<a class="dl" href="tools/rand-poem/index.html" data-name="随机诗词" data-cat="趣味娱乐">📜 随机诗词</a>
+<a class="dl" href="tools/rand-joke/index.html" data-name="随机笑话" data-cat="趣味娱乐">😂 随机笑话</a>
+<a class="dl" href="tools/rand-float/index.html" data-name="随机浮点数" data-cat="趣味娱乐">🔢 随机浮点数</a>
+<a class="dl" href="tools/rand-bool/index.html" data-name="随机布尔值" data-cat="趣味娱乐">⚖️ 随机布尔值</a>
 </div></div><div class="dl-group"><div class="dl-h" onclick="toggleGroup(this)">其他 <span class="tg">▾</span></div><div class="dl-links"><a class="dl" href="tools/qr-generator/index.html" data-name="二维码生成器" data-cat="其他">🔳 二维码生成器</a><a class="dl" href="tools/avatar-generator/index.html" data-name="头像生成器" data-cat="其他">🧑 头像生成器</a><a class="dl" href="tools/github-releases/index.html" data-name="GitHub 发行 / 加速下载" data-cat="其他">🐙 GitHub 发行 / 加速下载</a><a class="dl" href="tools/media/index.html" data-name="图片/视频/音频工具" data-cat="其他">🎞️ 图片/视频/音频 工具</a><a class="dl" href="tools/js-obfuscator/index.html" data-name="JS 压缩 / 混淆" data-cat="其他">🌀 JS 压缩 / 混淆</a><a class="dl" href="tools/sqlite-editor/index.html" data-name="SQLite 数据库编辑器 (.db)" data-cat="其他">🗄️ SQLite 数据库编辑器 (.db)</a></div></div></div></div>
 <div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
 <main class="main">
     <p class="sub">🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub 仓库</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">GitHub Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></p>
     <p class="sub" style="margin-top:4px">💬 QQ 技术交流群：<a href="https://qun.qq.com/universal-share/share?ac=1&authKey=lvoTFPoZGfglgeejEyJiinGqmOr0ZSXmJWXmbjBuf83enyW4LQ66Vlia4g3rGpUX&busi_data=eyJncm91cENvZGUiOiIxMDI2OTM5NzQxIiwidG9rZW4iOiJYTi9nSFg3Q3lrRVpTSmFxcjEwa2hUNkJBRlpHakY1RFY1TG9tUVgzNXRObmdTVWxWVGtaaUxsL3hqTmc5MmpFIiwidWluIjoiMzYzNTczNjE4MCJ9&data=P1gqzEQxB2hGsyKtKp8EZBWMefx__fSBRhnUP-0NWzBGks1275alc0XOjKOn0O4y7O9mcCCQJcQdlu6yeiFmgQ&svctype=4&tempid=h5_group_info" target="_blank" rel="noopener">1026939741</a> · 📺 B站：<a href="https://b23.tv/BbFAP6j" target="_blank" rel="noopener">小帅5656</a> · ✉️ 邮箱：<a href="mailto:li63050@qq.com">li63050@qq.com</a></p>
-    <input class="search" id="search" placeholder="搜索 141 个工具..." oninput="filterCards(this.value)">
+    <input class="search" id="search" placeholder="搜索 232 个工具..." oninput="filterCards(this.value)">
     <div class="chips" id="chips"><button class="chip cat active" data-cat="常用" onclick="filterCat('常用')">常用 (22)</button><button class="chip cat" data-cat="全部" onclick="filterCat('全部')">全部 (141)</button><button class="chip cat" data-cat="单位换算" onclick="filterCat('单位换算')">单位换算 (33)</button><button class="chip cat" data-cat="编码转换" onclick="filterCat('编码转换')">编码转换 (11)</button><button class="chip cat" data-cat="文本处理" onclick="filterCat('文本处理')">文本处理 (30)</button><button class="chip cat" data-cat="数学·财务" onclick="filterCat('数学·财务')">数学·财务 (15)</button><button class="chip cat" data-cat="时间与日期" onclick="filterCat('时间与日期')">时间与日期 (10)</button><button class="chip cat" data-cat="开发工具" onclick="filterCat('开发工具')">开发工具 (22)</button><button class="chip cat" data-cat="系统命令" onclick="filterCat('系统命令')">系统命令 (1)</button><button class="chip cat" data-cat="网络工具" onclick="filterCat('网络工具')">网络工具 (5)</button><button class="chip cat" data-cat="趣味娱乐" onclick="filterCat('趣味娱乐')">趣味娱乐 (10)</button><button class="chip cat" data-cat="其他" onclick="filterCat('其他')">其他 (6)</button></div>
     <div id="cats"><section class="cat" data-cat="单位换算"><h3 class="cat-h" onclick="filterCat('单位换算')" style="cursor:pointer">单位换算 <span class="cat-n">33</span></h3><div class="grid"><a class="card" href="tools/bit-converter/index.html" data-name="比特换算" data-cat="单位换算"><span class="ico">🔢</span><span class="nm">比特换算</span></a>
 <a class="card" href="tools/inductance-converter/index.html" data-name="电感换算" data-cat="单位换算"><span class="ico">🌀</span><span class="nm">电感换算</span></a>
@@ -109,7 +285,7 @@
 <a class="card" href="tools/illuminance-converter/index.html" data-name="照度换算" data-cat="单位换算"><span class="ico">💡</span><span class="nm">照度换算</span></a>
 <a class="card" href="tools/weight-converter/index.html" data-name="重量换算" data-cat="单位换算"><span class="ico">⚖️</span><span class="nm">重量换算</span></a>
 <a class="card" href="tools/byte-converter/index.html" data-name="字节单位换算" data-cat="单位换算"><span class="ico">📦</span><span class="nm">字节单位换算</span></a></div></section>
-<section class="cat" data-cat="编码转换"><h3 class="cat-h" onclick="filterCat('编码转换')" style="cursor:pointer">编码转换 <span class="cat-n">11</span></h3><div class="grid"><a class="card" href="tools/base-converter/index.html" data-name="进制转换" data-cat="编码转换"><span class="ico">🔢</span><span class="nm">进制转换</span></a>
+<section class="cat" data-cat="编码转换"><h3 class="cat-h" onclick="filterCat('编码转换')" style="cursor:pointer">编码转换 <span class="cat-n">18</span></h3><div class="grid"><a class="card" href="tools/base-converter/index.html" data-name="进制转换" data-cat="编码转换"><span class="ico">🔢</span><span class="nm">进制转换</span></a>
 <a class="card" href="tools/morse-code/index.html" data-name="摩斯密码" data-cat="编码转换"><span class="ico">📻</span><span class="nm">摩斯密码</span></a>
 <a class="card" href="tools/ascii-converter/index.html" data-name="ASCII 编解码" data-cat="编码转换"><span class="ico">🔤</span><span class="nm">ASCII 编解码</span></a>
 <a class="card" href="tools/base64/index.html" data-name="Base64 编解码 (文字 + 图片)" data-cat="编码转换"><span class="ico">🔐</span><span class="nm">Base64 编解码 (文字 + 图片)</span></a>
@@ -119,8 +295,22 @@
 <a class="card" href="tools/md5-generator/index.html" data-name="MD5 哈希" data-cat="编码转换"><span class="ico">🔐</span><span class="nm">MD5 哈希</span></a>
 <a class="card" href="tools/unicode-converter/index.html" data-name="Unicode 编码" data-cat="编码转换"><span class="ico">🔡</span><span class="nm">Unicode 编码</span></a>
 <a class="card" href="tools/url-encoder/index.html" data-name="URL 编码 / 解码" data-cat="编码转换"><span class="ico">🌐</span><span class="nm">URL 编码 / 解码</span></a><a class="card" href="tools/sha-hash/index.html" data-name="SHA 哈希" data-cat="编码转换"><span class="ico">🔒</span><span class="nm">SHA 哈希</span></a>
+
+
+
+
+
+
+
+<a class="card" href="tools/base32/index.html" data-name="Base32 编解码" data-cat="编码转换"><span class="ico">🔢</span><span class="nm">Base32 编解码</span></a>
+<a class="card" href="tools/base58/index.html" data-name="Base58 编解码" data-cat="编码转换"><span class="ico">🔢</span><span class="nm">Base58 编解码</span></a>
+<a class="card" href="tools/base85/index.html" data-name="Base85 编解码" data-cat="编码转换"><span class="ico">🔢</span><span class="nm">Base85 编解码</span></a>
+<a class="card" href="tools/bacon/index.html" data-name="培根密码" data-cat="编码转换"><span class="ico">🥓</span><span class="nm">培根密码</span></a>
+<a class="card" href="tools/sha256-lines/index.html" data-name="批量 SHA256（每行）" data-cat="编码转换"><span class="ico">🔒</span><span class="nm">批量 SHA256（每行）</span></a>
+<a class="card" href="tools/sha512-lines/index.html" data-name="批量 SHA512（每行）" data-cat="编码转换"><span class="ico">🔒</span><span class="nm">批量 SHA512（每行）</span></a>
+<a class="card" href="tools/crc32/index.html" data-name="CRC32 校验" data-cat="编码转换"><span class="ico">🧮</span><span class="nm">CRC32 校验</span></a>
 </div></section>
-<section class="cat" data-cat="文本处理"><h3 class="cat-h" onclick="filterCat('文本处理')" style="cursor:pointer">文本处理 <span class="cat-n">30</span></h3><div class="grid"><a class="card" href="tools/word-wrap/index.html" data-name="按宽度换行" data-cat="文本处理"><span class="ico">📏</span><span class="nm">按宽度换行</span></a>
+<section class="cat" data-cat="文本处理"><h3 class="cat-h" onclick="filterCat('文本处理')" style="cursor:pointer">文本处理 <span class="cat-n">54</span></h3><div class="grid"><a class="card" href="tools/word-wrap/index.html" data-name="按宽度换行" data-cat="文本处理"><span class="ico">📏</span><span class="nm">按宽度换行</span></a>
 <a class="card" href="tools/anagram-checker/index.html" data-name="变位词检测" data-cat="文本处理"><span class="ico">🔤</span><span class="nm">变位词检测</span></a>
 <a class="card" href="tools/emoji-picker/index.html" data-name="表情符号速选" data-cat="文本处理"><span class="ico">😀</span><span class="nm">表情符号速选</span></a>
 <a class="card" href="tools/find-replace/index.html" data-name="查找替换" data-cat="文本处理"><span class="ico">🔎</span><span class="nm">查找替换</span></a>
@@ -149,8 +339,56 @@
 <a class="card" href="tools/word-counter/index.html" data-name="字数统计" data-cat="文本处理"><span class="ico">📊</span><span class="nm">字数统计</span></a>
 <a class="card" href="tools/lorem-generator/index.html" data-name="Lorem 占位文本" data-cat="文本处理"><span class="ico">📝</span><span class="nm">Lorem 占位文本</span></a><a class="card" href="tools/case-style/index.html" data-name="命名风格转换" data-cat="文本处理"><span class="ico">🔤</span><span class="nm">命名风格转换</span></a>
 <a class="card" href="tools/passphrase/index.html" data-name="密码短语生成" data-cat="文本处理"><span class="ico">🎲</span><span class="nm">密码短语生成</span></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a class="card" href="tools/full-to-half/index.html" data-name="全角转半角" data-cat="文本处理"><span class="ico">🔡</span><span class="nm">全角转半角</span></a>
+<a class="card" href="tools/half-to-full/index.html" data-name="半角转全角" data-cat="文本处理"><span class="ico">🔠</span><span class="nm">半角转全角</span></a>
+<a class="card" href="tools/caesar-enc/index.html" data-name="凯撒密码加密" data-cat="文本处理"><span class="ico">🔐</span><span class="nm">凯撒密码加密</span></a>
+<a class="card" href="tools/caesar-dec/index.html" data-name="凯撒密码解密" data-cat="文本处理"><span class="ico">🔓</span><span class="nm">凯撒密码解密</span></a>
+<a class="card" href="tools/rot13/index.html" data-name="ROT13 转换" data-cat="文本处理"><span class="ico">🔄</span><span class="nm">ROT13 转换</span></a>
+<a class="card" href="tools/dedup-lines/index.html" data-name="按行去重" data-cat="文本处理"><span class="ico">🧹</span><span class="nm">按行去重</span></a>
+<a class="card" href="tools/sort-lines-asc/index.html" data-name="行正序排序" data-cat="文本处理"><span class="ico">🔼</span><span class="nm">行正序排序</span></a>
+<a class="card" href="tools/sort-lines-desc/index.html" data-name="行倒序排序" data-cat="文本处理"><span class="ico">🔽</span><span class="nm">行倒序排序</span></a>
+<a class="card" href="tools/remove-empty/index.html" data-name="删除空行" data-cat="文本处理"><span class="ico">🚮</span><span class="nm">删除空行</span></a>
+<a class="card" href="tools/line-number/index.html" data-name="每行加序号" data-cat="文本处理"><span class="ico">🔢</span><span class="nm">每行加序号</span></a>
+<a class="card" href="tools/strip-html/index.html" data-name="删除 HTML 标签" data-cat="文本处理"><span class="ico">🧼</span><span class="nm">删除 HTML 标签</span></a>
+<a class="card" href="tools/escape-html/index.html" data-name="HTML 转义" data-cat="文本处理"><span class="ico">🛡️</span><span class="nm">HTML 转义</span></a>
+<a class="card" href="tools/escape-js/index.html" data-name="JS 字符串转义" data-cat="文本处理"><span class="ico">🛡️</span><span class="nm">JS 字符串转义</span></a>
+<a class="card" href="tools/extract-phone/index.html" data-name="提取手机号" data-cat="文本处理"><span class="ico">📱</span><span class="nm">提取手机号</span></a>
+<a class="card" href="tools/extract-url/index.html" data-name="提取网址" data-cat="文本处理"><span class="ico">🌐</span><span class="nm">提取网址</span></a>
+<a class="card" href="tools/extract-han/index.html" data-name="提取汉字" data-cat="文本处理"><span class="ico">🈶</span><span class="nm">提取汉字</span></a>
+<a class="card" href="tools/extract-latin/index.html" data-name="提取英文字母" data-cat="文本处理"><span class="ico">🔤</span><span class="nm">提取英文字母</span></a>
+<a class="card" href="tools/align-text/index.html" data-name="文本两端对齐" data-cat="文本处理"><span class="ico">📏</span><span class="nm">文本两端对齐</span></a>
+<a class="card" href="tools/cn-punc2en/index.html" data-name="中文标点转英文" data-cat="文本处理"><span class="ico">🔣</span><span class="nm">中文标点转英文</span></a>
+<a class="card" href="tools/trim-lines/index.html" data-name="去除每行首尾空白" data-cat="文本处理"><span class="ico">✂️</span><span class="nm">去除每行首尾空白</span></a>
+<a class="card" href="tools/merge-lines/index.html" data-name="多行合并为一行" data-cat="文本处理"><span class="ico">➡️</span><span class="nm">多行合并为一行</span></a>
+<a class="card" href="tools/split-lines/index.html" data-name="按标点拆分成行" data-cat="文本处理"><span class="ico">✂️</span><span class="nm">按标点拆分成行</span></a>
+<a class="card" href="tools/dedup-space/index.html" data-name="合并连续空格" data-cat="文本处理"><span class="ico">␣</span><span class="nm">合并连续空格</span></a>
+<a class="card" href="tools/random-line/index.html" data-name="随机抽取一行" data-cat="文本处理"><span class="ico">🎲</span><span class="nm">随机抽取一行</span></a>
 </div></section>
-<section class="cat" data-cat="数学·财务"><h3 class="cat-h" onclick="filterCat('数学·财务')" style="cursor:pointer">数学·财务 <span class="cat-n">15</span></h3><div class="grid"><a class="card" href="tools/percentage-calculator/index.html" data-name="百分比计算" data-cat="数学·财务"><span class="ico">📊</span><span class="nm">百分比计算</span></a>
+<section class="cat" data-cat="数学·财务"><h3 class="cat-h" onclick="filterCat('数学·财务')" style="cursor:pointer">数学·财务 <span class="cat-n">40</span></h3><div class="grid"><a class="card" href="tools/percentage-calculator/index.html" data-name="百分比计算" data-cat="数学·财务"><span class="ico">📊</span><span class="nm">百分比计算</span></a>
 <a class="card" href="tools/ratio-simplifier/index.html" data-name="比例化简" data-cat="数学·财务"><span class="ico">⚖️</span><span class="nm">比例化简</span></a>
 <a class="card" href="tools/unit-price-calculator/index.html" data-name="单价计算" data-cat="数学·财务"><span class="ico">🛒</span><span class="nm">单价计算</span></a>
 <a class="card" href="tools/compound-interest/index.html" data-name="复利计算" data-cat="数学·财务"><span class="ico">💹</span><span class="nm">复利计算</span></a>
@@ -164,8 +402,58 @@
 <a class="card" href="tools/loan-calculator/index.html" data-name="月供计算" data-cat="数学·财务"><span class="ico">🏦</span><span class="nm">月供计算</span></a>
 <a class="card" href="tools/percentage-change/index.html" data-name="增长率" data-cat="数学·财务"><span class="ico">📈</span><span class="nm">增长率</span></a>
 <a class="card" href="tools/bmi-calculator/index.html" data-name="BMI 身体质量指数" data-cat="数学·财务"><span class="ico">⚖️</span><span class="nm">BMI 身体质量指数</span></a><a class="card" href="tools/prime/index.html" data-name="质数工具" data-cat="数学·财务"><span class="ico">🔢</span><span class="nm">质数工具</span></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a class="card" href="tools/gcd/index.html" data-name="最大公约数" data-cat="数学·财务"><span class="ico">📐</span><span class="nm">最大公约数</span></a>
+<a class="card" href="tools/lcm/index.html" data-name="最小公倍数" data-cat="数学·财务"><span class="ico">📐</span><span class="nm">最小公倍数</span></a>
+<a class="card" href="tools/factorial/index.html" data-name="阶乘计算" data-cat="数学·财务"><span class="ico">❗</span><span class="nm">阶乘计算</span></a>
+<a class="card" href="tools/fibonacci/index.html" data-name="斐波那契数列" data-cat="数学·财务"><span class="ico">🌀</span><span class="nm">斐波那契数列</span></a>
+<a class="card" href="tools/permutation/index.html" data-name="排列数" data-cat="数学·财务"><span class="ico">🔢</span><span class="nm">排列数</span></a>
+<a class="card" href="tools/combination/index.html" data-name="组合数" data-cat="数学·财务"><span class="ico">🔢</span><span class="nm">组合数</span></a>
+<a class="card" href="tools/sqrt/index.html" data-name="平方根计算" data-cat="数学·财务"><span class="ico">√</span><span class="nm">平方根计算</span></a>
+<a class="card" href="tools/power/index.html" data-name="幂运算" data-cat="数学·财务"><span class="ico">＾</span><span class="nm">幂运算</span></a>
+<a class="card" href="tools/ln/index.html" data-name="自然对数" data-cat="数学·财务"><span class="ico">📈</span><span class="nm">自然对数</span></a>
+<a class="card" href="tools/log10/index.html" data-name="常用对数" data-cat="数学·财务"><span class="ico">📈</span><span class="nm">常用对数</span></a>
+<a class="card" href="tools/frac-add/index.html" data-name="分数加法" data-cat="数学·财务"><span class="ico">➕</span><span class="nm">分数加法</span></a>
+<a class="card" href="tools/frac-sub/index.html" data-name="分数减法" data-cat="数学·财务"><span class="ico">➖</span><span class="nm">分数减法</span></a>
+<a class="card" href="tools/frac-mul/index.html" data-name="分数乘法" data-cat="数学·财务"><span class="ico">✖️</span><span class="nm">分数乘法</span></a>
+<a class="card" href="tools/frac-div/index.html" data-name="分数除法" data-cat="数学·财务"><span class="ico">➗</span><span class="nm">分数除法</span></a>
+<a class="card" href="tools/roi/index.html" data-name="投资回报率 ROI" data-cat="数学·财务"><span class="ico">📊</span><span class="nm">投资回报率 ROI</span></a>
+<a class="card" href="tools/mortgage-principal/index.html" data-name="等额本金房贷" data-cat="数学·财务"><span class="ico">🏦</span><span class="nm">等额本金房贷</span></a>
+<a class="card" href="tools/deposit/index.html" data-name="存款利率计算" data-cat="数学·财务"><span class="ico">🏦</span><span class="nm">存款利率计算</span></a>
+<a class="card" href="tools/calories/index.html" data-name="卡路里消耗估算" data-cat="数学·财务"><span class="ico">🔥</span><span class="nm">卡路里消耗估算</span></a>
+<a class="card" href="tools/wpm/index.html" data-name="打字速度 WPM" data-cat="数学·财务"><span class="ico">⌨️</span><span class="nm">打字速度 WPM</span></a>
+<a class="card" href="tools/rand-range/index.html" data-name="随机整数(范围/步进)" data-cat="数学·财务"><span class="ico">🎲</span><span class="nm">随机整数(范围/步进)</span></a>
+<a class="card" href="tools/deg2rad/index.html" data-name="角度转弧度" data-cat="数学·财务"><span class="ico">📐</span><span class="nm">角度转弧度</span></a>
+<a class="card" href="tools/rad2deg/index.html" data-name="弧度转角度" data-cat="数学·财务"><span class="ico">📐</span><span class="nm">弧度转角度</span></a>
+<a class="card" href="tools/pi-digits/index.html" data-name="圆周率 π" data-cat="数学·财务"><span class="ico">π</span><span class="nm">圆周率 π</span></a>
+<a class="card" href="tools/golden/index.html" data-name="黄金分割数" data-cat="数学·财务"><span class="ico">✨</span><span class="nm">黄金分割数</span></a>
+<a class="card" href="tools/abs-round/index.html" data-name="绝对值与取整" data-cat="数学·财务"><span class="ico">➿</span><span class="nm">绝对值与取整</span></a>
 </div></section>
-<section class="cat" data-cat="时间与日期"><h3 class="cat-h" onclick="filterCat('时间与日期')" style="cursor:pointer">时间与日期 <span class="cat-n">10</span></h3><div class="grid"><a class="card" href="tools/pomodoro/index.html" data-name="番茄钟" data-cat="时间与日期"><span class="ico">🍅</span><span class="nm">番茄钟</span></a>
+<section class="cat" data-cat="时间与日期"><h3 class="cat-h" onclick="filterCat('时间与日期')" style="cursor:pointer">时间与日期 <span class="cat-n">19</span></h3><div class="grid"><a class="card" href="tools/pomodoro/index.html" data-name="番茄钟" data-cat="时间与日期"><span class="ico">🍅</span><span class="nm">番茄钟</span></a>
 <a class="card" href="tools/stopwatch/index.html" data-name="秒表" data-cat="时间与日期"><span class="ico">⏱️</span><span class="nm">秒表</span></a>
 <a class="card" href="tools/weekday-finder/index.html" data-name="日期→星期" data-cat="时间与日期"><span class="ico">📅</span><span class="nm">日期→星期</span></a>
 <a class="card" href="tools/date-add/index.html" data-name="日期加减" data-cat="时间与日期"><span class="ico">📅</span><span class="nm">日期加减</span></a>
@@ -174,8 +462,26 @@
 <a class="card" href="tools/world-clock/index.html" data-name="世界时钟" data-cat="时间与日期"><span class="ico">🌍</span><span class="nm">世界时钟</span></a>
 <a class="card" href="tools/calendar-generator/index.html" data-name="月历生成" data-cat="时间与日期"><span class="ico">📆</span><span class="nm">月历生成</span></a><a class="card" href="tools/timezone/index.html" data-name="时区转换" data-cat="时间与日期"><span class="ico">🌐</span><span class="nm">时区转换</span></a>
 <a class="card" href="tools/date-diff/index.html" data-name="日期差计算" data-cat="时间与日期"><span class="ico">📅</span><span class="nm">日期差计算</span></a>
+
+
+
+
+
+
+
+
+
+<a class="card" href="tools/rand-date/index.html" data-name="随机日期" data-cat="时间与日期"><span class="ico">📅</span><span class="nm">随机日期</span></a>
+<a class="card" href="tools/rand-time/index.html" data-name="随机时间" data-cat="时间与日期"><span class="ico">⏰</span><span class="nm">随机时间</span></a>
+<a class="card" href="tools/rand-weekday/index.html" data-name="随机星期" data-cat="时间与日期"><span class="ico">📆</span><span class="nm">随机星期</span></a>
+<a class="card" href="tools/rand-month/index.html" data-name="随机月份" data-cat="时间与日期"><span class="ico">📆</span><span class="nm">随机月份</span></a>
+<a class="card" href="tools/zodiac/index.html" data-name="星座查询" data-cat="时间与日期"><span class="ico">♈</span><span class="nm">星座查询</span></a>
+<a class="card" href="tools/workdays/index.html" data-name="工作日天数" data-cat="时间与日期"><span class="ico">💼</span><span class="nm">工作日天数</span></a>
+<a class="card" href="tools/countdown/index.html" data-name="倒计时到日期" data-cat="时间与日期"><span class="ico">⏳</span><span class="nm">倒计时到日期</span></a>
+<a class="card" href="tools/unix-ms/index.html" data-name="Unix 毫秒时间戳" data-cat="时间与日期"><span class="ico">⏱️</span><span class="nm">Unix 毫秒时间戳</span></a>
+<a class="card" href="tools/now-ts/index.html" data-name="当前时间戳" data-cat="时间与日期"><span class="ico">⏱️</span><span class="nm">当前时间戳</span></a>
 </div></section>
-<section class="cat" data-cat="开发工具"><h3 class="cat-h" onclick="filterCat('开发工具')" style="cursor:pointer">开发工具 <span class="cat-n">22</span></h3><div class="grid"><a class="card" href="tools/port-numbers/index.html" data-name="端口速查" data-cat="开发工具"><span class="ico">🔌</span><span class="nm">端口速查</span></a>
+<section class="cat" data-cat="开发工具"><h3 class="cat-h" onclick="filterCat('开发工具')" style="cursor:pointer">开发工具 <span class="cat-n">31</span></h3><div class="grid"><a class="card" href="tools/port-numbers/index.html" data-name="端口速查" data-cat="开发工具"><span class="ico">🔌</span><span class="nm">端口速查</span></a>
 <a class="card" href="tools/gradient-generator/index.html" data-name="渐变生成" data-cat="开发工具"><span class="ico">🌈</span><span class="nm">渐变生成</span></a>
 <a class="card" href="tools/color-palette/index.html" data-name="随机调色板" data-cat="开发工具"><span class="ico">🎨</span><span class="nm">随机调色板</span></a>
 <a class="card" href="tools/contrast-checker/index.html" data-name="颜色对比度 (WCAG)" data-cat="开发工具"><span class="ico">🎭</span><span class="nm">颜色对比度 (WCAG)</span></a>
@@ -196,14 +502,43 @@
 <a class="card" href="tools/user-agent-parser/index.html" data-name="User-Agent 解析" data-cat="开发工具"><span class="ico">🕵️</span><span class="nm">User-Agent 解析</span></a>
 <a class="card" href="tools/uuid-generator/index.html" data-name="UUID 生成器 (v4)" data-cat="开发工具"><span class="ico">🆔</span><span class="nm">UUID 生成器 (v4)</span></a><a class="card" href="tools/hmac/index.html" data-name="HMAC 生成" data-cat="开发工具"><span class="ico">🔑</span><span class="nm">HMAC 生成</span></a>
 <a class="card" href="tools/file-hash/index.html" data-name="文件哈希校验" data-cat="开发工具"><span class="ico">📄</span><span class="nm">文件哈希校验</span></a>
+
+
+
+
+
+
+
+
+<a class="card" href="tools/rand-hex/index.html" data-name="随机十六进制串" data-cat="开发工具"><span class="ico">🔡</span><span class="nm">随机十六进制串</span></a>
+<a class="card" href="tools/rand-color/index.html" data-name="随机颜色 HEX" data-cat="开发工具"><span class="ico">🎨</span><span class="nm">随机颜色 HEX</span></a>
+<a class="card" href="tools/rand-color-rgb/index.html" data-name="随机 RGB 颜色" data-cat="开发工具"><span class="ico">🎨</span><span class="nm">随机 RGB 颜色</span></a>
+<a class="card" href="tools/md-to-html/index.html" data-name="Markdown → HTML" data-cat="开发工具"><span class="ico">📝</span><span class="nm">Markdown → HTML</span></a>
+<a class="card" href="tools/html-to-md/index.html" data-name="HTML → Markdown" data-cat="开发工具"><span class="ico">📝</span><span class="nm">HTML → Markdown</span></a>
+<a class="card" href="tools/ascii-table/index.html" data-name="ASCII 表" data-cat="开发工具"><span class="ico">📋</span><span class="nm">ASCII 表</span></a>
+<a class="card" href="tools/char-code/index.html" data-name="字符码点查询" data-cat="开发工具"><span class="ico">🔣</span><span class="nm">字符码点查询</span></a>
+<a class="card" href="tools/js-beautify/index.html" data-name="JS 代码美化" data-cat="开发工具"><span class="ico">💎</span><span class="nm">JS 代码美化</span></a>
+<a class="card" href="tools/opencode-config-editor/index.html" data-name="OpenCode 配置修改器" data-cat="开发工具"><span class="ico">⚙️</span><span class="nm">OpenCode 配置修改器</span></a>
 </div></section>
 <section class="cat" data-cat="系统命令"><h3 class="cat-h" onclick="filterCat('系统命令')" style="cursor:pointer">系统命令 <span class="cat-n">1</span></h3><div class="grid"><a class="card" href="tools/linux-commands/index.html" data-name="Linux 命令速查（详解版 · 共 187 条）" data-cat="系统命令"><span class="ico">🐧</span><span class="nm">Linux 命令速查（详解版 · 共 187 条）</span></a></div></section>
-<section class="cat" data-cat="网络工具"><h3 class="cat-h" onclick="filterCat('网络工具')" style="cursor:pointer">网络工具 <span class="cat-n">5</span></h3><div class="grid"><a class="card" href="tools/http-status/index.html" data-name="HTTP 状态码速查" data-cat="网络工具"><span class="ico">🌐</span><span class="nm">HTTP 状态码速查</span></a>
+<section class="cat" data-cat="网络工具"><h3 class="cat-h" onclick="filterCat('网络工具')" style="cursor:pointer">网络工具 <span class="cat-n">11</span></h3><div class="grid"><a class="card" href="tools/http-status/index.html" data-name="HTTP 状态码速查" data-cat="网络工具"><span class="ico">🌐</span><span class="nm">HTTP 状态码速查</span></a>
 <a class="card" href="tools/url-parser/index.html" data-name="URL 解析" data-cat="网络工具"><span class="ico">🌐</span><span class="nm">URL 解析</span></a>
 <a class="card" href="tools/dns/index.html" data-name="DNS 解析" data-cat="网络工具"><span class="ico">🌐</span><span class="nm">DNS 解析</span></a><a class="card" href="tools/my-ip/index.html" data-name="公网 IP 查询" data-cat="网络工具"><span class="ico">📡</span><span class="nm">公网 IP 查询</span></a>
 <a class="card" href="tools/subnet/index.html" data-name="子网 / CIDR 计算器" data-cat="网络工具"><span class="ico">🕸️</span><span class="nm">子网 / CIDR 计算器</span></a>
+
+
+
+
+
+
+<a class="card" href="tools/rand-mac/index.html" data-name="随机 MAC 地址" data-cat="网络工具"><span class="ico">🖧</span><span class="nm">随机 MAC 地址</span></a>
+<a class="card" href="tools/rand-ipv4/index.html" data-name="随机 IPv4" data-cat="网络工具"><span class="ico">🌐</span><span class="nm">随机 IPv4</span></a>
+<a class="card" href="tools/rand-ipv6/index.html" data-name="随机 IPv6" data-cat="网络工具"><span class="ico">🌐</span><span class="nm">随机 IPv6</span></a>
+<a class="card" href="tools/rand-port/index.html" data-name="随机端口号" data-cat="网络工具"><span class="ico">🔌</span><span class="nm">随机端口号</span></a>
+<a class="card" href="tools/rand-ua/index.html" data-name="随机 User-Agent" data-cat="网络工具"><span class="ico">🕵️</span><span class="nm">随机 User-Agent</span></a>
+<a class="card" href="tools/rand-latlng/index.html" data-name="随机经纬度" data-cat="网络工具"><span class="ico">🗺️</span><span class="nm">随机经纬度</span></a>
 </div></section>
-<section class="cat" data-cat="趣味娱乐"><h3 class="cat-h" onclick="filterCat('趣味娱乐')" style="cursor:pointer">趣味娱乐 <span class="cat-n">10</span></h3><div class="grid"><a class="card" href="tools/lottery-generator/index.html" data-name="彩票号码生成" data-cat="趣味娱乐"><span class="ico">🎰</span><span class="nm">彩票号码生成</span></a>
+<section class="cat" data-cat="趣味娱乐"><h3 class="cat-h" onclick="filterCat('趣味娱乐')" style="cursor:pointer">趣味娱乐 <span class="cat-n">19</span></h3><div class="grid"><a class="card" href="tools/lottery-generator/index.html" data-name="彩票号码生成" data-cat="趣味娱乐"><span class="ico">🎰</span><span class="nm">彩票号码生成</span></a>
 <a class="card" href="tools/magic-8-ball/index.html" data-name="魔法8号球" data-cat="趣味娱乐"><span class="ico">🎱</span><span class="nm">魔法8号球</span></a>
 <a class="card" href="tools/coin-flip/index.html" data-name="抛硬币" data-cat="趣味娱乐"><span class="ico">🪙</span><span class="nm">抛硬币</span></a>
 <a class="card" href="tools/rock-paper-scissors/index.html" data-name="石头剪刀布" data-cat="趣味娱乐"><span class="ico">✊</span><span class="nm">石头剪刀布</span></a>
@@ -212,6 +547,24 @@
 <a class="card" href="tools/random-generator/index.html" data-name="随机数生成器" data-cat="趣味娱乐"><span class="ico">🎲</span><span class="nm">随机数生成器</span></a>
 <a class="card" href="tools/fake-data/index.html" data-name="随机信息" data-cat="趣味娱乐"><span class="ico">🧪</span><span class="nm">随机信息</span></a>
 <a class="card" href="tools/dice-roller/index.html" data-name="骰子投掷" data-cat="趣味娱乐"><span class="ico">🎲</span><span class="nm">骰子投掷</span></a><a class="card" href="tools/tts/index.html" data-name="文本转语音" data-cat="趣味娱乐"><span class="ico">🔊</span><span class="nm">文本转语音</span></a>
+
+
+
+
+
+
+
+
+
+<a class="card" href="tools/rand-cn-name/index.html" data-name="随机中文姓名" data-cat="趣味娱乐"><span class="ico">🧑</span><span class="nm">随机中文姓名</span></a>
+<a class="card" href="tools/rand-en-name/index.html" data-name="随机英文姓名" data-cat="趣味娱乐"><span class="ico">🧑</span><span class="nm">随机英文姓名</span></a>
+<a class="card" href="tools/rand-address/index.html" data-name="随机中国地址" data-cat="趣味娱乐"><span class="ico">🏠</span><span class="nm">随机中国地址</span></a>
+<a class="card" href="tools/rand-emoji/index.html" data-name="随机 Emoji" data-cat="趣味娱乐"><span class="ico">😀</span><span class="nm">随机 Emoji</span></a>
+<a class="card" href="tools/rand-sentence/index.html" data-name="随机中文句子" data-cat="趣味娱乐"><span class="ico">💬</span><span class="nm">随机中文句子</span></a>
+<a class="card" href="tools/rand-poem/index.html" data-name="随机诗词" data-cat="趣味娱乐"><span class="ico">📜</span><span class="nm">随机诗词</span></a>
+<a class="card" href="tools/rand-joke/index.html" data-name="随机笑话" data-cat="趣味娱乐"><span class="ico">😂</span><span class="nm">随机笑话</span></a>
+<a class="card" href="tools/rand-float/index.html" data-name="随机浮点数" data-cat="趣味娱乐"><span class="ico">🔢</span><span class="nm">随机浮点数</span></a>
+<a class="card" href="tools/rand-bool/index.html" data-name="随机布尔值" data-cat="趣味娱乐"><span class="ico">⚖️</span><span class="nm">随机布尔值</span></a>
 </div></section>
 <section class="cat" data-cat="其他"><h3 class="cat-h" onclick="filterCat('其他')" style="cursor:pointer">其他 <span class="cat-n">6</span></h3><div class="grid"><a class="card" href="tools/qr-generator/index.html" data-name="二维码生成器" data-cat="其他"><span class="ico">🔳</span><span class="nm">二维码生成器</span></a>
 <a class="card" href="tools/avatar-generator/index.html" data-name="头像生成器" data-cat="其他"><span class="ico">🧑</span><span class="nm">头像生成器</span></a>

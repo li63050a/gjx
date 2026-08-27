@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<title>培根密码 · 超能工具箱</title>
+<script>var __t=localStorage.getItem("theme"); if(__t)document.documentElement.dataset.theme=__t;</script>
+<link rel="stylesheet" href="../common.css">
+</head>
+<body>
+<div class="container">
+<a class="brand" href="../../index.html">🧰 超能工具箱</a>
+<a class="back" href="../../index.html">← 返回主页</a>
+<h2>🥓 培根密码</h2>
+<div class="row"><textarea id="inp" rows="4" placeholder="输入文本"></textarea></div>
+<div class="row"><label>模式 <select id="mode"><option value="enc">编码</option><option value="dec">解码</option></select></label><button class="btn" onclick="go()">执行</button><button class="btn gray" onclick="copy()">复制</button></div>
+<div id="out"></div>
+</div>
+<button onclick="__tg()" style="position:fixed;right:16px;bottom:16px;z-index:99;width:46px;height:46px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:1.3rem;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.3)">🌙</button>
+<script>function __tg(){var d=document.documentElement.dataset.theme==="dark";document.documentElement.dataset.theme=d?"":"dark";localStorage.setItem("theme",d?"":"dark");var b=document.querySelector('button[onclick="__tg()"]');b.textContent=d?"🌙":"☀️";}
+if(document.documentElement.dataset.theme==="dark"){var bx=document.querySelector('button[onclick="__tg()"]');if(bx)bx.textContent="☀️";}
+var OP='bacon';
+var B32='ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+function b32enc(str){var bytes=new TextEncoder().encode(str);var bin='';bytes.forEach(function(b){bin+=b.toString(2).padStart(8,'0');});var out='';for(var i=0;i<bin.length;i+=5){var chunk=bin.substr(i,5);while(chunk.length<5)chunk+='0';out+=B32.charAt(parseInt(chunk,2));}while(out.length%8)out+='=';return out;}
+function b32dec(str){str=str.replace(/=+$/,'');var bin='';for(var i=0;i<str.length;i++){var v=B32.indexOf(str[i].toUpperCase());if(v<0)return '非法字符';bin+=v.toString(2).padStart(5,'0');}bin=bin.slice(0,Math.floor(bin.length/8)*8);var out='';for(var i=0;i<bin.length;i+=8)out+=String.fromCharCode(parseInt(bin.substr(i,8),2));return out;}
+var B58='123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+function b58enc(str){var bytes=Array.from(new TextEncoder().encode(str));var num=0n;bytes.forEach(function(b){num=num*256n+BigInt(b);});var out='';while(num>0n){out=B58[Number(num%58n)]+out;num/=58n;}for(var i=0;i<bytes.length&&bytes[i]===0;i++)out='1'+out;return out;}
+function b58dec(str){var num=0n;for(var i=0;i<str.length;i++){var v=B58.indexOf(str[i]);if(v<0)return '非法字符';num=num*58n+BigInt(v);}var out=[];while(num>0n){out.unshift(Number(num%256n));num/=256n;}for(var i=0;i<str.length&&str[i]==='1';i++)out.unshift(0);return new TextDecoder().decode(Uint8Array.from(out));}
+function b85enc(str){var bytes=new TextEncoder().encode(str);var out='';for(var i=0;i<bytes.length;i+=4){var n=0;for(var j=0;j<4;j++)n=n*256+(bytes[i+j]||0);var c=[];for(var j=0;j<5;j++){c.unshift(String.fromCharCode(33+(n%85)));n=Math.floor(n/85);}out+=c.join('');}return out;}
+function b85dec(str){var out=[];for(var i=0;i<str.length;i+=5){var n=0;for(var j=0;j<5&&i+j<str.length;j++)n=n*85+(str.charCodeAt(i+j)-33);var pad=5-Math.min(5,str.length-i);n*=Math.pow(85,pad);for(var j=0;j<4-pad;j++)out.push((n>>(8*(3-j)))&255);}return new TextDecoder().decode(Uint8Array.from(out));}
+function bacon(str,dec){var M={A:'aaaaa',B:'aaaab',C:'aaaba',D:'aaabb',E:'aabaa',F:'aabab',G:'aabba',H:'aabbb',I:'abaaa',J:'abaab',K:'ababa',L:'ababb',M:'abbaa',N:'abbab',O:'abbba',P:'abbbb',Q:'baaaa',R:'baaab',S:'baaba',T:'baabb',U:'babaa',V:'babab',W:'babba',X:'babbb',Y:'bbaaa',Z:'bbaab'};if(!dec){return str.toUpperCase().replace(/[A-Z]/g,function(c){return M[c]||'';});}var r='';for(var i=0;i+5<=str.length;i+=5){var k=str.substr(i,5).toLowerCase();for(var ch in M){if(M[ch]===k){r+=ch;break;}}}return r;}
+function go(){var t=document.getElementById('inp').value,mode=document.getElementById('mode').value,r='';
+ if(OP==='base32')r=mode==='enc'?b32enc(t):b32dec(t);
+ else if(OP==='base58')r=mode==='enc'?b58enc(t):b58dec(t);
+ else if(OP==='base85')r=mode==='enc'?b85enc(t):b85dec(t);
+ else if(OP==='bacon')r=mode==='enc'?bacon(t,false):bacon(t,true);
+ document.getElementById('out').innerHTML='<div class="ans"><pre>'+esc(r)+'</pre></div>';
+}
+function copy(){var e=document.querySelector('#out pre');if(e)navigator.clipboard.writeText(e.textContent);}
+</script>
+<footer class="site-foot">
+<div>🔗 <a href="https://github.com/li63050a/gjx" target="_blank" rel="noopener">GitHub</a> · <a href="https://li63050a.github.io/gjx/" target="_blank" rel="noopener">Pages</a> · <a href="https://gjx.z321.cc.cd/" target="_blank" rel="noopener">gjx.z321.cc.cd</a></div>
+<div>💬 QQ 1026939741 · 📺 B站 小帅5656 · ✉️ li63050@qq.com</div>
+</footer>
+</body>
+</html>
